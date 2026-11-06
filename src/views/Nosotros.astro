@@ -1,0 +1,240 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Crumbs from '../components/Crumbs.astro';
+import Reviews from '../components/Reviews.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { img } from '../lib/img';
+import { path, t, fmt, type Lang } from '../lib/i18n';
+import { EMPRESA, dato, telHref } from '../config/empresa';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const ui = t(lang);
+const fundacion = dato(EMPRESA.fundacion);
+const agente = dato(EMPRESA.agenteNombre);
+const aicat = dato(EMPRESA.aicat);
+const peritoJudicial = dato(EMPRESA.peritoJudicial);
+const razonSocial = dato(EMPRESA.razonSocial);
+const cif = dato(EMPRESA.cif);
+const rm = dato(EMPRESA.registroMercantil);
+const polizaRC = dato(EMPRESA.aseguradoraRC);
+const caucion = dato(EMPRESA.garantiaCaucion);
+const direccion = dato(EMPRESA.direccion)!;
+const cp = dato(EMPRESA.codigoPostal)!;
+const muni = dato(EMPRESA.municipio)!;
+const tel = dato(EMPRESA.telefono)!;
+
+const T = {
+  es: {
+    title: 'Nosotros: su inmobiliaria en Gavà · Finques Mil·lenium',
+    desc: 'Inmobiliaria de barrio en Gavà: trato personal, precio real de mercado y acompañamiento hasta la firma. Agencia registrada en el AICAT.',
+    h1: 'Toda una vida en el Baix Llobregat.',
+    h1SinAno: 'Una inmobiliaria con los pies en el barrio.',
+    historia1: fundacion
+      ? `Abrimos la oficina de Gavà en ${fundacion}. Desde entonces acompañamos a los vecinos del Baix Llobregat a vender, comprar y alquilar su casa.`
+      : 'Acompañamos a los vecinos del Baix Llobregat a vender, comprar y alquilar su casa desde nuestra oficina de la calle Sant Pere de Gavà.',
+    historia2: 'Hoy trabajamos en Gavà, Castelldefels y Viladecans. Conocemos cada calle porque vivimos aquí. El método no ha cambiado: precio real de mercado, trato personal y acompañamiento hasta la firma ante notario.',
+    valoresEyebrow: '01 · Valores',
+    valoresTitulo: 'Lo que nos guía en cada operación.',
+    valores: [
+      { t: 'Precio real', d: 'No inflamos valoraciones para captar encargos. Decimos lo que se paga hoy, con datos.' },
+      { t: 'Trato de tú a tú', d: 'Le atiende siempre la misma persona, que conoce su caso y le habla claro.' },
+      { t: 'Sin sorpresas', d: 'Condiciones por escrito, informes de visitas y cada paso explicado antes de darlo.' },
+      { t: 'Del barrio', d: 'Vivimos donde trabajamos. Nuestra reputación se juega en la calle, cada día.' },
+    ],
+    equipoEyebrow: '02 · Equipo',
+    equipoTitulo: 'Las personas que le atenderán.',
+    equipoTexto: 'Cada operación tiene una persona de referencia que la lleva de principio a fin.',
+    equipoAgenteRol: 'Agente inmobiliario',
+    equipoNota: 'Presentaremos aquí al resto del equipo en cuanto cerremos fotos y permisos.',
+    garantiasEyebrow: '03 · Garantías',
+    garantiasTitulo: 'Agencia registrada y asegurada.',
+    garantiasTexto: 'Estamos inscritos en el Registro de Agentes Inmobiliarios de Cataluña. Estos son nuestros datos.',
+    gRazon: 'Razón social',
+    gCif: 'CIF',
+    gAicat: 'Registro de Agentes Inmobiliarios de Cataluña (AICAT)',
+    gRM: 'Registro Mercantil',
+    gRC: 'Seguro de responsabilidad civil',
+    gCaucion: 'Garantía de cantidades entregadas',
+    gDomicilio: 'Domicilio',
+    gPerito: 'Perito judicial',
+    gPeritoSi: 'Sí',
+    trabajaEyebrow: '04 · Trabaje con nosotros',
+    trabajaTitulo: 'Buscamos personas que conozcan el Baix Llobregat.',
+    trabajaTexto: 'Si le gusta el trato con las personas y quiere crecer en el sector inmobiliario, escríbanos y cuéntenos de usted.',
+    trabajaCta: 'Escribir a la agencia',
+    ctaTitulo: 'Hablemos sin compromiso.',
+    ctaTexto: 'Le explicamos lo que vale hoy su vivienda y cómo la venderíamos.',
+  },
+  ca: {
+    title: 'Nosaltres: la seva immobiliària a Gavà · Finques Mil·lenium',
+    desc: 'Immobiliària de barri a Gavà: tracte personal, preu real de mercat i acompanyament fins a la signatura. Agència registrada a l’AICAT.',
+    h1: 'Tota una vida al Baix Llobregat.',
+    h1SinAno: 'Una immobiliària amb els peus al barri.',
+    historia1: fundacion
+      ? `Vam obrir l’oficina de Gavà el ${fundacion}. Des de llavors acompanyem els veïns del Baix Llobregat a vendre, comprar i llogar casa seva.`
+      : 'Acompanyem els veïns del Baix Llobregat a vendre, comprar i llogar casa seva des de la nostra oficina del carrer Sant Pere de Gavà.',
+    historia2: 'Avui treballem a Gavà, Castelldefels i Viladecans. Coneixem cada carrer perquè vivim aquí. El mètode no ha canviat: preu real de mercat, tracte personal i acompanyament fins a la signatura davant de notari.',
+    valoresEyebrow: '01 · Valors',
+    valoresTitulo: 'El que ens guia en cada operació.',
+    valores: [
+      { t: 'Preu real', d: 'No inflem valoracions per captar encàrrecs. Diem el que es paga avui, amb dades.' },
+      { t: 'Tracte de tu a tu', d: 'L’atén sempre la mateixa persona, que coneix el seu cas i li parla clar.' },
+      { t: 'Sense sorpreses', d: 'Condicions per escrit, informes de visites i cada pas explicat abans de fer-lo.' },
+      { t: 'De barri', d: 'Vivim on treballem. La nostra reputació es juga al carrer, cada dia.' },
+    ],
+    equipoEyebrow: '02 · Equip',
+    equipoTitulo: 'Les persones que l’atendran.',
+    equipoTexto: 'Cada operació té una persona de referència que la porta de principi a fi.',
+    equipoAgenteRol: 'Agent immobiliari',
+    equipoNota: 'Presentarem aquí la resta de l’equip quan tanquem fotos i permisos.',
+    garantiasEyebrow: '03 · Garanties',
+    garantiasTitulo: 'Agència registrada i assegurada.',
+    garantiasTexto: 'Estem inscrits al Registre d’Agents Immobiliaris de Catalunya. Aquestes són les nostres dades.',
+    gRazon: 'Raó social',
+    gCif: 'CIF',
+    gAicat: 'Registre d’Agents Immobiliaris de Catalunya (AICAT)',
+    gRM: 'Registre Mercantil',
+    gRC: 'Assegurança de responsabilitat civil',
+    gCaucion: 'Garantia de quantitats lliurades',
+    gDomicilio: 'Domicili',
+    gPerito: 'Pèrit judicial',
+    gPeritoSi: 'Sí',
+    trabajaEyebrow: '04 · Treballi amb nosaltres',
+    trabajaTitulo: 'Busquem persones que coneguin el Baix Llobregat.',
+    trabajaTexto: 'Si li agrada el tracte amb les persones i vol créixer en el sector immobiliari, escrigui’ns i expliqui’ns coses de vostè.',
+    trabajaCta: 'Escriure a l’agència',
+    ctaTitulo: 'Parlem-ne sense compromís.',
+    ctaTexto: 'Li expliquem el que val avui el seu habitatge i com el vendríem.',
+  },
+  en: {
+    title: 'About us: your estate agency in Gavà · Finques Mil·lenium',
+    desc: 'Neighbourhood estate agency in Gavà: personal service, real market prices and support through to completion. Registered AICAT agency.',
+    h1: 'A lifetime in Baix Llobregat.',
+    h1SinAno: 'An agency with its feet in the neighbourhood.',
+    historia1: fundacion
+      ? `We opened our Gavà office in ${fundacion}. Since then we have been helping the people of Baix Llobregat sell, buy and rent their homes.`
+      : 'We help the people of Baix Llobregat sell, buy and rent their homes from our office on Carrer de Sant Pere in Gavà.',
+    historia2: 'Today we work in Gavà, Castelldefels and Viladecans. We know every street because we live here. The method has never changed: a real market price, personal service and support all the way to the notary.',
+    valoresEyebrow: '01 · Values',
+    valoresTitulo: 'What guides us in every sale.',
+    valores: [
+      { t: 'The real price', d: 'We don’t inflate valuations to win listings. We tell you what buyers pay today, with data.' },
+      { t: 'Person to person', d: 'You always deal with the same person, who knows your case and gives it to you straight.' },
+      { t: 'No surprises', d: 'Terms in writing, visit reports, and every step explained before we take it.' },
+      { t: 'Of the neighbourhood', d: 'We live where we work. Our reputation is on the line in the street, every day.' },
+    ],
+    equipoEyebrow: '02 · Team',
+    equipoTitulo: 'The people who will look after you.',
+    equipoTexto: 'Every sale has one person of reference who handles it from start to finish.',
+    equipoAgenteRol: 'Estate agent',
+    equipoNota: 'We will introduce the rest of the team here once photos and permissions are settled.',
+    garantiasEyebrow: '03 · Guarantees',
+    garantiasTitulo: 'A registered, insured agency.',
+    garantiasTexto: 'We are listed in the Catalan Register of Real Estate Agents. These are our details.',
+    gRazon: 'Company name',
+    gCif: 'Tax ID',
+    gAicat: 'Catalan Register of Real Estate Agents (AICAT)',
+    gRM: 'Companies Registry',
+    gRC: 'Professional liability insurance',
+    gCaucion: 'Client funds guarantee',
+    gDomicilio: 'Registered address',
+    gPerito: 'Court-appointed property expert',
+    gPeritoSi: 'Yes',
+    trabajaEyebrow: '04 · Work with us',
+    trabajaTitulo: 'We look for people who know Baix Llobregat.',
+    trabajaTexto: 'If you enjoy working with people and want to grow in real estate, write to us and tell us about yourself.',
+    trabajaCta: 'Write to the agency',
+    ctaTitulo: 'Let’s talk, no strings attached.',
+    ctaTexto: 'We will tell you what your home is worth today and how we would sell it.',
+  },
+}[lang]!;
+
+const iniciales = agente ? agente.split(' ').slice(0, 2).map((p) => p[0]).join('') : '';
+---
+<Base lang={lang} section="nosotros" title={T.title} description={T.desc}>
+  <Crumbs lang={lang} items={[{ nombre: ui.nav.nosotros }]} />
+  <section class="section section--tight">
+    <div class="container split split--13">
+      <div class="framed-img">
+        <Image src={img('oficina-01')} alt="" widths={[480, 900]} sizes="(min-width: 900px) 42vw, 92vw" quality={70} loading="eager" />
+      </div>
+      <div>
+        <h1>{fundacion ? T.h1 : T.h1SinAno}</h1>
+        <p style="margin-top:16px">{T.historia1}</p>
+        <p style="margin-top:10px">{T.historia2}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--navy">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">{T.valoresEyebrow}</span>
+        <h2>{T.valoresTitulo}</h2>
+      </div>
+      <div class="num-cols">
+        {T.valores.map((v, idx) => (
+          <div>
+            <h3 style="color:#fff"><span class="n" aria-hidden="true">{String(idx + 1).padStart(2, '0')}</span> {v.t}</h3>
+            <p style="color:rgba(243,239,230,.75)">{v.d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">{T.equipoEyebrow}</span>
+        <h2>{T.equipoTitulo}</h2>
+        <p class="lead">{T.equipoTexto}</p>
+      </div>
+      {agente && (
+        <div class="review" style="max-width:420px">
+          <p aria-hidden="true" style="width:56px;height:56px;border-radius:50%;background:var(--navy);color:var(--brass-bright);display:grid;place-items:center;font-family:var(--font-display);font-size:1.3rem">{iniciales}</p>
+          <p class="review__who" style="font-size:1.05rem">{agente}</p>
+          <p class="review__text">
+            {T.equipoAgenteRol}{aicat ? ` · AICAT nº ${aicat}` : ''}{peritoJudicial ? ` · ${T.gPerito}` : ''}
+          </p>
+        </div>
+      )}
+      <p class="hint" style="margin-top:16px">{T.equipoNota}</p>
+    </div>
+  </section>
+
+  <section class="section section--deep">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">{T.garantiasEyebrow}</span>
+        <h2>{T.garantiasTitulo}</h2>
+        <p class="lead">{T.garantiasTexto}</p>
+      </div>
+      <dl class="deflist">
+        {razonSocial && <div><dt>{T.gRazon}</dt><dd>{razonSocial}</dd></div>}
+        {cif && <div><dt>{T.gCif}</dt><dd>{cif}</dd></div>}
+        {aicat && <div><dt>{T.gAicat}</dt><dd>nº {aicat}</dd></div>}
+        {rm && <div><dt>{T.gRM}</dt><dd>{rm}</dd></div>}
+        {peritoJudicial && agente && <div><dt>{T.gPerito}</dt><dd>{agente}</dd></div>}
+        {polizaRC && <div><dt>{T.gRC}</dt><dd>{polizaRC}</dd></div>}
+        {caucion && <div><dt>{T.gCaucion}</dt><dd>{caucion}</dd></div>}
+        <div><dt>{T.gDomicilio}</dt><dd>{direccion} · {cp} {muni} (Barcelona)</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <Reviews lang={lang} />
+
+  <section class="section section--tight">
+    <div class="container cta-band">
+      <span class="eyebrow">{T.trabajaEyebrow}</span>
+      <h2>{T.trabajaTitulo}</h2>
+      <p class="lead">{T.trabajaTexto}</p>
+      <p><a class="btn btn--primary" href={path(lang, 'contacto')}>{T.trabajaCta}</a></p>
+    </div>
+  </section>
+
+  <CtaBand lang={lang} titulo={T.ctaTitulo} texto={T.ctaTexto} />
+</Base>

@@ -1,0 +1,92 @@
+---
+/**
+ * Despachador único: genera TODAS las páginas de todos los idiomas
+ * a partir del mapa de rutas (src/lib/i18n.ts). Añadir un idioma o una
+ * sección no exige tocar este archivo.
+ */
+import { LANGS, ROUTES, path, type SectionKey, type Lang } from '../lib/i18n';
+import { getInmuebles, porOperacion, OPERACION_SECCION, type Operacion } from '../lib/propiedades';
+import zonasData from '../data/zonas.json';
+
+import Home from '../views/Home.astro';
+import Listado from '../views/Listado.astro';
+import Vender from '../views/Vender.astro';
+import Valorar from '../views/Valorar.astro';
+import Hipoteca from '../views/Hipoteca.astro';
+import Inversion from '../views/Inversion.astro';
+import Alerta from '../views/Alerta.astro';
+import Zonas from '../views/Zonas.astro';
+import Zona from '../views/Zona.astro';
+import Nosotros from '../views/Nosotros.astro';
+import Contacto from '../views/Contacto.astro';
+import AvisoLegal from '../views/AvisoLegal.astro';
+import Privacidad from '../views/Privacidad.astro';
+import Cookies from '../views/Cookies.astro';
+import Inmueble from '../views/Inmueble.astro';
+import DemoEnvio from '../views/DemoEnvio.astro';
+
+export function getStaticPaths() {
+  const rutas: { params: { slug: string }; props: Record<string, unknown> }[] = [];
+  const slugOf = (lang: Lang, section: SectionKey, ...rest: string[]) =>
+    path(lang, section, ...rest).replace(/^\/|\/$/g, '');
+
+  const OPS: Operacion[] = ['venta', 'alquiler', 'obra-nueva', 'traspaso'];
+  const municipios = zonasData.zonas.map((z) => z.slug);
+
+  for (const lang of LANGS) {
+    rutas.push({ params: { slug: slugOf(lang, 'home') }, props: { lang, vista: 'home' } });
+
+    for (const op of OPS) {
+      const section = OPERACION_SECCION[op];
+      rutas.push({ params: { slug: slugOf(lang, section) }, props: { lang, vista: 'listado', op } });
+      for (const m of municipios) {
+        rutas.push({
+          params: { slug: slugOf(lang, section, m) },
+          props: { lang, vista: 'listado', op, municipio: m },
+        });
+      }
+    }
+
+    for (const i of getInmuebles()) {
+      rutas.push({ params: { slug: slugOf(lang, 'inmuebles', i.slug) }, props: { lang, vista: 'inmueble', inmuebleSlug: i.slug } });
+    }
+
+    rutas.push({ params: { slug: slugOf(lang, 'vender') }, props: { lang, vista: 'vender' } });
+    rutas.push({ params: { slug: slugOf(lang, 'valorar') }, props: { lang, vista: 'valorar' } });
+    rutas.push({ params: { slug: slugOf(lang, 'hipoteca') }, props: { lang, vista: 'hipoteca' } });
+    rutas.push({ params: { slug: slugOf(lang, 'inversion') }, props: { lang, vista: 'inversion' } });
+    rutas.push({ params: { slug: slugOf(lang, 'alerta') }, props: { lang, vista: 'alerta' } });
+    rutas.push({ params: { slug: slugOf(lang, 'zonas') }, props: { lang, vista: 'zonas' } });
+    for (const z of zonasData.zonas) {
+      rutas.push({ params: { slug: slugOf(lang, 'zonas', z.slug) }, props: { lang, vista: 'zona', zonaSlug: z.slug } });
+    }
+    rutas.push({ params: { slug: slugOf(lang, 'nosotros') }, props: { lang, vista: 'nosotros' } });
+    rutas.push({ params: { slug: slugOf(lang, 'contacto') }, props: { lang, vista: 'contacto' } });
+    rutas.push({ params: { slug: slugOf(lang, 'aviso-legal') }, props: { lang, vista: 'aviso-legal' } });
+    rutas.push({ params: { slug: slugOf(lang, 'privacidad') }, props: { lang, vista: 'privacidad' } });
+    rutas.push({ params: { slug: slugOf(lang, 'cookies') }, props: { lang, vista: 'cookies' } });
+    rutas.push({ params: { slug: slugOf(lang, 'demo-envio') }, props: { lang, vista: 'demo-envio' } });
+  }
+  return rutas;
+}
+
+const { lang, vista, op, municipio, zonaSlug, inmuebleSlug } = Astro.props as {
+  lang: Lang; vista: string; op?: Operacion; municipio?: string; zonaSlug?: string; inmuebleSlug?: string;
+};
+---
+{vista === 'home' && <Home lang={lang} />}
+{vista === 'listado' && <Listado lang={lang} op={op!} municipio={municipio} />}
+{vista === 'inmueble' && <Inmueble lang={lang} slug={inmuebleSlug!} />}
+{vista === 'vender' && <Vender lang={lang} />}
+{vista === 'valorar' && <Valorar lang={lang} />}
+{vista === 'hipoteca' && <Hipoteca lang={lang} />}
+{vista === 'inversion' && <Inversion lang={lang} />}
+{vista === 'alerta' && <Alerta lang={lang} />}
+{vista === 'zonas' && <Zonas lang={lang} />}
+{vista === 'zona' && <Zona lang={lang} zonaSlug={zonaSlug!} />}
+{vista === 'nosotros' && <Nosotros lang={lang} />}
+{vista === 'contacto' && <Contacto lang={lang} />}
+{vista === 'aviso-legal' && <AvisoLegal lang={lang} />}
+{vista === 'privacidad' && <Privacidad lang={lang} />}
+{vista === 'cookies' && <Cookies lang={lang} />}
+{vista === 'demo-envio' && <DemoEnvio lang={lang} />}

@@ -1,0 +1,138 @@
+---
+import Base from '../layouts/Base.astro';
+import Crumbs from '../components/Crumbs.astro';
+import { path, t, type Lang } from '../lib/i18n';
+import { GA4_ID, META_PIXEL_ID } from '../config/site';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const ui = t(lang);
+const hayGA = Boolean(GA4_ID);
+const hayMeta = Boolean(META_PIXEL_ID);
+
+const T = {
+  es: {
+    title: 'Política de cookies · Finques Mil·lenium',
+    desc: 'Qué cookies y almacenamiento local usa esta web, para qué sirven y cómo cambiar su elección en cualquier momento.',
+    h1: 'Política de cookies',
+    s1: '1. Qué son las cookies',
+    s1Texto: 'Las cookies y el almacenamiento local son pequeños archivos que el navegador guarda para recordar información entre visitas: su elección de consentimiento, por ejemplo.',
+    s2: '2. Qué usamos',
+    necesarias: 'Imprescindibles (siempre activas)',
+    thNombre: 'Nombre', thTitular: 'Titular', thPara: 'Para qué sirve', thDuracion: 'Duración',
+    nFmConsent: 'Guardar su elección sobre las cookies (almacenamiento local).',
+    nFmConsentDur: 'Hasta que la cambie o borre',
+    analitica: 'Analítica (solo con su consentimiento)',
+    nGa: 'Contar visitas y saber qué páginas se usan más, de forma agregada.',
+    nGaDur: '2 años',
+    sinAnalitica: 'Esta versión de la web no tiene la analítica configurada: no se carga ningún script de Google aunque usted la active en el banner. Si la agencia activa Google Analytics, esta tabla se actualizará.',
+    publicidad: 'Publicidad (solo con su consentimiento)',
+    nFbp: 'Medir campañas en Facebook e Instagram y mostrar anuncios relevantes.',
+    nFbpDur: '3 meses',
+    sinPublicidad: 'Esta versión de la web no tiene el píxel de Meta configurado: no se carga ningún script de Meta aunque usted lo active en el banner. Si la agencia lo activa, esta tabla se actualizará.',
+    s3: '3. Servicios de terceros',
+    s3Texto: 'Los enlaces a OpenStreetMap, Google Maps, Instagram, WhatsApp y al perfil de Google de la agencia abren webs de terceros con sus propias políticas; esta web no incrusta esos servicios ni les envía datos mientras usted navega.',
+    s4: '4. Cómo cambiar su elección',
+    s4Texto: 'Puede cambiar su elección en cualquier momento con el botón «Configurar cookies» del pie de página, o borrando los datos de navegación de su navegador.',
+    abrir: 'Configurar cookies',
+  },
+  ca: {
+    title: 'Política de galetes · Finques Mil·lenium',
+    desc: 'Quines galetes i emmagatzematge local fa servir aquest web, per a què serveixen i com canviar la seva elecció en qualsevol moment.',
+    h1: 'Política de galetes',
+    s1: '1. Què són les galetes',
+    s1Texto: 'Les galetes i l’emmagatzematge local són petits arxius que el navegador guarda per recordar informació entre visites: la seva elecció de consentiment, per exemple.',
+    s2: '2. Què fem servir',
+    necesarias: 'Imprescindibles (sempre actives)',
+    thNombre: 'Nom', thTitular: 'Titular', thPara: 'Per a què serveix', thDuracion: 'Durada',
+    nFmConsent: 'Desar la seva elecció sobre les galetes (emmagatzematge local).',
+    nFmConsentDur: 'Fins que la canviï o esborri',
+    analitica: 'Analítica (només amb el seu consentiment)',
+    nGa: 'Comptar visites i saber quines pàgines es fan servir més, de manera agregada.',
+    nGaDur: '2 anys',
+    sinAnalitica: 'Aquesta versió del web no té l’analítica configurada: no es carrega cap script de Google encara que vostè l’activi al bàner. Si l’agència activa Google Analytics, aquesta taula s’actualitzarà.',
+    publicidad: 'Publicitat (només amb el seu consentiment)',
+    nFbp: 'Mesurar campanyes a Facebook i Instagram i mostrar anuncis rellevants.',
+    nFbpDur: '3 mesos',
+    sinPublicidad: 'Aquesta versió del web no té el píxel de Meta configurat: no es carrega cap script de Meta encara que vostè l’activi al bàner. Si l’agència l’activa, aquesta taula s’actualitzarà.',
+    s3: '3. Serveis de tercers',
+    s3Texto: 'Els enllaços a OpenStreetMap, Google Maps, Instagram, WhatsApp i al perfil de Google de l’agència obren webs de tercers amb les seves pròpies polítiques; aquest web no incrusta aquests serveis ni els envia dades mentre vostè navega.',
+    s4: '4. Com canviar la seva elecció',
+    s4Texto: 'Pot canviar la seva elecció en qualsevol moment amb el botó «Configurar galetes» del peu de pàgina, o esborrant les dades de navegació del seu navegador.',
+    abrir: 'Configurar galetes',
+  },
+  en: {
+    title: 'Cookie policy · Finques Mil·lenium',
+    desc: 'Which cookies and local storage this website uses, what they are for and how to change your choice at any time.',
+    h1: 'Cookie policy',
+    s1: '1. What cookies are',
+    s1Texto: 'Cookies and local storage are small files your browser keeps to remember information between visits: your consent choice, for example.',
+    s2: '2. What we use',
+    necesarias: 'Essential (always on)',
+    thNombre: 'Name', thTitular: 'Provider', thPara: 'Purpose', thDuracion: 'Duration',
+    nFmConsent: 'Store your cookie choice (local storage).',
+    nFmConsentDur: 'Until you change or delete it',
+    analitica: 'Analytics (only with your consent)',
+    nGa: 'Count visits and see which pages are most used, in aggregate.',
+    nGaDur: '2 years',
+    sinAnalitica: 'This version of the website has no analytics configured: no Google script loads even if you enable it in the banner. If the agency activates Google Analytics, this table will be updated.',
+    publicidad: 'Advertising (only with your consent)',
+    nFbp: 'Measure Facebook and Instagram campaigns and show relevant ads.',
+    nFbpDur: '3 months',
+    sinPublicidad: 'This version of the website has no Meta pixel configured: no Meta script loads even if you enable it in the banner. If the agency activates it, this table will be updated.',
+    s3: '3. Third-party services',
+    s3Texto: 'Links to OpenStreetMap, Google Maps, Instagram, WhatsApp and the agency’s Google profile open third-party websites with their own policies; this website does not embed those services or send them data while you browse.',
+    s4: '4. How to change your choice',
+    s4Texto: 'You can change your choice at any time using the “Cookie settings” button in the footer, or by clearing your browser data.',
+    abrir: 'Cookie settings',
+  },
+}[lang]!;
+---
+<Base lang={lang} section="cookies" title={T.title} description={T.desc}>
+  <Crumbs lang={lang} items={[{ nombre: ui.footer.cookies }]} />
+  <section class="section section--tight">
+    <div class="container legal-body">
+      <h1>{T.h1}</h1>
+      <h2>{T.s1}</h2><p>{T.s1Texto}</p>
+      <h2>{T.s2}</h2>
+      <h3>{T.necesarias}</h3>
+      <div class="table-wrap">
+        <table class="tbl">
+          <thead><tr><th scope="col">{T.thNombre}</th><th scope="col">{T.thTitular}</th><th scope="col">{T.thPara}</th><th scope="col">{T.thDuracion}</th></tr></thead>
+          <tbody>
+            <tr><td>fm_consent_v1</td><td>Finques Mil·lenium</td><td>{T.nFmConsent}</td><td>{T.nFmConsentDur}</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3>{T.analitica}</h3>
+      {hayGA ? (
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th scope="col">{T.thNombre}</th><th scope="col">{T.thTitular}</th><th scope="col">{T.thPara}</th><th scope="col">{T.thDuracion}</th></tr></thead>
+            <tbody>
+              <tr><td>_ga, _ga_*</td><td>Google Ireland Ltd.</td><td>{T.nGa}</td><td>{T.nGaDur}</td></tr>
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <p>{T.sinAnalitica}</p>
+      )}
+      <h3>{T.publicidad}</h3>
+      {hayMeta ? (
+        <div class="table-wrap">
+          <table class="tbl">
+            <thead><tr><th scope="col">{T.thNombre}</th><th scope="col">{T.thTitular}</th><th scope="col">{T.thPara}</th><th scope="col">{T.thDuracion}</th></tr></thead>
+            <tbody>
+              <tr><td>_fbp</td><td>Meta Platforms Ireland Ltd.</td><td>{T.nFbp}</td><td>{T.nFbpDur}</td></tr>
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <p>{T.sinPublicidad}</p>
+      )}
+      <h2>{T.s3}</h2><p>{T.s3Texto}</p>
+      <h2>{T.s4}</h2><p>{T.s4Texto}</p>
+      <p><button type="button" class="btn btn--primary btn--sm" data-consent-open>{T.abrir}</button></p>
+    </div>
+  </section>
+</Base>

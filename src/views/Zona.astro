@@ -1,0 +1,138 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Crumbs from '../components/Crumbs.astro';
+import PropCard from '../components/PropCard.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { getInmuebles } from '../lib/propiedades';
+import { breadcrumbSchema } from '../lib/schema';
+import { img } from '../lib/img';
+import { path, t, fmt, type Lang } from '../lib/i18n';
+import zonasData from '../data/zonas.json';
+
+interface Props { lang: Lang; zonaSlug: string; }
+const { lang, zonaSlug } = Astro.props;
+const nz = (z: { nombre: Record<string, string> }) => z.nombre[lang] ?? z.nombre.es;
+const ui = t(lang);
+const zona = zonasData.zonas.find((z) => z.slug === zonaSlug)!;
+const nombre = nz(zona);
+
+const VIVIR: Record<string, Record<Lang | 'es', string>> = {
+  gava: {
+    es: 'Gavà combina la vida de pueblo con los servicios de una ciudad: la Rambla y su mercado, colegios y institutos a un paso, Renfe hasta Barcelona en veinte minutos y la playa de Gavà Mar con sus pinares. Nuestra oficina está aquí, en la calle Sant Pere, y aquí vivimos.',
+    ca: 'Gavà combina la vida de poble amb els serveis d’una ciutat: la Rambla i el seu mercat, escoles i instituts a un pas, Renfe fins a Barcelona en vint minuts i la platja de Gavà Mar amb les seves pinedes. La nostra oficina és aquí, al carrer Sant Pere, i aquí vivim.',
+    en: 'Gavà combines small-town life with city services: the Rambla and its market, schools within walking distance, a twenty-minute train ride to Barcelona and the pine-backed beach of Gavà Mar. Our office is here on Carrer de Sant Pere, and this is where we live.',
+    fr: '',
+  },
+  castelldefels: {
+    es: 'Castelldefels es mar: cinco kilómetros de playa, el canal olímpico y una vida al aire libre que atrae a familias y a profesionales de todo el mundo. Del Baixador a Montmar, cada barrio tiene su carácter, y los conocemos todos.',
+    ca: 'Castelldefels és mar: cinc quilòmetres de platja, el canal olímpic i una vida a l’aire lliure que atrau famílies i professionals de tot el món. Del Baixador a Montmar, cada barri té el seu caràcter, i els coneixem tots.',
+    en: 'Castelldefels is the sea: five kilometres of beach, the Olympic canal and an outdoor life that draws families and professionals from around the world. From Baixador to Montmar, every neighbourhood has its own character, and we know them all.',
+    fr: '',
+  },
+  viladecans: {
+    es: 'Viladecans ha crecido sin perder su escala humana: el parque de la Torre Roja, un centro comercial a cielo abierto y vivienda más asequible que en la costa, a quince minutos de Barcelona. Una apuesta segura para familias y para quien invierte.',
+    ca: 'Viladecans ha crescut sense perdre l’escala humana: el parc de la Torre Roja, un centre comercial a cel obert i habitatge més assequible que a la costa, a quinze minuts de Barcelona. Una aposta segura per a famílies i per a qui inverteix.',
+    en: 'Viladecans has grown without losing its human scale: Torre Roja park, an open-air shopping district and more affordable housing than on the coast, fifteen minutes from Barcelona. A safe bet for families and investors alike.',
+    fr: '',
+  },
+};
+
+const T = {
+  es: {
+    title: `Inmobiliaria en ${nombre}: pisos y casas · Finques Mil·lenium`,
+    desc: `Compra, venta y alquiler de viviendas en ${nombre}, barrio a barrio, con valoración gratuita y trato personal.`,
+    h1: `Inmobiliaria en ${nombre}.`,
+    vivir: `Vivir en ${nombre}`,
+    barrios: 'Sus barrios',
+    inmuebles: `Inmuebles en ${nombre}`,
+    vacio: `Ahora mismo no tenemos inmuebles publicados en ${nombre}. Déjenos una alerta y le avisaremos en cuanto entre uno.`,
+    alertaCta: 'Crear una Alerta Mil·lenium',
+    otras: 'Otras zonas donde trabajamos',
+    ctaTitulo: `¿Vende en ${nombre}?`,
+    ctaTexto: 'Le decimos lo que hoy se paga en su barrio. Gratis y sin compromiso.',
+  },
+  ca: {
+    title: `Immobiliària a ${nombre}: pisos i cases · Finques Mil·lenium`,
+    desc: `Compra, venda i lloguer d’habitatges a ${nombre}, barri a barri, amb valoració gratuïta i tracte personal.`,
+    h1: `Immobiliària a ${nombre}.`,
+    vivir: `Viure a ${nombre}`,
+    barrios: 'Els seus barris',
+    inmuebles: `Immobles a ${nombre}`,
+    vacio: `Ara mateix no tenim immobles publicats a ${nombre}. Deixi’ns una alerta i l’avisarem quan n’entri un.`,
+    alertaCta: 'Crear una Alerta Mil·lenium',
+    otras: 'Altres zones on treballem',
+    ctaTitulo: `Ven a ${nombre}?`,
+    ctaTexto: 'Li diem el que avui es paga al seu barri. Gratis i sense compromís.',
+  },
+  en: {
+    title: `Estate agents in ${nombre}: flats and houses · Finques Mil·lenium`,
+    desc: `Buying, selling and renting homes in ${nombre}, neighbourhood by neighbourhood, with free valuations and personal service.`,
+    h1: `Estate agents in ${nombre}.`,
+    vivir: `Living in ${nombre}`,
+    barrios: 'Its neighbourhoods',
+    inmuebles: `Properties in ${nombre}`,
+    vacio: `We have no properties listed in ${nombre} right now. Set up an alert and we will tell you the moment one comes in.`,
+    alertaCta: 'Create a Mil·lenium Alert',
+    otras: 'Other areas we work in',
+    ctaTitulo: `Selling in ${nombre}?`,
+    ctaTexto: 'We will tell you what your neighbourhood fetches today. Free and with no obligation.',
+  },
+}[lang]!;
+
+const inmuebles = getInmuebles().filter((i) => i.municipio === zonaSlug);
+const otras = zonasData.zonas.filter((z) => z.slug !== zonaSlug);
+const schemaExtra = [breadcrumbSchema([
+  { nombre: ui.migas.inicio, href: path(lang, 'home') },
+  { nombre: ui.nav.zonas, href: path(lang, 'zonas') },
+  { nombre, href: path(lang, 'zonas', zonaSlug) },
+])];
+---
+<Base lang={lang} section="zonas" rest={[zonaSlug]} title={T.title} description={T.desc} schemaExtra={schemaExtra}>
+  <Crumbs lang={lang} items={[{ nombre: ui.nav.zonas, href: path(lang, 'zonas') }, { nombre }]} />
+  <section class="section section--tight">
+    <div class="container split split--13">
+      <div class="framed-img">
+        <Image src={img(`zona-${zonaSlug}`)} alt="" widths={[480, 900]} sizes="(min-width: 900px) 42vw, 92vw" quality={68} loading="eager" />
+      </div>
+      <div>
+        <h1>{T.h1}</h1>
+        <h2 style="font-size:1.2rem;margin-top:20px">{T.vivir}</h2>
+        <p style="margin-top:10px">{VIVIR[zonaSlug]?.[lang] ?? VIVIR[zonaSlug]?.es}</p>
+        <h2 style="font-size:1.2rem;margin-top:20px">{T.barrios}</h2>
+        <ul class="tag-list" style="margin-top:12px">
+          {zona.barrios.map((b) => <li>{b.nombre}</li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--deep">
+    <div class="container">
+      <div class="section-head"><h2>{T.inmuebles}</h2></div>
+      {inmuebles.length > 0 ? (
+        <div class="grid-cards">
+          {inmuebles.map((i) => <PropCard lang={lang} inmueble={i} />)}
+        </div>
+      ) : (
+        <div class="notice">
+          <p>{T.vacio}</p>
+          <p style="margin-top:10px"><a class="btn btn--primary btn--sm" href={path(lang, 'alerta')}>{T.alertaCta}</a></p>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="container">
+      <h2 style="font-size:1.2rem;margin-bottom:14px">{T.otras}</h2>
+      <ul class="filter-chips">
+        {otras.map((z) => (
+          <li><a href={path(lang, 'zonas', z.slug)}>{nz(z)}</a></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand lang={lang} titulo={T.ctaTitulo} texto={T.ctaTexto} />
+</Base>

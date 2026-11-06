@@ -1,0 +1,69 @@
+{
+  "_ayuda": "Reseñas de la sección «Opiniones», copiadas tal cual de Google (perfil de Inmobiliaria Fincas Millenium). Se muestra el nombre con la inicial del apellido. Tipos: venta, compra, alquiler. La fecha es aproximada (Google solo indica «hace X meses»). Para usar un widget externo, rellene \"widget\" con la URL de su script y la clase de su contenedor; el carrusel se oculta y el diseño de la sección no cambia.",
+  "source": "google",
+  "sample": false,
+  "rating": 4.8,
+  "count": 80,
+  "updated": "2026-11-03",
+  "profile_url": "https://maps.google.com/?cid=4529215732731413543",
+  "write_url": "https://maps.google.com/?cid=4529215732731413543",
+  "widget": null,
+  "reviews": [
+    {
+      "name": "Maria T.",
+      "type": "venta",
+      "rating": 5,
+      "date": "2026-09",
+      "text": "Nuestra experiencia con Finques Mil.lenium ha sido excelente. Nos han acompañado de manera muy cercana y empática en todo el proceso de cambio de vivienda: en la venta, la compra y la coordinación milimétrica entre ambas operaciones.\nProfesionalidad y trato familiar que hacen que la experiencia haya sido muy positiva.\nVolveríamos a confiar en ellos, sin duda alguna."
+    },
+    {
+      "name": "Natalia A.",
+      "type": "compra",
+      "rating": 5,
+      "date": "2026-09",
+      "text": "El trato por parte de la inmobiliaria ha sido fantástico desde el primer momento. En especial, me gustaría nombrar a Albert, el cual nos acompañó las veces que hizo falta a visitar el inmueble y nos asesoró estupendamente. Por otro lado, Adri se hizo cargo de la operación y de resolver nuestras dudas en todo momento. Además, José Luis nos transmitió la confianza necesaria que hay que tener para dar el paso de comprar una vivienda. Sin duda, volveremos a recurrir a ellos si los necesitamos."
+    },
+    {
+      "name": "Sandra A.",
+      "type": "venta",
+      "rating": 5,
+      "date": "2026-04",
+      "text": "Estoy muy contenta con la venta del piso de mi madre, tienen un equipo profesional, atento y muy humano. Muchas gracias por ayudarme en este trámite y muchas felicidades equipo Milenium!! Os recomiendo por el magnífico trabajo que hacéis. Mil gracias ☺️"
+    },
+    {
+      "name": "Jan O.",
+      "type": "compra",
+      "rating": 5,
+      "date": "2026-09",
+      "text": "Queremos agradecer a todo el equipo de Finques Mil.lenium y en especial a Albert, Adri y José Luis por el trato recibido desde la primera visita. Siempre han estado dispuestos a ayudar mostrando así su gran profesionalidad. A pesar de las dificultades que la operación conllevaba, a día de hoy estamos disfrutando de nuestro nuevo hogar gracias a su paciencia y ayuda. ¡¡Muchísimas gracias por todo!!"
+    },
+    {
+      "name": "Gaston M.",
+      "type": "alquiler",
+      "rating": 5,
+      "date": "2023-11",
+      "text": "Nos alquilaron un piso, y todo fue rápido y fácil, agradecemos el trato recibido y lo recomiendo 100%, muchas gracias por todo :)"
+    },
+    {
+      "name": "Bea G.",
+      "type": "compra",
+      "rating": 5,
+      "date": "2026-06",
+      "text": "Yo tuve un gran placer de tratar con Mario y Adrián que me ayudaron mucho con la compra y hipoteca, la verdad que no se puede pedir más, estaban muy atentos a todo y siempre disponibles para solucionar mis dudas."
+    },
+    {
+      "name": "Sergio R.",
+      "type": "venta",
+      "rating": 5,
+      "date": "2023-11",
+      "text": "Acabamos de vender nuestro piso con ellos y no podemos estar más contentos! Trato exquisito por parte de Rocío y José Luis, la confianza que transmiten es total. Muchas gracias por todo."
+    },
+    {
+      "name": "Laura G.",
+      "type": "compra",
+      "rating": 5,
+      "date": "2025-11",
+      "text": "Muy contenta de haber confiado en ellos para la compra de mi piso. Tanto Albert como José Luis se ocuparon de todo de manera muy eficiente y el trato ha sido estupendo. Muchas gracias!"
+    }
+  ]
+}

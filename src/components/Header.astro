@@ -1,0 +1,81 @@
+---
+import { path, t, type SectionKey, LANGS } from '../lib/i18n';
+import type { Lang } from '../config/site';
+
+interface Props { lang: Lang; section: SectionKey; }
+const { lang, section } = Astro.props;
+const ui = t(lang);
+const cur = (s: SectionKey) => (s === section ? 'page' : undefined);
+const idiomas: Record<Lang, string> = { es: 'Español', ca: 'Català', en: 'English', fr: 'Français' };
+---
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="brand" href={path(lang, 'home')}>
+      <span class="brand__mark" aria-hidden="true">M</span>
+      <span class="brand__name">Finques Mil·lenium<span class="brand__tag">Gavà · Baix Llobregat</span></span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-principal" data-nav-toggle>
+      {ui.menu}
+    </button>
+    <nav class="site-nav" id="nav-principal" aria-label={ui.menu} data-nav>
+      <ul>
+        <li>
+          <details>
+            <summary>{ui.nav.inmuebles}</summary>
+            <ul class="subnav">
+              <li><a href={path(lang, 'comprar')} aria-current={cur('comprar')}>{ui.nav.comprar} <span class="subnav__desc">{ui.nav.comprarDesc}</span></a></li>
+              <li><a href={path(lang, 'alquilar')} aria-current={cur('alquilar')}>{ui.nav.alquilar} <span class="subnav__desc">{ui.nav.alquilarDesc}</span></a></li>
+              <li><a href={path(lang, 'obra-nueva')} aria-current={cur('obra-nueva')}>{ui.nav.obraNueva} <span class="subnav__desc">{ui.nav.obraNuevaDesc}</span></a></li>
+              <li><a href={path(lang, 'traspasos')} aria-current={cur('traspasos')}>{ui.nav.traspasos} <span class="subnav__desc">{ui.nav.traspasosDesc}</span></a></li>
+              <li><a href={path(lang, 'alerta')} aria-current={cur('alerta')}>{ui.nav.alerta} <span class="subnav__desc">{ui.nav.alertaDesc}</span></a></li>
+            </ul>
+          </details>
+        </li>
+        <li><a href={path(lang, 'vender')} aria-current={cur('vender')}>{ui.nav.vender}</a></li>
+        <li><a href={path(lang, 'inversion')} aria-current={cur('inversion')}>{ui.nav.inversion}</a></li>
+        <li>
+          <details>
+            <summary>{ui.nav.herramientas}</summary>
+            <ul class="subnav">
+              <li><a href={path(lang, 'valorar')} aria-current={cur('valorar')}>{ui.nav.valorador} <span class="subnav__desc">{ui.nav.valoradorDesc}</span></a></li>
+              <li><a href={path(lang, 'hipoteca')} aria-current={cur('hipoteca')}>{ui.nav.hipoteca} <span class="subnav__desc">{ui.nav.hipotecaDesc}</span></a></li>
+              <li><a href={path(lang, 'alerta')}>{ui.nav.alerta} <span class="subnav__desc">{ui.nav.alertaDesc}</span></a></li>
+            </ul>
+          </details>
+        </li>
+        <li><a href={path(lang, 'zonas')} aria-current={cur('zonas')}>{ui.nav.zonas}</a></li>
+        <li><a href={path(lang, 'nosotros')} aria-current={cur('nosotros')}>{ui.nav.nosotros}</a></li>
+        <li><a href={path(lang, 'contacto')} aria-current={cur('contacto')}>{ui.nav.contacto}</a></li>
+        <li class="lang-switch" role="list" aria-label="Idiomas">
+          {LANGS.map((l) =>
+            l === lang
+              ? <span aria-current="true" lang={l} title={idiomas[l]}>{l.toUpperCase()}</span>
+              : <a href={path(l, section === 'inmuebles' || section === 'demo-envio' ? 'home' : section)} lang={l} title={idiomas[l]}>{l.toUpperCase()}</a>
+          )}
+        </li>
+      </ul>
+    </nav>
+    <a class="btn btn--brass btn--sm header-cta" href={path(lang, 'valorar')}>{ui.nav.valorarCta}</a>
+  </div>
+</header>
+<script>
+  // Menú móvil accesible. Sin JS, los <details> siguen funcionando.
+  const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+  const nav = document.querySelector<HTMLElement>('[data-nav]');
+  toggle?.addEventListener('click', () => {
+    const abierto = nav?.toggleAttribute('data-open');
+    toggle.setAttribute('aria-expanded', String(Boolean(abierto)));
+  });
+  // En escritorio, cerrar un desplegable cuando se abre otro.
+  const detalles = Array.from(document.querySelectorAll<HTMLDetailsElement>('.site-nav details'));
+  for (const d of detalles) {
+    d.addEventListener('toggle', () => {
+      if (d.open) detalles.forEach((o) => { if (o !== d) o.open = false; });
+    });
+  }
+  document.addEventListener('click', (e) => {
+    if (window.matchMedia('(min-width: 980px)').matches && !(e.target as Element).closest('.site-nav')) {
+      detalles.forEach((d) => (d.open = false));
+    }
+  });
+</script>

@@ -1,0 +1,20 @@
+---
+import { EMPRESA, dato, telHref } from '../config/empresa';
+import { path, t } from '../lib/i18n';
+import type { Lang } from '../config/site';
+
+interface Props { lang: Lang; titulo: string; texto?: string; }
+const { lang, titulo, texto } = Astro.props;
+const ui = t(lang);
+const tel = dato(EMPRESA.telefono)!;
+---
+<section class="section section--navy">
+  <div class="container cta-band">
+    <h2>{titulo}</h2>
+    {texto && <p class="lead">{texto}</p>}
+    <p class="hero__actions" style="justify-content:center">
+      <a class="btn btn--brass" href={path(lang, 'valorar')}>{ui.comunes.valorarGratis}</a>
+      <a class="btn btn--ghost" href={telHref(tel)}>{tel}</a>
+    </p>
+  </div>
+</section>

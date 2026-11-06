@@ -1,0 +1,133 @@
+---
+import Base from '../layouts/Base.astro';
+import Crumbs from '../components/Crumbs.astro';
+import FormShell from '../components/FormShell.astro';
+import { path, t, type Lang } from '../lib/i18n';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const ui = t(lang);
+
+const T = {
+  es: {
+    title: 'Alerta Mil·lenium: avisos de nuevas viviendas · Finques Mil·lenium',
+    desc: 'Díganos qué vivienda busca y le avisamos en cuanto entre una que encaje, antes de publicarla en los portales.',
+    h1: 'Le avisamos cuando entre lo que busca.',
+    lead: 'Muchas de nuestras viviendas se venden antes de llegar a los portales. Con la Alerta Mil·lenium, usted se entera primero.',
+    pasos: [
+      { t: 'Díganos qué busca', d: 'Zona, tipo de vivienda y presupuesto. Dos minutos.' },
+      { t: 'Revisamos cada entrada', d: 'Comparamos su búsqueda con cada vivienda que entra en cartera.' },
+      { t: 'Le avisamos primero', d: 'Si encaja, le escribimos antes de publicarla. Sin correos de relleno.' },
+    ],
+    formTitulo: 'Cree su alerta',
+    campos: { nombre: 'Nombre', email: 'Correo electrónico', telefono: 'Teléfono', zona: 'Zona', tipo: 'Tipo de vivienda', presupuesto: 'Presupuesto máximo (€)', operacion: 'Busco' },
+    operaciones: [ { valor: 'comprar', label: 'Comprar' }, { valor: 'alquilar', label: 'Alquilar' } ],
+    tipos: [
+      { valor: 'piso', label: 'Piso' },
+      { valor: 'atico', label: 'Ático' },
+      { valor: 'casa', label: 'Casa' },
+      { valor: 'local', label: 'Local' },
+      { valor: 'cualquiera', label: 'Cualquiera' },
+    ],
+    zonas: [
+      { valor: 'gava', label: 'Gavà' },
+      { valor: 'castelldefels', label: 'Castelldefels' },
+      { valor: 'viladecans', label: 'Viladecans' },
+      { valor: 'cualquiera', label: 'Cualquiera de las zonas' },
+    ],
+    enviar: 'Crear mi alerta',
+    nota: 'Solo le escribiremos por viviendas que encajen con su búsqueda. Puede darse de baja cuando quiera con un correo.',
+  },
+  ca: {
+    title: 'Alerta Mil·lenium: avisos d’habitatges nous · Finques Mil·lenium',
+    desc: 'Digui’ns quin habitatge busca i l’avisem quan n’entri un que encaixi, abans de publicar-lo als portals.',
+    h1: 'L’avisem quan entri el que busca.',
+    lead: 'Molts dels nostres habitatges es venen abans d’arribar als portals. Amb l’Alerta Mil·lenium, vostè se n’assabenta primer.',
+    pasos: [
+      { t: 'Digui’ns què busca', d: 'Zona, tipus d’habitatge i pressupost. Dos minuts.' },
+      { t: 'Revisem cada entrada', d: 'Comparem la seva cerca amb cada habitatge que entra en cartera.' },
+      { t: 'L’avisem primer', d: 'Si encaixa, li escrivim abans de publicar-lo. Sense correus de farciment.' },
+    ],
+    formTitulo: 'Creï la seva alerta',
+    campos: { nombre: 'Nom', email: 'Correu electrònic', telefono: 'Telèfon', zona: 'Zona', tipo: 'Tipus d’habitatge', presupuesto: 'Pressupost màxim (€)', operacion: 'Busco' },
+    operaciones: [ { valor: 'comprar', label: 'Comprar' }, { valor: 'alquilar', label: 'Llogar' } ],
+    tipos: [
+      { valor: 'piso', label: 'Pis' },
+      { valor: 'atico', label: 'Àtic' },
+      { valor: 'casa', label: 'Casa' },
+      { valor: 'local', label: 'Local' },
+      { valor: 'cualquiera', label: 'Qualsevol' },
+    ],
+    zonas: [
+      { valor: 'gava', label: 'Gavà' },
+      { valor: 'castelldefels', label: 'Castelldefels' },
+      { valor: 'viladecans', label: 'Viladecans' },
+      { valor: 'cualquiera', label: 'Qualsevol de les zones' },
+    ],
+    enviar: 'Crear la meva alerta',
+    nota: 'Només li escriurem per habitatges que encaixin amb la seva cerca. Pot donar-se de baixa quan vulgui amb un correu.',
+  },
+  en: {
+    title: 'Mil·lenium Alert: new home notifications · Finques Mil·lenium',
+    desc: 'Tell us what home you are looking for and we will let you know the moment a match comes in, before it reaches the portals.',
+    h1: 'We tell you the moment it comes in.',
+    lead: 'Many of our homes sell before they ever reach the portals. With the Mil·lenium Alert, you hear about them first.',
+    pasos: [
+      { t: 'Tell us what you want', d: 'Area, type of home and budget. Two minutes.' },
+      { t: 'We check every new listing', d: 'We compare your search against every home that joins our portfolio.' },
+      { t: 'You hear first', d: 'If it fits, we write to you before publishing it. No filler emails.' },
+    ],
+    formTitulo: 'Create your alert',
+    campos: { nombre: 'Name', email: 'Email', telefono: 'Phone', zona: 'Area', tipo: 'Type of home', presupuesto: 'Maximum budget (€)', operacion: 'I’m looking to' },
+    operaciones: [ { valor: 'comprar', label: 'Buy' }, { valor: 'alquilar', label: 'Rent' } ],
+    tipos: [
+      { valor: 'piso', label: 'Flat' },
+      { valor: 'atico', label: 'Penthouse' },
+      { valor: 'casa', label: 'House' },
+      { valor: 'local', label: 'Premises' },
+      { valor: 'cualquiera', label: 'Any' },
+    ],
+    zonas: [
+      { valor: 'gava', label: 'Gavà' },
+      { valor: 'castelldefels', label: 'Castelldefels' },
+      { valor: 'viladecans', label: 'Viladecans' },
+      { valor: 'cualquiera', label: 'Any of our areas' },
+    ],
+    enviar: 'Create my alert',
+    nota: 'We will only write about homes that match your search. You can unsubscribe at any time with a single email.',
+  },
+}[lang]!;
+---
+<Base lang={lang} section="alerta" title={T.title} description={T.desc}>
+  <Crumbs lang={lang} items={[{ nombre: ui.nav.alerta }]} />
+  <section class="section section--tight">
+    <div class="container split split--13">
+      <div>
+        <h1>{T.h1}</h1>
+        <p class="lead" style="margin-top:14px">{T.lead}</p>
+        <ol class="steps" style="margin-top:28px">
+          {T.pasos.map((p) => <li><h3>{p.t}</h3><p>{p.d}</p></li>)}
+        </ol>
+      </div>
+      <div class="hero__card" style="max-width:none">
+        <h2 style="margin-bottom:10px">{T.formTitulo}</h2>
+        <FormShell
+          lang={lang}
+          id="form-alerta"
+          origen="alerta"
+          submitLabel={T.enviar}
+          campos={[
+            { clave: 'operacion', label: T.campos.operacion, tipo: 'select', requerido: true, opciones: T.operaciones },
+            { clave: 'zona', label: T.campos.zona, tipo: 'select', requerido: true, opciones: T.zonas },
+            { clave: 'tipo', label: T.campos.tipo, tipo: 'select', opciones: T.tipos },
+            { clave: 'presupuesto', label: T.campos.presupuesto, tipo: 'number' },
+            { clave: 'nombre', label: T.campos.nombre, requerido: true, autocomplete: 'name' },
+            { clave: 'email', label: T.campos.email, tipo: 'email', requerido: true, autocomplete: 'email' },
+            { clave: 'telefono', label: T.campos.telefono, tipo: 'tel', autocomplete: 'tel' },
+          ]}
+        />
+        <p class="hint" style="margin-top:12px">{T.nota}</p>
+      </div>
+    </div>
+  </section>
+</Base>

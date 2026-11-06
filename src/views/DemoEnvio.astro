@@ -1,0 +1,41 @@
+---
+import Base from '../layouts/Base.astro';
+import { path, t, type Lang } from '../lib/i18n';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const ui = t(lang);
+
+const T = {
+  es: {
+    title: 'Demostración: nada enviado · Finques Mil·lenium',
+    desc: 'Página de confirmación de la versión de demostración: el formulario no envía datos.',
+    h1: 'Esto es una demostración.',
+    texto: 'Este formulario forma parte de la versión de demostración y no ha enviado ningún dato a ningún sitio. En la web definitiva, su mensaje llegaría directamente al buzón de la agencia.',
+    volver: 'Volver a la portada',
+  },
+  ca: {
+    title: 'Demostració: res enviat · Finques Mil·lenium',
+    desc: 'Pàgina de confirmació de la versió de demostració: el formulari no envia dades.',
+    h1: 'Això és una demostració.',
+    texto: 'Aquest formulari forma part de la versió de demostració i no ha enviat cap dada enlloc. Al web definitiu, el seu missatge arribaria directament a la bústia de l’agència.',
+    volver: 'Tornar a la portada',
+  },
+  en: {
+    title: 'Demo: nothing sent · Finques Mil·lenium',
+    desc: 'Demonstration confirmation page: the form does not send data.',
+    h1: 'This is a demonstration.',
+    texto: 'This form is part of the demonstration version and has not sent any data anywhere. On the final website, your message would go straight to the agency’s inbox.',
+    volver: 'Back to the home page',
+  },
+}[lang]!;
+---
+<Base lang={lang} section="demo-envio" title={T.title} description={T.desc}>
+  <section class="section">
+    <div class="container cta-band">
+      <h1>{T.h1}</h1>
+      <p class="lead">{T.texto}</p>
+      <p><a class="btn btn--primary" href={path(lang, 'home')}>{T.volver}</a></p>
+    </div>
+  </section>
+</Base>

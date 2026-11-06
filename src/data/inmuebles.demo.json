@@ -1,0 +1,220 @@
+{
+  "_nota": "Inmuebles DE EJEMPLO para la demo (ejemplo: true en todos). Redactados desde cero: no proceden de Fotocasa ni de ningún portal. Las fotos son de banco con licencia libre. En producción se sustituyen por el feed XML del CRM (src/lib/propiedades.ts).",
+  "inmuebles": [
+    {
+      "id": "fm-demo-001",
+      "slug": "piso-3-habitaciones-gava-centre",
+      "ejemplo": true,
+      "operacion": "venta",
+      "tipo": "piso",
+      "municipio": "gava",
+      "barrio": "Centre",
+      "precio": 289000,
+      "superficie": 92,
+      "habitaciones": 3,
+      "banos": 2,
+      "planta": 2,
+      "ascensor": true,
+      "cee": "E",
+      "destacado": true,
+      "titulo": {
+        "es": "Piso de 3 habitaciones junto a la Rambla de Gavà",
+        "ca": "Pis de 3 habitacions al costat de la Rambla de Gavà",
+        "en": "3-bedroom flat next to the Rambla in Gavà"
+      },
+      "descripcion": {
+        "es": "Piso luminoso y bien distribuido en el centro de Gavà, a dos minutos a pie de la Rambla. Salón con balcón orientado a calle tranquila, cocina independiente equipada, tres habitaciones (dos dobles) y dos baños completos. Finca con ascensor. Comercios, colegios y Renfe a un paso.",
+        "ca": "Pis lluminós i ben distribuït al centre de Gavà, a dos minuts a peu de la Rambla. Saló amb balcó orientat a carrer tranquil, cuina independent equipada, tres habitacions (dues de dobles) i dos banys complets. Finca amb ascensor. Comerços, escoles i Renfe a tocar.",
+        "en": "Bright, well-laid-out flat in the centre of Gavà, a two-minute walk from the Rambla. Living room with a balcony over a quiet street, separate fitted kitchen, three bedrooms (two doubles) and two full bathrooms. Building with a lift. Shops, schools and the Renfe station close by."
+      },
+      "extras": {
+        "es": ["Balcón", "Ascensor", "Cocina equipada", "Calefacción", "Cerca de Renfe"],
+        "ca": ["Balcó", "Ascensor", "Cuina equipada", "Calefacció", "A prop de Renfe"],
+        "en": ["Balcony", "Lift", "Fitted kitchen", "Heating", "Near Renfe station"]
+      },
+      "imagenes": [
+        { "src": "salon-01", "alt": { "es": "Salón luminoso con balcón", "ca": "Saló lluminós amb balcó", "en": "Bright living room with balcony" } },
+        { "src": "cocina-01", "alt": { "es": "Cocina independiente equipada", "ca": "Cuina independent equipada", "en": "Separate fitted kitchen" } },
+        { "src": "dormitorio-01", "alt": { "es": "Dormitorio principal", "ca": "Dormitori principal", "en": "Main bedroom" } }
+      ]
+    },
+    {
+      "id": "fm-demo-002",
+      "slug": "casa-adosada-gava-mar",
+      "ejemplo": true,
+      "operacion": "venta",
+      "tipo": "casa",
+      "municipio": "gava",
+      "barrio": "Gavà Mar",
+      "precio": 785000,
+      "superficie": 210,
+      "habitaciones": 4,
+      "banos": 3,
+      "parcela": 320,
+      "piscina": true,
+      "cee": "D",
+      "destacado": true,
+      "titulo": {
+        "es": "Casa adosada con jardín y piscina en Gavà Mar",
+        "ca": "Casa adossada amb jardí i piscina a Gavà Mar",
+        "en": "Terraced house with garden and pool in Gavà Mar"
+      },
+      "descripcion": {
+        "es": "Casa adosada en una de las zonas más buscadas de Gavà Mar, a 500 metros de la playa. Jardín privado con piscina, salón de doble altura con chimenea, cocina con office, cuatro habitaciones y tres baños. Garaje para dos coches. Entre pinos y a quince minutos del aeropuerto.",
+        "ca": "Casa adossada en una de les zones més buscades de Gavà Mar, a 500 metres de la platja. Jardí privat amb piscina, saló de doble alçada amb llar de foc, cuina amb office, quatre habitacions i tres banys. Garatge per a dos cotxes. Entre pins i a quinze minuts de l'aeroport.",
+        "en": "Terraced house in one of the most sought-after parts of Gavà Mar, 500 metres from the beach. Private garden with a pool, double-height living room with fireplace, kitchen with breakfast area, four bedrooms and three bathrooms. Garage for two cars. Among the pines, fifteen minutes from the airport."
+      },
+      "extras": {
+        "es": ["Piscina privada", "Jardín", "Chimenea", "Garaje 2 plazas", "A 500 m de la playa"],
+        "ca": ["Piscina privada", "Jardí", "Llar de foc", "Garatge 2 places", "A 500 m de la platja"],
+        "en": ["Private pool", "Garden", "Fireplace", "2-car garage", "500 m from the beach"]
+      },
+      "imagenes": [
+        { "src": "casa-piscina-01", "alt": { "es": "Jardín con piscina de la casa", "ca": "Jardí amb piscina de la casa", "en": "Garden with the house's pool" } },
+        { "src": "salon-02", "alt": { "es": "Salón de doble altura", "ca": "Saló de doble alçada", "en": "Double-height living room" } },
+        { "src": "exterior-01", "alt": { "es": "Fachada de la casa", "ca": "Façana de la casa", "en": "Front of the house" } }
+      ]
+    },
+    {
+      "id": "fm-demo-003",
+      "slug": "atico-terraza-castelldefels-centre",
+      "ejemplo": true,
+      "operacion": "venta",
+      "tipo": "atico",
+      "municipio": "castelldefels",
+      "barrio": "Centre",
+      "precio": 445000,
+      "superficie": 105,
+      "habitaciones": 3,
+      "banos": 2,
+      "terraza": 40,
+      "ascensor": true,
+      "cee": "D",
+      "destacado": true,
+      "titulo": {
+        "es": "Ático con terraza de 40 m² en el centro de Castelldefels",
+        "ca": "Àtic amb terrassa de 40 m² al centre de Castelldefels",
+        "en": "Penthouse with a 40 m² terrace in central Castelldefels"
+      },
+      "descripcion": {
+        "es": "Ático reformado con terraza de 40 m² y vistas despejadas al Garraf. Salón con salida directa a la terraza, cocina abierta, tres habitaciones y dos baños. Plaza de aparcamiento incluida. A diez minutos a pie de la plaza de la Iglesia y bien comunicado con la C-32.",
+        "ca": "Àtic reformat amb terrassa de 40 m² i vistes esbargides al Garraf. Saló amb sortida directa a la terrassa, cuina oberta, tres habitacions i dos banys. Plaça d'aparcament inclosa. A deu minuts a peu de la plaça de l'Església i ben comunicat amb la C-32.",
+        "en": "Refurbished penthouse with a 40 m² terrace and open views of the Garraf hills. Living room opening straight onto the terrace, open kitchen, three bedrooms and two bathrooms. Parking space included. Ten minutes' walk from the church square, with quick access to the C-32."
+      },
+      "extras": {
+        "es": ["Terraza 40 m²", "Reformado", "Parking incluido", "Vistas al Garraf", "Ascensor"],
+        "ca": ["Terrassa 40 m²", "Reformat", "Pàrquing inclòs", "Vistes al Garraf", "Ascensor"],
+        "en": ["40 m² terrace", "Refurbished", "Parking included", "Garraf views", "Lift"]
+      },
+      "imagenes": [
+        { "src": "salon-03", "alt": { "es": "Salón con salida a la terraza", "ca": "Saló amb sortida a la terrassa", "en": "Living room opening onto the terrace" } },
+        { "src": "bano-01", "alt": { "es": "Baño reformado", "ca": "Bany reformat", "en": "Refurbished bathroom" } }
+      ]
+    },
+    {
+      "id": "fm-demo-004",
+      "slug": "piso-2-habitaciones-alquiler-viladecans",
+      "ejemplo": true,
+      "operacion": "alquiler",
+      "tipo": "piso",
+      "municipio": "viladecans",
+      "barrio": "Centre",
+      "precio": 1150,
+      "superficie": 70,
+      "habitaciones": 2,
+      "banos": 1,
+      "planta": 3,
+      "ascensor": true,
+      "cee": "E",
+      "destacado": false,
+      "titulo": {
+        "es": "Piso de 2 habitaciones en alquiler en el centro de Viladecans",
+        "ca": "Pis de 2 habitacions de lloguer al centre de Viladecans",
+        "en": "2-bedroom flat to rent in central Viladecans"
+      },
+      "descripcion": {
+        "es": "Piso recién pintado en el centro de Viladecans, junto al parque de la Torre Roja. Salón comedor, cocina equipada, dos habitaciones dobles y baño con ducha. Tercera planta con ascensor. Contrato claro y gastos detallados desde el primer día.",
+        "ca": "Pis acabat de pintar al centre de Viladecans, al costat del parc de la Torre Roja. Saló menjador, cuina equipada, dues habitacions dobles i bany amb dutxa. Tercera planta amb ascensor. Contracte clar i despeses detallades des del primer dia.",
+        "en": "Freshly painted flat in the centre of Viladecans, next to Torre Roja park. Living-dining room, fitted kitchen, two double bedrooms and a shower bathroom. Third floor with a lift. A clear contract and itemised costs from day one."
+      },
+      "extras": {
+        "es": ["Recién pintado", "Ascensor", "Cocina equipada", "Junto a la Torre Roja"],
+        "ca": ["Acabat de pintar", "Ascensor", "Cuina equipada", "Al costat de la Torre Roja"],
+        "en": ["Freshly painted", "Lift", "Fitted kitchen", "Next to Torre Roja park"]
+      },
+      "imagenes": [
+        { "src": "salon-04", "alt": { "es": "Salón comedor del piso", "ca": "Saló menjador del pis", "en": "Living-dining room" } },
+        { "src": "comedor-01", "alt": { "es": "Comedor del piso", "ca": "Menjador del pis", "en": "Dining area" } }
+      ]
+    },
+    {
+      "id": "fm-demo-005",
+      "slug": "obra-nueva-residencial-llevant-viladecans",
+      "ejemplo": true,
+      "operacion": "obra-nueva",
+      "tipo": "piso",
+      "municipio": "viladecans",
+      "barrio": "Llevant",
+      "precio": 365000,
+      "precioDesde": true,
+      "superficie": 85,
+      "habitaciones": 3,
+      "banos": 2,
+      "ascensor": true,
+      "cee": "A",
+      "destacado": true,
+      "titulo": {
+        "es": "Obra nueva: pisos de 2 y 3 habitaciones con terraza en Viladecans",
+        "ca": "Obra nova: pisos de 2 i 3 habitacions amb terrassa a Viladecans",
+        "en": "New build: 2- and 3-bedroom flats with terraces in Viladecans"
+      },
+      "descripcion": {
+        "es": "Promoción de obra nueva de 24 viviendas con terraza, piscina comunitaria y parking. Calificación energética A, aerotermia y suelo radiante. Pisos de 2 y 3 habitaciones desde 365.000 €. Entrega prevista: consulte disponibilidad y plano de cada vivienda en la oficina.",
+        "ca": "Promoció d'obra nova de 24 habitatges amb terrassa, piscina comunitària i pàrquing. Qualificació energètica A, aerotèrmia i terra radiant. Pisos de 2 i 3 habitacions des de 365.000 €. Lliurament previst: consulteu disponibilitat i plànol de cada habitatge a l'oficina.",
+        "en": "New development of 24 homes with terraces, a shared pool and parking. Energy rating A, aerothermal heating and underfloor heating. 2- and 3-bedroom flats from €365,000. Ask at the office for availability and floor plans."
+      },
+      "extras": {
+        "es": ["Calificación A", "Piscina comunitaria", "Terraza", "Parking opcional", "Aerotermia"],
+        "ca": ["Qualificació A", "Piscina comunitària", "Terrassa", "Pàrquing opcional", "Aerotèrmia"],
+        "en": ["Energy rating A", "Shared pool", "Terrace", "Optional parking", "Aerothermal heating"]
+      },
+      "imagenes": [
+        { "src": "obra-nueva-01", "alt": { "es": "Edificio de obra nueva", "ca": "Edifici d'obra nova", "en": "New-build residential building" } },
+        { "src": "salon-05", "alt": { "es": "Salón de la vivienda de muestra", "ca": "Saló de l'habitatge de mostra", "en": "Show home living room" } }
+      ]
+    },
+    {
+      "id": "fm-demo-006",
+      "slug": "traspaso-cafeteria-gava-rambla",
+      "ejemplo": true,
+      "operacion": "traspaso",
+      "tipo": "local",
+      "municipio": "gava",
+      "barrio": "Centre",
+      "precio": 48000,
+      "alquilerMensual": 1400,
+      "superficie": 120,
+      "banos": 1,
+      "cee": "C",
+      "destacado": false,
+      "titulo": {
+        "es": "Traspaso de cafetería en funcionamiento junto a la Rambla de Gavà",
+        "ca": "Traspàs de cafeteria en funcionament al costat de la Rambla de Gavà",
+        "en": "Working café for transfer next to the Rambla in Gavà"
+      },
+      "descripcion": {
+        "es": "Cafetería en funcionamiento con clientela consolidada, en calle de mucho paso junto a la Rambla. 120 m² con cocina equipada, salida de humos, terraza autorizada para seis mesas y almacén. Alquiler mensual de 1.400 €. Traspaso por jubilación.",
+        "ca": "Cafeteria en funcionament amb clientela consolidada, en carrer de molt pas al costat de la Rambla. 120 m² amb cuina equipada, sortida de fums, terrassa autoritzada per a sis taules i magatzem. Lloguer mensual de 1.400 €. Traspàs per jubilació.",
+        "en": "Working café with an established clientele on a busy street next to the Rambla. 120 m² with a fitted kitchen, extractor outlet, licensed terrace for six tables and a storeroom. Monthly rent €1,400. Transfer due to retirement."
+      },
+      "extras": {
+        "es": ["Salida de humos", "Terraza autorizada", "Cocina equipada", "Clientela consolidada"],
+        "ca": ["Sortida de fums", "Terrassa autoritzada", "Cuina equipada", "Clientela consolidada"],
+        "en": ["Extractor outlet", "Licensed terrace", "Fitted kitchen", "Established clientele"]
+      },
+      "imagenes": [
+        { "src": "local-01", "alt": { "es": "Interior de la cafetería", "ca": "Interior de la cafeteria", "en": "Inside the café" } }
+      ]
+    }
+  ]
+}

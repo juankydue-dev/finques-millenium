@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import { path } from '../lib/i18n';
+---
+<Base lang="es" section="home" title="Página no encontrada · Finques Mil·lenium" description="La página que busca no existe o ha cambiado de dirección." noAlternates>
+  <section class="section">
+    <div class="container cta-band">
+      <h1>No encontramos esa página.</h1>
+      <p class="lead">Puede que la dirección haya cambiado. Estas puertas sí están abiertas:</p>
+      <ul class="filter-chips" style="justify-content:center">
+        <li><a href={path('es', 'home')}>Portada</a></li>
+        <li><a href={path('es', 'comprar')}>Comprar</a></li>
+        <li><a href={path('es', 'vender')}>Vender</a></li>
+        <li><a href={path('es', 'contacto')}>Contacto</a></li>
+      </ul>
+      <p style="margin-top:10px"><a href={path('ca', 'home')} lang="ca">Versió en català</a> · <a href={path('en', 'home')} lang="en">English version</a></p>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,66 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource-variable/fraunces';
+import '../styles/global.css';
+import { DEMO, SITE_URL, CHAT_WIDGET, type Lang } from '../config/site';
+import { path, alternates, OG_LOCALE, HTML_LANG, DEFAULT_LANG, LANGS, t, type SectionKey } from '../lib/i18n';
+import { agenciaSchema, webSchema, grafo } from '../lib/schema';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import Consent from '../components/Consent.astro';
+
+interface Props {
+  lang: Lang;
+  section: SectionKey;
+  /** Segmentos extra de la URL (p. ej. slug de zona o de inmueble). */
+  rest?: string[];
+  title: string;
+  description: string;
+  /** Nodos JSON-LD adicionales (breadcrumbs, inmueble…). */
+  schemaExtra?: Record<string, unknown>[];
+  /** Si la sección extra no existe en otros idiomas, pasar alternates ya resueltos. */
+  noAlternates?: boolean;
+}
+
+const { lang, section, rest = [], title, description, schemaExtra = [], noAlternates = false } = Astro.props;
+const ui = t(lang);
+const canonicalPath = path(lang, section, ...rest);
+const canonical = SITE_URL.replace(/\/$/, '') + canonicalPath;
+const alts = noAlternates ? [] : alternates(section, ...rest);
+const ld = grafo(agenciaSchema(), webSchema(lang), ...schemaExtra);
+const demoLabel = { es: 'Versión de demostración', ca: 'Versió de demostració', en: 'Demonstration version', fr: 'Version de démonstration' }[lang];
+---
+<!doctype html>
+<html lang={HTML_LANG[lang]}>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  {DEMO && <meta name="robots" content="noindex, nofollow" />}
+  <link rel="canonical" href={canonical} />
+  {alts.map((a) => <link rel="alternate" hreflang={a.lang} href={SITE_URL.replace(/\/$/, '') + a.href} />)}
+  {!noAlternates && <link rel="alternate" hreflang="x-default" href={SITE_URL.replace(/\/$/, '') + path(DEFAULT_LANG, section, ...rest)} />}
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Finques Mil·lenium" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:locale" content={OG_LOCALE[lang]} />
+  {LANGS.filter((l) => l !== lang).map((l) => <meta property="og:locale:alternate" content={OG_LOCALE[l]} />)}
+  <script type="application/ld+json" set:html={ld} />
+</head>
+<body>
+  <a class="skip-link" href="#contenido">{ui.saltar}</a>
+  {DEMO && <p class="demo-strip">{demoLabel} · Visto Bueno</p>}
+  <Header lang={lang} section={section} />
+  <main id="contenido">
+    <slot />
+  </main>
+  <Footer lang={lang} />
+  <Consent lang={lang} />
+  {/* Punto de integración del asistente (Visto Bueno): se montará aquí más adelante. */}
+  <div id={CHAT_WIDGET.mountId} data-vb-mount hidden></div>
+</body>
+</html>

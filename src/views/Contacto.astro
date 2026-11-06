@@ -1,0 +1,119 @@
+---
+import Base from '../layouts/Base.astro';
+import Crumbs from '../components/Crumbs.astro';
+import FormShell from '../components/FormShell.astro';
+import { path, t, type Lang } from '../lib/i18n';
+import { EMPRESA, dato, telHref, waHref } from '../config/empresa';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const ui = t(lang);
+const tel = dato(EMPRESA.telefono)!;
+const wa = dato(EMPRESA.whatsapp)!;
+const email = dato(EMPRESA.email)!;
+const direccion = dato(EMPRESA.direccion)!;
+const cp = dato(EMPRESA.codigoPostal)!;
+const muni = dato(EMPRESA.municipio)!;
+const geo = dato(EMPRESA.geo)!;
+const horario = dato(EMPRESA.horario);
+const insta = dato(EMPRESA.instagram)!;
+
+const T = {
+  es: {
+    title: 'Contacto: oficina en Gavà, teléfono y WhatsApp · Finques Mil·lenium',
+    desc: 'Hable con Finques Mil·lenium: oficina en C/ Sant Pere 91 de Gavà, teléfono +34 936 33 42 42, WhatsApp y correo electrónico.',
+    h1: 'Hablemos sin compromiso.',
+    lead: 'Llámenos, escríbanos o pase por la oficina: estamos en el centro de Gavà.',
+    formTitulo: 'Escríbanos',
+    campos: { nombre: 'Nombre', telefono: 'Teléfono', email: 'Correo electrónico', mensaje: '¿En qué podemos ayudarle?' },
+    datosTitulo: 'La oficina',
+    llegarTitulo: 'Cómo llegar',
+    llegarTexto: 'Estamos en la calle Sant Pere 91 de Gavà, a tres minutos a pie de la Rambla. Hay aparcamiento público en la plaza del Mercat.',
+    mapa: 'Ver en OpenStreetMap (se abre en una ventana nueva)',
+    mapaGoogle: 'Ver en Google Maps (se abre en una ventana nueva)',
+    horarioTitulo: 'Horario',
+    horarioPendiente: 'Llámenos y le atendemos, o escríbanos por WhatsApp a cualquier hora.',
+    waMsg: 'Hola, vengo de la web de Finques Mil·lenium',
+  },
+  ca: {
+    title: 'Contacte: oficina a Gavà, telèfon i WhatsApp · Finques Mil·lenium',
+    desc: 'Parli amb Finques Mil·lenium: oficina al C/ Sant Pere 91 de Gavà, telèfon +34 936 33 42 42, WhatsApp i correu electrònic.',
+    h1: 'Parlem-ne sense compromís.',
+    lead: 'Truqui’ns, escrigui’ns o passi per l’oficina: som al centre de Gavà.',
+    formTitulo: 'Escrigui’ns',
+    campos: { nombre: 'Nom', telefono: 'Telèfon', email: 'Correu electrònic', mensaje: 'En què el podem ajudar?' },
+    datosTitulo: 'L’oficina',
+    llegarTitulo: 'Com arribar-hi',
+    llegarTexto: 'Som al carrer Sant Pere 91 de Gavà, a tres minuts a peu de la Rambla. Hi ha aparcament públic a la plaça del Mercat.',
+    mapa: 'Veure a OpenStreetMap (s’obre en una finestra nova)',
+    mapaGoogle: 'Veure a Google Maps (s’obre en una finestra nova)',
+    horarioTitulo: 'Horari',
+    horarioPendiente: 'Truqui’ns i l’atenem, o escrigui’ns per WhatsApp a qualsevol hora.',
+    waMsg: 'Hola, vinc del web de Finques Mil·lenium',
+  },
+  en: {
+    title: 'Contact: Gavà office, phone and WhatsApp · Finques Mil·lenium',
+    desc: 'Talk to Finques Mil·lenium: office at C/ Sant Pere 91 in Gavà, phone +34 936 33 42 42, WhatsApp and email.',
+    h1: 'Let’s talk, no strings attached.',
+    lead: 'Call us, write to us or drop by the office: we are in the centre of Gavà.',
+    formTitulo: 'Write to us',
+    campos: { nombre: 'Name', telefono: 'Phone', email: 'Email', mensaje: 'How can we help?' },
+    datosTitulo: 'The office',
+    llegarTitulo: 'Getting here',
+    llegarTexto: 'We are at Carrer de Sant Pere 91 in Gavà, a three-minute walk from the Rambla. There is public parking at Plaça del Mercat.',
+    mapa: 'View on OpenStreetMap (opens in a new window)',
+    mapaGoogle: 'View on Google Maps (opens in a new window)',
+    horarioTitulo: 'Opening hours',
+    horarioPendiente: 'Call us and we will help you, or message us on WhatsApp at any time.',
+    waMsg: 'Hello, I found you on the Finques Mil·lenium website',
+  },
+}[lang]!;
+
+const osmUrl = `https://www.openstreetmap.org/?mlat=${geo.lat}&mlon=${geo.lng}#map=18/${geo.lat}/${geo.lng}`;
+const gmapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`Finques Mil·lenium, ${direccion}, ${cp} ${muni}`)}`;
+---
+<Base lang={lang} section="contacto" title={T.title} description={T.desc}>
+  <Crumbs lang={lang} items={[{ nombre: ui.nav.contacto }]} />
+  <section class="section section--tight">
+    <div class="container split">
+      <div>
+        <h1>{T.h1}</h1>
+        <p class="lead" style="margin-top:12px">{T.lead}</p>
+        <h2 style="font-size:1.15rem;margin-top:28px">{T.datosTitulo}</h2>
+        <div class="contact-lines" style="margin-top:12px">
+          <p>{direccion} · {cp} {muni} (Barcelona)</p>
+          <p><a href={telHref(tel)}>{tel}</a></p>
+          <p><a href={waHref(wa, T.waMsg)} rel="noopener" target="_blank">{ui.comunes.escribanosWhatsapp} <span class="visually-hidden">{ui.comunes.abreNueva}</span></a></p>
+          <p><a href={`mailto:${email}`}>{email}</a></p>
+          <p><a href={`https://www.instagram.com/${insta}/`} rel="noopener" target="_blank">@{insta} <span class="visually-hidden">Instagram {ui.comunes.abreNueva}</span></a></p>
+        </div>
+        <h2 style="font-size:1.15rem;margin-top:28px">{T.horarioTitulo}</h2>
+        {horario ? (
+          <p style="margin-top:8px">{horario.dias}, {horario.manana.abre}–{horario.manana.cierra} · {horario.tarde.abre}–{horario.tarde.cierra}</p>
+        ) : (
+          <p style="margin-top:8px">{T.horarioPendiente}</p>
+        )}
+        <h2 style="font-size:1.15rem;margin-top:28px">{T.llegarTitulo}</h2>
+        <p style="margin-top:8px">{T.llegarTexto}</p>
+        <p style="margin-top:10px;display:grid;gap:6px">
+          <a href={osmUrl} rel="noopener" target="_blank">{T.mapa}</a>
+          <a href={gmapsUrl} rel="noopener" target="_blank">{T.mapaGoogle}</a>
+        </p>
+      </div>
+      <div class="hero__card" style="max-width:none;align-self:start">
+        <h2 style="margin-bottom:10px">{T.formTitulo}</h2>
+        <FormShell
+          lang={lang}
+          id="form-contacto"
+          origen="contacto"
+          campos={[
+            { clave: 'nombre', label: T.campos.nombre, requerido: true, autocomplete: 'name' },
+            { clave: 'telefono', label: T.campos.telefono, tipo: 'tel', autocomplete: 'tel' },
+            { clave: 'email', label: T.campos.email, tipo: 'email', requerido: true, autocomplete: 'email' },
+            { clave: 'mensaje', label: T.campos.mensaje, tipo: 'textarea', requerido: true },
+          ]}
+        />
+      </div>
+    </div>
+  </section>
+</Base>

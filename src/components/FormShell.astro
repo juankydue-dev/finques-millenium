@@ -1,0 +1,104 @@
+---
+/**
+ * Formulario común: validación, consentimiento RGPD y destino configurable.
+ * - Producción: POST a FORM_ENDPOINT (variable PUBLIC_FORM_ENDPOINT) con todos los campos.
+ * - Demo: los campos se renderizan SIN atributo name y el envío se intercepta:
+ *   no sale ningún dato, ni siquiera sin JavaScript (el GET a la página de demo va vacío).
+ */
+import { EMPRESA, dato } from '../config/empresa';
+import { FORM_ENDPOINT, DEMO, type Lang } from '../config/site';
+import { path, t, fmt } from '../lib/i18n';
+
+export interface Campo {
+  clave: string;
+  label: string;
+  tipo?: 'text' | 'tel' | 'email' | 'number' | 'textarea' | 'select';
+  requerido?: boolean;
+  autocomplete?: string;
+  opciones?: { valor: string; label: string }[];
+  placeholder?: string;
+}
+
+interface Props {
+  lang: Lang;
+  id: string;
+  /** Nombre interno del formulario (llega como campo oculto en producción). */
+  origen: string;
+  campos: Campo[];
+  submitLabel?: string;
+}
+const { lang, id, origen, campos, submitLabel } = Astro.props;
+const ui = t(lang);
+const email = dato(EMPRESA.email)!;
+const demoMode = DEMO || !FORM_ENDPOINT;
+const action = demoMode ? path(lang, 'demo-envio') : FORM_ENDPOINT;
+const okMsg = {
+  es: 'Gracias. Hemos recibido su mensaje y le responderemos lo antes posible.',
+  ca: 'Gràcies. Hem rebut el seu missatge i li respondrem al més aviat possible.',
+  en: 'Thank you. We have received your message and will reply as soon as possible.',
+  fr: 'Merci. Nous avons bien reçu votre message et vous répondrons au plus vite.',
+}[lang];
+---
+<form
+  class="form"
+  id={id}
+  method={demoMode ? 'get' : 'post'}
+  action={action}
+  data-fm-form
+  data-demo={demoMode ? 'true' : undefined}
+  data-ok={okMsg}
+  novalidate={false}
+>
+  {demoMode && <p class="form-demo-note">{ui.form.demoAviso}</p>}
+  {!demoMode && <input type="hidden" name="_origen" value={origen} />}
+  <p class="hp-field" aria-hidden="true">
+    <label>No rellene este campo: <input type="text" tabindex="-1" autocomplete="off" {...(demoMode ? {} : { name: '_hp' })} /></label>
+  </p>
+  {campos.map((c) => (
+    <p class="field">
+      <label for={`${id}-${c.clave}`}>{c.label}{c.requerido ? ' *' : ''}</label>
+      {c.tipo === 'textarea' ? (
+        <textarea
+          id={`${id}-${c.clave}`}
+          required={c.requerido}
+          placeholder={c.placeholder}
+          {...(demoMode ? {} : { name: c.clave })}
+        ></textarea>
+      ) : c.tipo === 'select' ? (
+        <select id={`${id}-${c.clave}`} required={c.requerido} {...(demoMode ? {} : { name: c.clave })}>
+          {(c.opciones ?? []).map((o) => <option value={o.valor}>{o.label}</option>)}
+        </select>
+      ) : (
+        <input
+          id={`${id}-${c.clave}`}
+          type={c.tipo ?? 'text'}
+          required={c.requerido}
+          autocomplete={c.autocomplete}
+          placeholder={c.placeholder}
+          {...(demoMode ? {} : { name: c.clave })}
+        />
+      )}
+    </p>
+  ))}
+  <p class="check">
+    <input type="checkbox" id={`${id}-rgpd`} required {...(demoMode ? {} : { name: 'rgpd', value: 'si' })} />
+    <label for={`${id}-rgpd`}>
+      {ui.form.rgpd} <a href={path(lang, 'privacidad')}>{ui.footer.privacidad}</a>.
+    </label>
+  </p>
+  <p class="hint">{fmt(ui.form.rgpdNota, { email })}</p>
+  <p><button class="btn btn--primary" type="submit">{submitLabel ?? ui.form.enviar}</button></p>
+  <p class="form-ok" hidden data-form-ok>{okMsg}</p>
+</form>
+<script>
+  // En demo, interceptar el envío: validar y confirmar sin mandar nada a ningún sitio.
+  for (const form of document.querySelectorAll<HTMLFormElement>('[data-fm-form][data-demo]')) {
+    form.addEventListener('submit', (e) => {
+      if (!form.checkValidity()) return; // dejar que el navegador muestre los errores
+      e.preventDefault();
+      const ok = form.querySelector<HTMLElement>('[data-form-ok]');
+      if (ok) { ok.hidden = false; ok.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
+      form.querySelectorAll<HTMLButtonElement>('button[type=submit]').forEach((b) => (b.disabled = true));
+    });
+  }
+</script>

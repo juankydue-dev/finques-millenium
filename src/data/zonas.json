@@ -1,0 +1,65 @@
+{
+  "_nota": "Barrios según la web actual (api/zones.php). Los precios €/m² están pendientes de confirmar con el cliente (verificado: false) y NO se renderizan. Sant Boi, El Prat y Begues quedan fuera hasta que el cliente confirme el set de zonas (ver src/config/empresa.ts).",
+  "zonas": [
+    {
+      "slug": "gava",
+      "nombre": { "es": "Gavà", "ca": "Gavà", "en": "Gavà" },
+      "precio_m2": { "valor": 3400, "verificado": false },
+      "barrios": [
+        { "slug": "gava-mar", "nombre": "Gavà Mar", "precio_m2": { "valor": 6000, "verificado": false } },
+        { "slug": "centre", "nombre": "Centre", "precio_m2": { "valor": 3500, "verificado": false } },
+        { "slug": "diagonal", "nombre": "Diagonal", "precio_m2": { "valor": null, "verificado": false } },
+        { "slug": "bruguers", "nombre": "Bruguers", "precio_m2": { "valor": null, "verificado": false } },
+        { "slug": "can-tintorer", "nombre": "Can Tintorer", "precio_m2": { "valor": null, "verificado": false } }
+      ]
+    },
+    {
+      "slug": "castelldefels",
+      "nombre": { "es": "Castelldefels", "ca": "Castelldefels", "en": "Castelldefels" },
+      "precio_m2": { "valor": 4400, "verificado": false },
+      "barrios": [
+        { "slug": "baixador", "nombre": "Baixador", "precio_m2": { "valor": 5650, "verificado": false } },
+        { "slug": "lluminetes", "nombre": "Lluminetes", "precio_m2": { "valor": 5750, "verificado": false } },
+        { "slug": "bellamar", "nombre": "Bellamar", "precio_m2": { "valor": 5000, "verificado": false } },
+        { "slug": "la-pineda", "nombre": "La Pineda", "precio_m2": { "valor": 5000, "verificado": false } },
+        { "slug": "el-poal", "nombre": "El Poal", "precio_m2": { "valor": 4600, "verificado": false } },
+        { "slug": "centre", "nombre": "Centre", "precio_m2": { "valor": 4150, "verificado": false } },
+        { "slug": "montmar", "nombre": "Montmar", "precio_m2": { "valor": 4100, "verificado": false } },
+        { "slug": "el-castell-poble-vell", "nombre": "El Castell-Poble Vell", "precio_m2": { "valor": 3500, "verificado": false } },
+        { "slug": "vistalegre", "nombre": "Vistalegre", "precio_m2": { "valor": 3100, "verificado": false } },
+        { "slug": "platja", "nombre": "Platja", "precio_m2": { "valor": null, "verificado": false } },
+        { "slug": "can-bou", "nombre": "Can Bou", "precio_m2": { "valor": null, "verificado": false } },
+        { "slug": "can-roca", "nombre": "Can Roca", "precio_m2": { "valor": null, "verificado": false } }
+      ]
+    },
+    {
+      "slug": "viladecans",
+      "nombre": { "es": "Viladecans", "ca": "Viladecans", "en": "Viladecans" },
+      "precio_m2": { "valor": 3000, "verificado": false },
+      "barrios": [
+        { "slug": "centre", "nombre": "Centre", "precio_m2": { "valor": null, "verificado": false } },
+        { "slug": "torrent-ballester", "nombre": "Torrent Ballester", "precio_m2": { "valor": null, "verificado": false } },
+        { "slug": "can-palmer", "nombre": "Can Palmer", "precio_m2": { "valor": null, "verificado": false } },
+        { "slug": "sales", "nombre": "Sales", "precio_m2": { "valor": null, "verificado": false } },
+        { "slug": "montserratina", "nombre": "Montserratina", "precio_m2": { "valor": null, "verificado": false } }
+      ]
+    }
+  ],
+  "pendientes": [
+    {
+      "slug": "sant-boi",
+      "nombre": { "es": "Sant Boi de Llobregat", "ca": "Sant Boi de Llobregat", "en": "Sant Boi de Llobregat" },
+      "motivo": "Pendiente de confirmar el set de zonas (¿con Sant Boi y El Prat, o con Begues?)"
+    },
+    {
+      "slug": "el-prat",
+      "nombre": { "es": "El Prat de Llobregat", "ca": "El Prat de Llobregat", "en": "El Prat de Llobregat" },
+      "motivo": "Pendiente de confirmar el set de zonas"
+    },
+    {
+      "slug": "begues",
+      "nombre": { "es": "Begues", "ca": "Begues", "en": "Begues" },
+      "motivo": "Pendiente de confirmar el set de zonas"
+    }
+  ]
+}

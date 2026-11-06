@@ -1,0 +1,154 @@
+---
+import { Image, getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Crumbs from '../components/Crumbs.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { porSlug, OPERACION_SECCION, tituloDe, descripcionDe, extrasDe } from '../lib/propiedades';
+import { inmuebleSchema, breadcrumbSchema } from '../lib/schema';
+import { img } from '../lib/img';
+import { path, t, precio, type Lang } from '../lib/i18n';
+import { EMPRESA, dato, telHref, waHref } from '../config/empresa';
+
+interface Props { lang: Lang; slug: string; }
+const { lang, slug } = Astro.props;
+const i = porSlug(slug)!;
+const ui = t(lang);
+const section = OPERACION_SECCION[i.operacion];
+const tel = dato(EMPRESA.telefono)!;
+const wa = dato(EMPRESA.whatsapp)!;
+
+const T = {
+  es: {
+    ejemploAviso: 'Inmueble de ejemplo: esta ficha forma parte de la demo y no corresponde a ninguna vivienda real en cartera.',
+    ref: 'Referencia',
+    descripcion: 'Descripción',
+    caracteristicas: 'Características',
+    superficie: 'Superficie',
+    habitaciones: 'Habitaciones',
+    banos: 'Baños',
+    planta: 'Planta',
+    parcela: 'Parcela',
+    terraza: 'Terraza',
+    alquilerLocal: 'Alquiler del local',
+    cee: 'Certificado energético',
+    interesa: '¿Le interesa esta vivienda?',
+    interesaTexto: 'Llámenos o escríbanos y organizamos una visita sin compromiso.',
+    waMsg: 'Hola, me interesa el inmueble "{t}" que he visto en su web.',
+    verMas: 'Ver más inmuebles',
+  },
+  ca: {
+    ejemploAviso: 'Immoble d’exemple: aquesta fitxa forma part de la demo i no correspon a cap habitatge real en cartera.',
+    ref: 'Referència',
+    descripcion: 'Descripció',
+    caracteristicas: 'Característiques',
+    superficie: 'Superfície',
+    habitaciones: 'Habitacions',
+    banos: 'Banys',
+    planta: 'Planta',
+    parcela: 'Parcel·la',
+    terraza: 'Terrassa',
+    alquilerLocal: 'Lloguer del local',
+    cee: 'Certificat energètic',
+    interesa: 'L’interessa aquest habitatge?',
+    interesaTexto: 'Truqui’ns o escrigui’ns i organitzem una visita sense compromís.',
+    waMsg: 'Hola, m’interessa l’immoble "{t}" que he vist al seu web.',
+    verMas: 'Veure més immobles',
+  },
+  en: {
+    ejemploAviso: 'Example property: this listing is part of the demo and does not correspond to any real property on our books.',
+    ref: 'Reference',
+    descripcion: 'Description',
+    caracteristicas: 'Features',
+    superficie: 'Floor area',
+    habitaciones: 'Bedrooms',
+    banos: 'Bathrooms',
+    planta: 'Floor',
+    parcela: 'Plot',
+    terraza: 'Terrace',
+    alquilerLocal: 'Premises rent',
+    cee: 'Energy certificate',
+    interesa: 'Interested in this property?',
+    interesaTexto: 'Call or message us and we will arrange a no-obligation visit.',
+    waMsg: 'Hello, I am interested in the property "{t}" I saw on your website.',
+    verMas: 'See more properties',
+  },
+}[lang]!;
+
+const titulo = tituloDe(i, lang);
+const desc = descripcionDe(i, lang);
+const extras = extrasDe(i, lang);
+const navLabel = { venta: ui.nav.comprar, alquiler: ui.nav.alquilar, 'obra-nueva': ui.nav.obraNueva, traspaso: ui.nav.traspasos }[i.operacion];
+const opLabel = { venta: ui.card.venta, alquiler: ui.card.alquiler, 'obra-nueva': ui.card.obraNueva, traspaso: ui.card.traspaso }[i.operacion];
+const zonaNombre: Record<string, string> = { gava: 'Gavà', castelldefels: 'Castelldefels', viladecans: 'Viladecans' };
+
+const ogImgs = await Promise.all(
+  i.imagenes.map((im) => getImage({ src: img(im.src), width: 1200, quality: 70, format: 'jpeg' }))
+);
+const schemaExtra = [
+  inmuebleSchema(i, lang, ogImgs.map((o) => new URL(o.src, Astro.site).href)),
+  breadcrumbSchema([
+    { nombre: ui.migas.inicio, href: path(lang, 'home') },
+    { nombre: navLabel, href: path(lang, section) },
+    { nombre: titulo, href: path(lang, 'inmuebles', i.slug) },
+  ]),
+];
+const metaDesc = (desc.length > 155 ? desc.slice(0, 152).trimEnd() + '…' : desc);
+const waLink = waHref(wa, T.waMsg.replace('{t}', titulo));
+---
+<Base lang={lang} section="inmuebles" rest={[i.slug]} title={`${titulo} · Finques Mil·lenium`} description={metaDesc} schemaExtra={schemaExtra}>
+  <Crumbs lang={lang} items={[{ nombre: navLabel, href: path(lang, section) }, { nombre: titulo }]} />
+  <article class="section section--tight">
+    <div class="container">
+      {i.ejemplo && <p class="notice" style="margin-bottom:22px"><strong>{ui.card.ejemplo}.</strong> {T.ejemploAviso}</p>}
+      <div class="prop-layout">
+        <div>
+          <div class="prop-hero">
+            <Image src={img(i.imagenes[0].src)} alt={i.imagenes[0].alt[lang] ?? i.imagenes[0].alt.es} widths={[768, 1200]} sizes="(min-width: 960px) 720px, 94vw" quality={74} loading="eager" fetchpriority="high" />
+            {i.imagenes.length > 1 && (
+              <div class="prop-hero__thumbs">
+                {i.imagenes.slice(1).map((im) => (
+                  <Image src={img(im.src)} alt={im.alt[lang] ?? im.alt.es} widths={[400]} sizes="240px" quality={68} />
+                ))}
+              </div>
+            )}
+          </div>
+
+          <h1 style="margin-top:26px;font-size:clamp(1.6rem,3.4vw,2.3rem)">{titulo}</h1>
+          <p class="prop-card__where" style="margin-top:6px">{opLabel} · {i.barrio ? `${i.barrio} · ` : ''}{zonaNombre[i.municipio] ?? i.municipio}</p>
+
+          <p class="prop-meta">
+            <span>{i.superficie} m²</span>
+            {i.habitaciones != null && <span>{i.habitaciones} {ui.card.hab}</span>}
+            {i.banos != null && <span>{i.banos} {ui.card.banos}</span>}
+            {i.planta != null && <span>{T.planta} {i.planta}ª</span>}
+            {i.parcela != null && <span>{T.parcela}: {i.parcela} m²</span>}
+            {i.terraza != null && <span>{T.terraza}: {i.terraza} m²</span>}
+            {i.cee && <span>{T.cee}: {i.cee}</span>}
+          </p>
+
+          <h2 style="font-size:1.25rem;margin-top:26px">{T.descripcion}</h2>
+          <p style="margin-top:10px">{desc}</p>
+
+          <h2 style="font-size:1.25rem;margin-top:26px">{T.caracteristicas}</h2>
+          <ul class="icon-list" style="margin-top:12px">
+            {extras.map((e) => <li>{e}</li>)}
+          </ul>
+          <p style="margin-top:14px;font-size:.85rem;color:var(--ink-soft)">{T.ref}: {i.id.toUpperCase()}</p>
+        </div>
+
+        <aside class="prop-aside" aria-label={T.interesa}>
+          <p class="prop-card__price" style="font-size:1.9rem">
+            {i.precioDesde && <small>{ui.card.desde} </small>}{precio(lang, i.precio)}{i.operacion === 'alquiler' && <small>{ui.card.mes}</small>}
+          </p>
+          {i.alquilerMensual != null && <p class="hint">{T.alquilerLocal}: {precio(lang, i.alquilerMensual)}{ui.card.mes}</p>}
+          <h2 style="font-size:1.05rem;font-family:var(--font-body);font-weight:680">{T.interesa}</h2>
+          <p class="hint">{T.interesaTexto}</p>
+          <a class="btn btn--primary" href={telHref(tel)}>{tel}</a>
+          <a class="btn btn--ghost" href={waLink} rel="noopener" target="_blank">{ui.comunes.escribanosWhatsapp} <span class="visually-hidden">{ui.comunes.abreNueva}</span></a>
+          <a href={path(lang, 'contacto')}>{ui.nav.contacto}</a>
+        </aside>
+      </div>
+      <p style="margin-top:34px"><a class="btn btn--ghost btn--sm" href={path(lang, section)}>← {T.verMas}</a></p>
+    </div>
+  </article>
+</Base>

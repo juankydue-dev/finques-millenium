@@ -1,0 +1,51 @@
+---
+import { Image } from 'astro:assets';
+import type { Inmueble } from '../lib/propiedades';
+import { tituloDe } from '../lib/propiedades';
+import { img } from '../lib/img';
+import { path, t, precio } from '../lib/i18n';
+import type { Lang } from '../config/site';
+
+interface Props { lang: Lang; inmueble: Inmueble; prioridad?: boolean; }
+const { lang, inmueble: i, prioridad = false } = Astro.props;
+const ui = t(lang);
+const opLabel = { venta: ui.card.venta, alquiler: ui.card.alquiler, 'obra-nueva': ui.card.obraNueva, traspaso: ui.card.traspaso }[i.operacion];
+const foto = i.imagenes[0];
+const zonaNombre: Record<string, string> = { gava: 'Gavà', castelldefels: 'Castelldefels', viladecans: 'Viladecans' };
+---
+<article
+  class="prop-card"
+  data-prop
+  data-municipio={i.municipio}
+  data-tipo={i.tipo}
+  data-precio={i.precio}
+  data-hab={i.habitaciones ?? 0}
+>
+  <div class="prop-card__media">
+    {i.ejemplo && <span class="badge">{ui.card.ejemplo}</span>}
+    <span class="badge badge--op">{opLabel}</span>
+    <Image
+      src={img(foto.src)}
+      alt={foto.alt[lang] ?? foto.alt.es}
+      widths={[480, 760]}
+      sizes="(min-width: 700px) 360px, 92vw"
+      quality={72}
+      loading={prioridad ? 'eager' : 'lazy'}
+    />
+  </div>
+  <div class="prop-card__body">
+    <p class="prop-card__price">
+      {i.precioDesde && <small>{ui.card.desde} </small>}{precio(lang, i.precio)}{i.operacion === 'alquiler' && <small>{ui.card.mes}</small>}
+    </p>
+    <h3 class="prop-card__title">
+      <a href={path(lang, 'inmuebles', i.slug)}>{tituloDe(i, lang)}</a>
+    </h3>
+    <p class="prop-card__where">{i.barrio ? `${i.barrio} · ` : ''}{zonaNombre[i.municipio] ?? i.municipio}</p>
+    <p class="prop-card__specs">
+      <span>{i.superficie} m²</span>
+      {i.habitaciones != null && <span>{i.habitaciones} {ui.card.hab}</span>}
+      {i.banos != null && <span>{i.banos} {ui.card.banos}</span>}
+      {i.cee && <span aria-label={ui.card.cee}>CEE {i.cee}</span>}
+    </p>
+  </div>
+</article>

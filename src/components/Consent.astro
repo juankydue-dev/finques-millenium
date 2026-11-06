@@ -1,0 +1,82 @@
+---
+import { t } from '../lib/i18n';
+import { path } from '../lib/i18n';
+import { GA4_ID, META_PIXEL_ID, type Lang } from '../config/site';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const ui = t(lang);
+---
+<section class="consent" data-consent-banner aria-label={ui.consent.titulo} hidden>
+  <div class="consent__inner">
+    <h2>{ui.consent.titulo}</h2>
+    <p>{ui.consent.texto} <a href={path(lang, 'cookies')}>{ui.consent.masInfo}</a></p>
+    <div class="consent__opts">
+      <label><input type="checkbox" checked disabled /> {ui.consent.necesarias}</label>
+      <label><input type="checkbox" data-consent-cat="analytics" /> {ui.consent.analitica}</label>
+      <label><input type="checkbox" data-consent-cat="ads" /> {ui.consent.publicidad}</label>
+    </div>
+    <div class="consent__actions">
+      <button type="button" class="btn btn--brass btn--sm" data-consent-act="all">{ui.consent.aceptarTodo}</button>
+      <button type="button" class="btn btn--ghost btn--sm" data-consent-act="save">{ui.consent.aceptarSel}</button>
+      <button type="button" class="btn btn--ghost btn--sm" data-consent-act="none">{ui.consent.rechazar}</button>
+    </div>
+  </div>
+</section>
+<script is:inline define:vars={{ GA4_ID, META_PIXEL_ID }}>
+  // Consentimiento: analítica y publicidad SIEMPRE desactivadas por defecto.
+  // Sin IDs configurados no se carga ningún script de terceros, consienta o no.
+  (function () {
+    var KEY = 'fm_consent_v1';
+    var banner = document.querySelector('[data-consent-banner]');
+    if (!banner) return;
+    function leer() {
+      try { return JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { return null; }
+    }
+    function guardar(v) {
+      try { localStorage.setItem(KEY, JSON.stringify(v)); } catch (e) { /* almacenamiento bloqueado */ }
+    }
+    function cargarTerceros(c) {
+      if (c.analytics && GA4_ID) {
+        var s = document.createElement('script');
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA4_ID; s.async = true;
+        document.head.appendChild(s);
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { window.dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', GA4_ID, { anonymize_ip: true });
+      }
+      if (c.ads && META_PIXEL_ID && !window.fbq) {
+        var f = function () { f.callMethod ? f.callMethod.apply(f, arguments) : f.queue.push(arguments); };
+        f.queue = []; f.loaded = true; f.version = '2.0'; window.fbq = f;
+        var p = document.createElement('script');
+        p.src = 'https://connect.facebook.net/en_US/fbevents.js'; p.async = true;
+        document.head.appendChild(p);
+        window.fbq('init', META_PIXEL_ID);
+        window.fbq('track', 'PageView');
+      }
+    }
+    function abrir() {
+      var c = leer() || { analytics: false, ads: false };
+      banner.querySelectorAll('[data-consent-cat]').forEach(function (i) { i.checked = !!c[i.dataset.consentCat]; });
+      banner.hidden = false; banner.classList.add('is-open');
+    }
+    function cerrar(c) {
+      guardar(c); banner.hidden = true; banner.classList.remove('is-open'); cargarTerceros(c);
+    }
+    banner.querySelectorAll('[data-consent-act]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var modo = b.dataset.consentAct;
+        var c = { analytics: false, ads: false, ts: Date.now() };
+        if (modo === 'all') { c.analytics = true; c.ads = true; }
+        if (modo === 'save') {
+          banner.querySelectorAll('[data-consent-cat]').forEach(function (i) { c[i.dataset.consentCat] = i.checked; });
+        }
+        cerrar(c);
+      });
+    });
+    document.querySelectorAll('[data-consent-open]').forEach(function (b) { b.addEventListener('click', abrir); });
+    var previo = leer();
+    if (!previo) { abrir(); } else { cargarTerceros(previo); }
+  })();
+</script>

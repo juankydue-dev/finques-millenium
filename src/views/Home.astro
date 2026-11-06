@@ -1,0 +1,244 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PropCard from '../components/PropCard.astro';
+import Reviews from '../components/Reviews.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { destacados } from '../lib/propiedades';
+import { img } from '../lib/img';
+import { path, t, type Lang } from '../lib/i18n';
+import { EMPRESA, dato, telHref, waHref } from '../config/empresa';
+import zonasData from '../data/zonas.json';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const nz = (z: { nombre: Record<string, string> }) => z.nombre[lang] ?? z.nombre.es;
+const ui = t(lang);
+const fundacion = dato(EMPRESA.fundacion);
+const tel = dato(EMPRESA.telefono)!;
+
+const T = {
+  es: {
+    title: 'Inmobiliaria en Gavà y Baix Llobregat · Finques Mil·lenium',
+    desc: 'Inmobiliaria de barrio en Gavà. Compra, venta y alquiler de viviendas en Gavà, Castelldefels y Viladecans, con valoración gratuita y trato personal.',
+    eyebrow: 'Gavà · Baix Llobregat',
+    h1ConAno: 'Cuatro décadas abriendo puertas.',
+    h1: 'Aquí se abren puertas.',
+    lead: 'Díganos qué busca. Del resto nos ocupamos nosotros: precio real de mercado, trato personal y acompañamiento hasta la firma ante notario.',
+    heroImgAlt: 'Vivienda mediterránea con piscina',
+    cardTitulo: '¿Qué le traemos?',
+    cardTexto: 'Elija por dónde quiere empezar y le acompañamos desde la primera visita.',
+    quiero: [
+      { href: 'comprar', label: 'Quiero comprar' },
+      { href: 'alquilar', label: 'Quiero alquilar' },
+      { href: 'vender', label: 'Quiero vender' },
+      { href: 'valorar', label: 'Saber qué vale mi casa' },
+    ],
+    destacadosEyebrow: '01 · Inmuebles',
+    destacadosTitulo: 'Lo que tenemos ahora',
+    destacadosLead: 'Una selección de las viviendas y locales que gestionamos en este momento.',
+    verComprar: 'Ver todo en venta',
+    nosotrosEyebrow: '02 · La agencia',
+    nosotrosTitulo: 'Una inmobiliaria de aquí.',
+    nosotrosParr1: 'Atendemos personalmente a cada propietario y a cada comprador desde nuestra oficina de la calle Sant Pere de Gavà. Sin centralitas ni intermediarios: las personas que le reciben son las que llevan su operación de principio a fin.',
+    nosotrosParr2: 'El método no cambia: precio real de mercado, información clara y acompañamiento hasta la firma ante notario.',
+    nosotrosCta: 'Conózcanos',
+    nosotrosImgAlt: 'Oficina de la agencia',
+    zonasEyebrow: '03 · Zonas',
+    zonasTitulo: 'Conocemos cada calle.',
+    zonasLead: 'Trabajamos donde vivimos. Estas son nuestras zonas.',
+    zonasCta: 'Ver todas las zonas',
+    toolsEyebrow: '04 · Herramientas',
+    toolsTitulo: 'Lo que usamos para trabajar, ahora a su disposición.',
+    tools: [
+      { href: 'valorar', titulo: 'Valorador', texto: 'Conozca el precio real de mercado de su vivienda, gratis y sin compromiso.' },
+      { href: 'hipoteca', titulo: 'Calculadora hipotecaria', texto: 'Calcule su cuota mensual y los gastos de compra en un minuto.' },
+      { href: 'inversion', titulo: 'Calculadora de rentabilidad', texto: 'Números claros antes de invertir: rentabilidad bruta y neta.' },
+      { href: 'alerta', titulo: 'Alerta Mil·lenium', texto: 'Le avisamos cuando entre una vivienda como la que busca.' },
+    ],
+    ctaTitulo: '¿Cuánto vale hoy su vivienda?',
+    ctaTexto: 'Le decimos el precio real de mercado, gratis y sin compromiso. Hablemos.',
+  },
+  ca: {
+    title: 'Immobiliària a Gavà i el Baix Llobregat · Finques Mil·lenium',
+    desc: 'Immobiliària de barri a Gavà. Compra, venda i lloguer d’habitatges a Gavà, Castelldefels i Viladecans, amb valoració gratuïta i tracte personal.',
+    eyebrow: 'Gavà · Baix Llobregat',
+    h1ConAno: 'Quatre dècades obrint portes.',
+    h1: 'Aquí s’obren portes.',
+    lead: 'Digui’ns què busca. De la resta ens n’ocupem nosaltres: preu real de mercat, tracte personal i acompanyament fins a la signatura davant de notari.',
+    heroImgAlt: 'Habitatge mediterrani amb piscina',
+    cardTitulo: 'Què li portem?',
+    cardTexto: 'Triï per on vol començar i l’acompanyem des de la primera visita.',
+    quiero: [
+      { href: 'comprar', label: 'Vull comprar' },
+      { href: 'alquilar', label: 'Vull llogar' },
+      { href: 'vender', label: 'Vull vendre' },
+      { href: 'valorar', label: 'Saber què val casa meva' },
+    ],
+    destacadosEyebrow: '01 · Immobles',
+    destacadosTitulo: 'El que tenim ara',
+    destacadosLead: 'Una selecció dels habitatges i locals que gestionem en aquest moment.',
+    verComprar: 'Veure tot en venda',
+    nosotrosEyebrow: '02 · L’agència',
+    nosotrosTitulo: 'Una immobiliària d’aquí.',
+    nosotrosParr1: 'Atenem personalment cada propietari i cada comprador des de la nostra oficina del carrer Sant Pere de Gavà. Sense centraletes ni intermediaris: les persones que el reben són les que porten la seva operació de principi a fi.',
+    nosotrosParr2: 'El mètode no canvia: preu real de mercat, informació clara i acompanyament fins a la signatura davant de notari.',
+    nosotrosCta: 'Conegui’ns',
+    nosotrosImgAlt: 'Oficina de l’agència',
+    zonasEyebrow: '03 · Zones',
+    zonasTitulo: 'Coneixem cada carrer.',
+    zonasLead: 'Treballem on vivim. Aquestes són les nostres zones.',
+    zonasCta: 'Veure totes les zones',
+    toolsEyebrow: '04 · Eines',
+    toolsTitulo: 'El que fem servir per treballar, ara a la seva disposició.',
+    tools: [
+      { href: 'valorar', titulo: 'Valorador', texto: 'Conegui el preu real de mercat del seu habitatge, gratis i sense compromís.' },
+      { href: 'hipoteca', titulo: 'Calculadora hipotecària', texto: 'Calculi la seva quota mensual i les despeses de compra en un minut.' },
+      { href: 'inversion', titulo: 'Calculadora de rendibilitat', texto: 'Números clars abans d’invertir: rendibilitat bruta i neta.' },
+      { href: 'alerta', titulo: 'Alerta Mil·lenium', texto: 'L’avisem quan entri un habitatge com el que busca.' },
+    ],
+    ctaTitulo: 'Quant val avui el seu habitatge?',
+    ctaTexto: 'Li diem el preu real de mercat, gratis i sense compromís. Parlem-ne.',
+  },
+  en: {
+    title: 'Estate agents in Gavà and Baix Llobregat · Finques Mil·lenium',
+    desc: 'Neighbourhood estate agency in Gavà. Buying, selling and renting homes in Gavà, Castelldefels and Viladecans, with free valuations and personal service.',
+    eyebrow: 'Gavà · Baix Llobregat',
+    h1ConAno: 'Four decades opening doors.',
+    h1: 'Doors open here.',
+    lead: 'Tell us what you are looking for and we will take care of the rest: a real market price, personal service and support all the way to signing before the notary.',
+    heroImgAlt: 'Mediterranean home with a pool',
+    cardTitulo: 'Where shall we start?',
+    cardTexto: 'Choose a starting point and we will be with you from the first visit.',
+    quiero: [
+      { href: 'comprar', label: 'I want to buy' },
+      { href: 'alquilar', label: 'I want to rent' },
+      { href: 'vender', label: 'I want to sell' },
+      { href: 'valorar', label: 'What is my home worth?' },
+    ],
+    destacadosEyebrow: '01 · Properties',
+    destacadosTitulo: 'What we have right now',
+    destacadosLead: 'A selection of the homes and premises we are currently handling.',
+    verComprar: 'See everything for sale',
+    nosotrosEyebrow: '02 · The agency',
+    nosotrosTitulo: 'An agency from here.',
+    nosotrosParr1: 'We look after every owner and every buyer personally from our office on Carrer de Sant Pere in Gavà. No call centres and no middlemen: the people who welcome you are the ones who handle your sale or purchase from start to finish.',
+    nosotrosParr2: 'The method never changes: a real market price, clear information and support all the way to the notary.',
+    nosotrosCta: 'Get to know us',
+    nosotrosImgAlt: 'The agency’s office',
+    zonasEyebrow: '03 · Areas',
+    zonasTitulo: 'We know every street.',
+    zonasLead: 'We work where we live. These are our areas.',
+    zonasCta: 'See all areas',
+    toolsEyebrow: '04 · Tools',
+    toolsTitulo: 'The tools we work with, now at your service.',
+    tools: [
+      { href: 'valorar', titulo: 'Valuation tool', texto: 'Find out your home’s real market price, free and with no obligation.' },
+      { href: 'hipoteca', titulo: 'Mortgage calculator', texto: 'Work out your monthly payment and purchase costs in a minute.' },
+      { href: 'inversion', titulo: 'Yield calculator', texto: 'Clear numbers before you invest: gross and net returns.' },
+      { href: 'alerta', titulo: 'Mil·lenium Alert', texto: 'We let you know when a home like the one you want comes in.' },
+    ],
+    ctaTitulo: 'What is your home worth today?',
+    ctaTexto: 'We will tell you its real market price, free and with no obligation. Let’s talk.',
+  },
+}[lang]!;
+
+const props = destacados().slice(0, 4);
+const secciones = { comprar: 'comprar', alquilar: 'alquilar', vender: 'vender', valorar: 'valorar', hipoteca: 'hipoteca', inversion: 'inversion', alerta: 'alerta' } as const;
+---
+<Base lang={lang} section="home" title={T.title} description={T.desc}>
+  <section class="hero">
+    <div class="hero__media">
+      <Image src={img('hero-01')} alt="" widths={[768, 1280, 1920]} sizes="100vw" quality={62} loading="eager" fetchpriority="high" />
+    </div>
+    <div class="container hero__inner">
+      <div>
+        <span class="eyebrow">{T.eyebrow}</span>
+        <h1>{fundacion ? T.h1ConAno : T.h1}</h1>
+        <div class="hero__rule" role="presentation"></div>
+        <p class="lead">{T.lead}</p>
+      </div>
+      <div class="hero__card">
+        <h2>{T.cardTitulo}</h2>
+        <p class="hint" style="margin-bottom:14px">{T.cardTexto}</p>
+        <ul class="filter-chips">
+          {T.quiero.map((q) => (
+            <li><a href={path(lang, secciones[q.href as keyof typeof secciones])}>{q.label}</a></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="destacados-t">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">{T.destacadosEyebrow}</span>
+        <h2 id="destacados-t">{T.destacadosTitulo}</h2>
+        <p class="lead">{T.destacadosLead}</p>
+      </div>
+      <div class="grid-cards">
+        {props.map((i) => <PropCard lang={lang} inmueble={i} />)}
+      </div>
+      <p style="margin-top:26px"><a class="btn btn--ghost" href={path(lang, 'comprar')}>{T.verComprar}</a></p>
+    </div>
+  </section>
+
+  <section class="section section--deep" aria-labelledby="nosotros-t">
+    <div class="container split split--13">
+      <div class="framed-img">
+        <Image src={img('oficina-01')} alt={T.nosotrosImgAlt} widths={[480, 900]} sizes="(min-width: 900px) 42vw, 92vw" quality={70} />
+      </div>
+      <div>
+        <span class="eyebrow">{T.nosotrosEyebrow}</span>
+        <h2 id="nosotros-t">{T.nosotrosTitulo}</h2>
+        <p style="margin-top:14px">{T.nosotrosParr1}</p>
+        <p style="margin-top:10px">{T.nosotrosParr2}</p>
+        <p style="margin-top:22px"><a class="btn btn--primary" href={path(lang, 'nosotros')}>{T.nosotrosCta}</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="zonas-t">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">{T.zonasEyebrow}</span>
+        <h2 id="zonas-t">{T.zonasTitulo}</h2>
+        <p class="lead">{T.zonasLead}</p>
+      </div>
+      <div class="zone-grid">
+        {zonasData.zonas.map((z) => (
+          <article class="zone-card">
+            <Image src={img(`zona-${z.slug}`)} alt="" widths={[480, 760]} sizes="(min-width: 700px) 340px, 92vw" quality={65} />
+            <div class="zone-card__body">
+              <h3><a href={path(lang, 'zonas', z.slug)}>{nz(z)}</a></h3>
+              <p class="zone-card__meta">{z.barrios.length} {lang === 'en' ? 'neighbourhoods' : lang === 'ca' ? 'barris' : 'barrios'}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+      <p style="margin-top:24px"><a href={path(lang, 'zonas')}>{T.zonasCta}</a></p>
+    </div>
+  </section>
+
+  <section class="section section--navy" aria-labelledby="tools-t">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">{T.toolsEyebrow}</span>
+        <h2 id="tools-t">{T.toolsTitulo}</h2>
+      </div>
+      <div class="num-cols">
+        {T.tools.map((h, idx) => (
+          <div>
+            <h3><span class="n" aria-hidden="true">{String(idx + 1).padStart(2, '0')}</span> <a href={path(lang, secciones[h.href as keyof typeof secciones])}>{h.titulo}</a></h3>
+            <p style="color:rgba(243,239,230,.75)">{h.texto}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <Reviews lang={lang} />
+
+  <CtaBand lang={lang} titulo={T.ctaTitulo} texto={T.ctaTexto} />
+</Base>

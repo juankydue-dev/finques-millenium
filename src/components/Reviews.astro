@@ -1,0 +1,43 @@
+---
+import reviews from '../data/reviews.json';
+import { t, fmt } from '../lib/i18n';
+import type { Lang } from '../config/site';
+
+interface Props { lang: Lang; limite?: number; titulo?: string; }
+const { lang, limite = 4, titulo } = Astro.props;
+const ui = t(lang);
+const tipos: Record<string, Record<string, string>> = {
+  venta: { es: 'Venta', ca: 'Venda', en: 'Sale' },
+  compra: { es: 'Compra', ca: 'Compra', en: 'Purchase' },
+  alquiler: { es: 'Alquiler', ca: 'Lloguer', en: 'Rental' },
+};
+const lista = reviews.reviews.slice(0, limite);
+---
+<section class="section" aria-labelledby="opiniones-titulo">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">Google</span>
+      <h2 id="opiniones-titulo">{titulo ?? ui.comunes.opiniones}</h2>
+      <p class="rating-line">
+        <strong>{String(reviews.rating).replace('.', ',')}</strong>
+        <span aria-hidden="true" class="review__stars">★★★★★</span>
+        <span>{fmt(ui.comunes.segunGoogle, { n: reviews.count })}</span>
+      </p>
+    </div>
+    <ul class="reviews">
+      {lista.map((r) => (
+        <li class="review">
+          <p class="review__stars" aria-label={`${r.rating}/5`}>{'★'.repeat(r.rating)}</p>
+          <blockquote class="review__text">
+            <p>{r.text.length > 320 ? r.text.slice(0, 317).trimEnd() + '…' : r.text}</p>
+          </blockquote>
+          <p class="review__who">{r.name} <span class="review__type">· {tipos[r.type]?.[lang] ?? r.type}</span></p>
+        </li>
+      ))}
+    </ul>
+    <p style="margin-top:22px;display:flex;gap:22px;flex-wrap:wrap">
+      <a href={reviews.profile_url} rel="noopener" target="_blank">{ui.comunes.verTodas}</a>
+      <a href={reviews.write_url} rel="noopener" target="_blank">{ui.comunes.dejarResena}</a>
+    </p>
+  </div>
+</section>

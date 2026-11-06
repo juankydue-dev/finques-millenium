@@ -1,0 +1,259 @@
+---
+import Base from '../layouts/Base.astro';
+import Crumbs from '../components/Crumbs.astro';
+import FormShell from '../components/FormShell.astro';
+import PropCard from '../components/PropCard.astro';
+import { destacados } from '../lib/propiedades';
+import { path, t, type Lang } from '../lib/i18n';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const ui = t(lang);
+
+const T = {
+  es: {
+    title: 'Inversión inmobiliaria en el Baix Llobregat · Finques Mil·lenium',
+    desc: 'Invierta en vivienda en Gavà, Castelldefels y Viladecans con números claros: calculadora de rentabilidad bruta y neta y oportunidades seleccionadas.',
+    h1: 'Rentabilidad calculada, con números claros.',
+    lead: 'Antes de invertir, los números. Calcule la rentabilidad de cualquier inmueble y, si quiere, le avisamos cuando detectemos una oportunidad en nuestras zonas.',
+    porqueEyebrow: '01 · Por qué con nosotros',
+    porqueTitulo: 'Por qué invertir con nosotros',
+    porque: [
+      { t: 'Conocemos el precio real', d: 'Sabemos qué se paga y qué se alquila en cada barrio, portal a portal.' },
+      { t: 'Números antes que promesas', d: 'Cada propuesta llega con su rentabilidad calculada y sus gastos detallados.' },
+      { t: 'Gestión completa', d: 'De la compra al alquiler: nos ocupamos de todo el recorrido si usted quiere.' },
+    ],
+    calcEyebrow: '02 · Calculadora',
+    calcTitulo: 'Calcule la rentabilidad de cualquier inmueble.',
+    precio: 'Precio de compra (€)',
+    reforma: 'Reforma y otros costes iniciales (€)',
+    alquiler: 'Alquiler mensual previsto (€)',
+    gastosAnuales: 'Gastos anuales (IBI, comunidad, seguro…) (€)',
+    bruta: 'Rentabilidad bruta',
+    neta: 'Rentabilidad neta',
+    inversionTotal: 'Inversión total (precio + ITP 10% + costes)',
+    nota: 'Cálculo orientativo: no incluye IRPF, periodos vacíos ni financiación. El ITP del 10% corresponde a vivienda de segunda mano en Cataluña.',
+    noJs: 'La calculadora necesita JavaScript. Llámenos y hacemos los números con usted.',
+    oppEyebrow: '03 · Oportunidades',
+    oppTitulo: 'Oportunidades ahora',
+    oppLead: 'Inmuebles de nuestra cartera con recorrido como inversión.',
+    formEyebrow: '04 · Avisos',
+    formTitulo: 'Quiero recibir oportunidades.',
+    formLead: 'Déjenos sus datos y el perfil que busca. Le escribiremos solo cuando haya algo que encaje: nada de correos semanales.',
+    campos: { nombre: 'Nombre', email: 'Correo electrónico', telefono: 'Teléfono', presupuesto: 'Presupuesto aproximado', interes: 'Qué le interesa' },
+    presupuestos: [
+      { valor: 'hasta-150', label: 'Hasta 150.000 €' },
+      { valor: '150-300', label: '150.000 – 300.000 €' },
+      { valor: '300-500', label: '300.000 – 500.000 €' },
+      { valor: 'mas-500', label: 'Más de 500.000 €' },
+    ],
+    intereses: [
+      { valor: 'alquiler-residencial', label: 'Vivienda para alquilar' },
+      { valor: 'reforma-venta', label: 'Comprar, reformar y vender' },
+      { valor: 'local', label: 'Locales comerciales' },
+      { valor: 'cualquiera', label: 'Escucho propuestas' },
+    ],
+    enviar: 'Quiero recibir oportunidades',
+  },
+  ca: {
+    title: 'Inversió immobiliària al Baix Llobregat · Finques Mil·lenium',
+    desc: 'Inverteixi en habitatge a Gavà, Castelldefels i Viladecans amb números clars: calculadora de rendibilitat bruta i neta i oportunitats seleccionades.',
+    h1: 'Rendibilitat calculada, amb números clars.',
+    lead: 'Abans d’invertir, els números. Calculi la rendibilitat de qualsevol immoble i, si vol, l’avisem quan detectem una oportunitat a les nostres zones.',
+    porqueEyebrow: '01 · Per què amb nosaltres',
+    porqueTitulo: 'Per què invertir amb nosaltres',
+    porque: [
+      { t: 'Coneixem el preu real', d: 'Sabem què es paga i què es lloga a cada barri, portal a portal.' },
+      { t: 'Números abans que promeses', d: 'Cada proposta arriba amb la seva rendibilitat calculada i les despeses detallades.' },
+      { t: 'Gestió completa', d: 'De la compra al lloguer: ens ocupem de tot el recorregut si vostè vol.' },
+    ],
+    calcEyebrow: '02 · Calculadora',
+    calcTitulo: 'Calculi la rendibilitat de qualsevol immoble.',
+    precio: 'Preu de compra (€)',
+    reforma: 'Reforma i altres costos inicials (€)',
+    alquiler: 'Lloguer mensual previst (€)',
+    gastosAnuales: 'Despeses anuals (IBI, comunitat, assegurança…) (€)',
+    bruta: 'Rendibilitat bruta',
+    neta: 'Rendibilitat neta',
+    inversionTotal: 'Inversió total (preu + ITP 10% + costos)',
+    nota: 'Càlcul orientatiu: no inclou IRPF, períodes buits ni finançament. L’ITP del 10% correspon a habitatge de segona mà a Catalunya.',
+    noJs: 'La calculadora necessita JavaScript. Truqui’ns i fem els números amb vostè.',
+    oppEyebrow: '03 · Oportunitats',
+    oppTitulo: 'Oportunitats ara',
+    oppLead: 'Immobles de la nostra cartera amb recorregut com a inversió.',
+    formEyebrow: '04 · Avisos',
+    formTitulo: 'Vull rebre oportunitats.',
+    formLead: 'Deixi’ns les seves dades i el perfil que busca. Li escriurem només quan hi hagi alguna cosa que encaixi: res de correus setmanals.',
+    campos: { nombre: 'Nom', email: 'Correu electrònic', telefono: 'Telèfon', presupuesto: 'Pressupost aproximat', interes: 'Què l’interessa' },
+    presupuestos: [
+      { valor: 'hasta-150', label: 'Fins a 150.000 €' },
+      { valor: '150-300', label: '150.000 – 300.000 €' },
+      { valor: '300-500', label: '300.000 – 500.000 €' },
+      { valor: 'mas-500', label: 'Més de 500.000 €' },
+    ],
+    intereses: [
+      { valor: 'alquiler-residencial', label: 'Habitatge per llogar' },
+      { valor: 'reforma-venta', label: 'Comprar, reformar i vendre' },
+      { valor: 'local', label: 'Locals comercials' },
+      { valor: 'cualquiera', label: 'Escolto propostes' },
+    ],
+    enviar: 'Vull rebre oportunitats',
+  },
+  en: {
+    title: 'Property investment in Baix Llobregat · Finques Mil·lenium',
+    desc: 'Invest in housing in Gavà, Castelldefels and Viladecans with clear numbers: a gross and net yield calculator and hand-picked opportunities.',
+    h1: 'Returns you can actually calculate.',
+    lead: 'Numbers first, then the investment. Work out any property’s yield and, if you wish, we will tell you when we spot an opportunity in our areas.',
+    porqueEyebrow: '01 · Why with us',
+    porqueTitulo: 'Why invest with us',
+    porque: [
+      { t: 'We know the real price', d: 'We know what sells and what rents in every neighbourhood, doorway by doorway.' },
+      { t: 'Numbers before promises', d: 'Every proposal comes with its yield calculated and costs itemised.' },
+      { t: 'End-to-end management', d: 'From purchase to rental: we can handle the whole journey if you wish.' },
+    ],
+    calcEyebrow: '02 · Calculator',
+    calcTitulo: 'Work out any property’s yield.',
+    precio: 'Purchase price (€)',
+    reforma: 'Refurbishment and other initial costs (€)',
+    alquiler: 'Expected monthly rent (€)',
+    gastosAnuales: 'Annual costs (property tax, community fees, insurance…) (€)',
+    bruta: 'Gross yield',
+    neta: 'Net yield',
+    inversionTotal: 'Total investment (price + 10% transfer tax + costs)',
+    nota: 'Indicative calculation: it excludes income tax, vacancy periods and financing. The 10% transfer tax applies to resale homes in Catalonia.',
+    noJs: 'The calculator needs JavaScript. Call us and we will run the numbers with you.',
+    oppEyebrow: '03 · Opportunities',
+    oppTitulo: 'Opportunities right now',
+    oppLead: 'Properties from our portfolio with investment potential.',
+    formEyebrow: '04 · Alerts',
+    formTitulo: 'Send me opportunities.',
+    formLead: 'Leave your details and the profile you are after. We will write only when something fits: no weekly newsletters.',
+    campos: { nombre: 'Name', email: 'Email', telefono: 'Phone', presupuesto: 'Approximate budget', interes: 'What interests you' },
+    presupuestos: [
+      { valor: 'hasta-150', label: 'Up to €150,000' },
+      { valor: '150-300', label: '€150,000 – €300,000' },
+      { valor: '300-500', label: '€300,000 – €500,000' },
+      { valor: 'mas-500', label: 'Over €500,000' },
+    ],
+    intereses: [
+      { valor: 'alquiler-residencial', label: 'A home to rent out' },
+      { valor: 'reforma-venta', label: 'Buy, refurbish and sell' },
+      { valor: 'local', label: 'Commercial premises' },
+      { valor: 'cualquiera', label: 'Open to proposals' },
+    ],
+    enviar: 'Send me opportunities',
+  },
+}[lang]!;
+
+const opps = destacados().filter((i) => i.operacion !== 'alquiler').slice(0, 3);
+---
+<Base lang={lang} section="inversion" title={T.title} description={T.desc}>
+  <Crumbs lang={lang} items={[{ nombre: ui.nav.inversion }]} />
+  <section class="section section--tight">
+    <div class="container section-head">
+      <h1>{T.h1}</h1>
+      <p class="lead">{T.lead}</p>
+    </div>
+    <div class="container">
+      <div class="num-cols" style="margin-bottom:10px">
+        {T.porque.map((q, idx) => (
+          <div>
+            <h3><span class="n" aria-hidden="true">{String(idx + 1).padStart(2, '0')}</span> {q.t}</h3>
+            <p>{q.d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--deep" id="calculadora">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">{T.calcEyebrow}</span>
+        <h2>{T.calcTitulo}</h2>
+      </div>
+      <div class="calc" data-yield>
+        <form class="form" aria-label={T.calcTitulo} onsubmit="return false">
+          <p class="field"><label for="yc-precio">{T.precio}</label><input id="yc-precio" type="number" min="10000" step="1000" value="200000" data-yc="precio" /></p>
+          <p class="field"><label for="yc-reforma">{T.reforma}</label><input id="yc-reforma" type="number" min="0" step="500" value="10000" data-yc="reforma" /></p>
+          <p class="field"><label for="yc-alquiler">{T.alquiler}</label><input id="yc-alquiler" type="number" min="100" step="25" value="1100" data-yc="alquiler" /></p>
+          <p class="field"><label for="yc-gastos">{T.gastosAnuales}</label><input id="yc-gastos" type="number" min="0" step="100" value="1800" data-yc="gastos" /></p>
+          <noscript><p class="notice">{T.noJs}</p></noscript>
+        </form>
+        <div class="calc__out" aria-live="polite">
+          <h3>{T.bruta} / {T.neta}</h3>
+          <p class="calc__big"><span data-yc-out="bruta">—</span> <small style="font-size:1rem;color:var(--cream-on-navy)">{T.bruta.toLowerCase()}</small></p>
+          <p class="calc__big" style="font-size:clamp(1.5rem,3vw,2rem)"><span data-yc-out="neta">—</span> <small style="font-size:1rem;color:var(--cream-on-navy)">{T.neta.toLowerCase()}</small></p>
+          <p class="calc__row"><span>{T.inversionTotal}</span> <strong data-yc-out="total">—</strong></p>
+          <p class="calc__note">{T.nota}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {opps.length > 0 && (
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <span class="eyebrow">{T.oppEyebrow}</span>
+          <h2>{T.oppTitulo}</h2>
+          <p class="lead">{T.oppLead}</p>
+        </div>
+        <div class="grid-cards">
+          {opps.map((i) => <PropCard lang={lang} inmueble={i} />)}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section section--navy">
+    <div class="container split">
+      <div>
+        <span class="eyebrow">{T.formEyebrow}</span>
+        <h2>{T.formTitulo}</h2>
+        <p class="lead" style="margin-top:12px">{T.formLead}</p>
+      </div>
+      <div class="hero__card" style="max-width:none">
+        <FormShell
+          lang={lang}
+          id="form-inversion"
+          origen="inversion"
+          submitLabel={T.enviar}
+          campos={[
+            { clave: 'nombre', label: T.campos.nombre, requerido: true, autocomplete: 'name' },
+            { clave: 'email', label: T.campos.email, tipo: 'email', requerido: true, autocomplete: 'email' },
+            { clave: 'telefono', label: T.campos.telefono, tipo: 'tel', autocomplete: 'tel' },
+            { clave: 'presupuesto', label: T.campos.presupuesto, tipo: 'select', opciones: T.presupuestos },
+            { clave: 'interes', label: T.campos.interes, tipo: 'select', opciones: T.intereses },
+          ]}
+        />
+      </div>
+    </div>
+  </section>
+</Base>
+<script>
+  const raiz = document.querySelector('[data-yield]');
+  if (raiz) {
+    const lang = document.documentElement.lang;
+    const eur = (n: number) =>
+      new Intl.NumberFormat(lang === 'en' ? 'en-GB' : 'es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n);
+    const pct = (n: number) => (isFinite(n) ? n.toLocaleString(lang === 'en' ? 'en-GB' : 'es-ES', { maximumFractionDigits: 2 }) + ' %' : '—');
+    const inp = (k: string) => raiz.querySelector<HTMLInputElement>(`[data-yc="${k}"]`)!;
+    const out = (k: string) => raiz.querySelector<HTMLElement>(`[data-yc-out="${k}"]`)!;
+    const calcular = () => {
+      const precio = Number(inp('precio').value) || 0;
+      const reforma = Number(inp('reforma').value) || 0;
+      const alquiler = Number(inp('alquiler').value) || 0;
+      const gastos = Number(inp('gastos').value) || 0;
+      const itp = precio * 0.10;
+      const total = precio + itp + reforma + Math.min(3000 + precio * 0.004, 6000);
+      const bruta = ((alquiler * 12) / total) * 100;
+      const neta = ((alquiler * 12 - gastos) / total) * 100;
+      out('bruta').textContent = pct(bruta);
+      out('neta').textContent = pct(neta);
+      out('total').textContent = eur(total);
+    };
+    raiz.querySelectorAll('input').forEach((i) => i.addEventListener('input', calcular));
+    calcular();
+  }
+</script>

@@ -1,0 +1,176 @@
+---
+import Base from '../layouts/Base.astro';
+import Crumbs from '../components/Crumbs.astro';
+import PropCard from '../components/PropCard.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { porOperacion, OPERACION_SECCION, type Operacion } from '../lib/propiedades';
+import { breadcrumbSchema } from '../lib/schema';
+import { path, t, fmt, type Lang } from '../lib/i18n';
+import { EMPRESA, dato } from '../config/empresa';
+import zonasData from '../data/zonas.json';
+
+interface Props { lang: Lang; op: Operacion; municipio?: string; }
+const { lang, op, municipio } = Astro.props;
+const nz = (z: { nombre: Record<string, string> }) => z.nombre[lang] ?? z.nombre.es;
+const ui = t(lang);
+const section = OPERACION_SECCION[op];
+const tel = dato(EMPRESA.telefono)!;
+
+const zonaDe = (slug?: string) => zonasData.zonas.find((z) => z.slug === slug);
+const nombreZona = municipio ? ((zonaDe(municipio)?.nombre as Record<string, string>)[lang] ?? '') : '';
+
+const T = {
+  es: {
+    venta: { titulo: 'Viviendas en venta en el Baix Llobregat', tituloZona: 'Viviendas en venta en {z}', title: 'Pisos y casas en venta{z} · Finques Mil·lenium', desc: 'Pisos, casas y áticos en venta en Gavà, Castelldefels y Viladecans, con precio real de mercado y acompañamiento hasta la firma.' },
+    alquiler: { titulo: 'Viviendas en alquiler en el Baix Llobregat', tituloZona: 'Viviendas en alquiler en {z}', title: 'Pisos en alquiler{z} · Finques Mil·lenium', desc: 'Pisos y casas en alquiler con contrato claro y gastos detallados desde el primer día.' },
+    'obra-nueva': { titulo: 'Obra nueva en el Baix Llobregat', tituloZona: 'Obra nueva en {z}', title: 'Obra nueva{z} · Finques Mil·lenium', desc: 'Promociones de obra nueva en nuestras zonas, con acompañamiento desde el plano hasta la entrega de llaves.' },
+    traspaso: { titulo: 'Locales y negocios en traspaso', tituloZona: 'Traspasos en {z}', title: 'Traspasos de locales{z} · Finques Mil·lenium', desc: 'Locales y negocios en funcionamiento en el Baix Llobregat, con las cuentas claras antes de decidir.' },
+    todas: 'Todas las zonas',
+    resultados: '{n} inmuebles',
+    resultado1: '1 inmueble',
+    vacio: 'Ahora mismo no tenemos inmuebles de este tipo aquí. Déjenos una alerta y le avisaremos en cuanto entre uno.',
+    alertaCta: 'Crear una Alerta Mil·lenium',
+    filtroPrecio: 'Precio máximo',
+    filtroHab: 'Habitaciones mínimas',
+    filtroCualquiera: 'Cualquiera',
+    ctaTitulo: '¿No encuentra lo que busca?',
+    ctaTexto: 'Cuéntenos qué necesita y le avisaremos en cuanto entre. También puede llamarnos: le escuchamos.',
+  },
+  ca: {
+    venta: { titulo: 'Habitatges en venda al Baix Llobregat', tituloZona: 'Habitatges en venda a {z}', title: 'Pisos i cases en venda{z} · Finques Mil·lenium', desc: 'Pisos, cases i àtics en venda a Gavà, Castelldefels i Viladecans, amb preu real de mercat i acompanyament fins a la signatura.' },
+    alquiler: { titulo: 'Habitatges de lloguer al Baix Llobregat', tituloZona: 'Habitatges de lloguer a {z}', title: 'Pisos de lloguer{z} · Finques Mil·lenium', desc: 'Pisos i cases de lloguer amb contracte clar i despeses detallades des del primer dia.' },
+    'obra-nueva': { titulo: 'Obra nova al Baix Llobregat', tituloZona: 'Obra nova a {z}', title: 'Obra nova{z} · Finques Mil·lenium', desc: 'Promocions d’obra nova a les nostres zones, amb acompanyament des del plànol fins al lliurament de claus.' },
+    traspaso: { titulo: 'Locals i negocis en traspàs', tituloZona: 'Traspassos a {z}', title: 'Traspassos de locals{z} · Finques Mil·lenium', desc: 'Locals i negocis en funcionament al Baix Llobregat, amb els comptes clars abans de decidir.' },
+    todas: 'Totes les zones',
+    resultados: '{n} immobles',
+    resultado1: '1 immoble',
+    vacio: 'Ara mateix no tenim immobles d’aquest tipus aquí. Deixi’ns una alerta i l’avisarem quan n’entri un.',
+    alertaCta: 'Crear una Alerta Mil·lenium',
+    filtroPrecio: 'Preu màxim',
+    filtroHab: 'Habitacions mínimes',
+    filtroCualquiera: 'Qualsevol',
+    ctaTitulo: 'No troba el que busca?',
+    ctaTexto: 'Expliqui’ns què necessita i l’avisarem quan entri. També pot trucar-nos: l’escoltem.',
+  },
+  en: {
+    venta: { titulo: 'Homes for sale in Baix Llobregat', tituloZona: 'Homes for sale in {z}', title: 'Flats and houses for sale{z} · Finques Mil·lenium', desc: 'Flats, houses and penthouses for sale in Gavà, Castelldefels and Viladecans, at real market prices with support through to completion.' },
+    alquiler: { titulo: 'Homes to rent in Baix Llobregat', tituloZona: 'Homes to rent in {z}', title: 'Flats to rent{z} · Finques Mil·lenium', desc: 'Flats and houses to rent with a clear contract and itemised costs from day one.' },
+    'obra-nueva': { titulo: 'New homes in Baix Llobregat', tituloZona: 'New homes in {z}', title: 'New builds{z} · Finques Mil·lenium', desc: 'New developments in the areas we work, with support from floor plan to key handover.' },
+    traspaso: { titulo: 'Premises and businesses for transfer', tituloZona: 'Business transfers in {z}', title: 'Business transfers{z} · Finques Mil·lenium', desc: 'Working premises and businesses in Baix Llobregat, with clear accounts before you decide.' },
+    todas: 'All areas',
+    resultados: '{n} properties',
+    resultado1: '1 property',
+    vacio: 'We have nothing of this kind here right now. Set up an alert and we will tell you the moment one comes in.',
+    alertaCta: 'Create a Mil·lenium Alert',
+    filtroPrecio: 'Maximum price',
+    filtroHab: 'Minimum bedrooms',
+    filtroCualquiera: 'Any',
+    ctaTitulo: 'Can’t find what you’re after?',
+    ctaTexto: 'Tell us what you need and we will let you know as soon as it comes in. Or just call us: we listen.',
+  },
+}[lang]!;
+
+const Top = T[op];
+const h1 = municipio ? fmt(Top.tituloZona, { z: nombreZona }) : Top.titulo;
+const title = fmt(Top.title, { z: municipio ? ` ${lang === 'en' ? 'in' : 'en'} ${nombreZona}` : '' });
+const inmuebles = porOperacion(op, municipio);
+const nav = ui.nav;
+const navLabel = { venta: nav.comprar, alquiler: nav.alquilar, 'obra-nueva': nav.obraNueva, traspaso: nav.traspasos }[op];
+
+const crumbs = [
+  ...(municipio
+    ? [{ nombre: navLabel, href: path(lang, section) }, { nombre: nombreZona }]
+    : [{ nombre: navLabel }]),
+];
+const schemaExtra = [breadcrumbSchema([{ nombre: ui.migas.inicio, href: path(lang, 'home') }, ...crumbs.map((c) => ({ nombre: c.nombre, href: c.href ?? path(lang, section, municipio ?? '') }))])];
+---
+<Base lang={lang} section={section} rest={municipio ? [municipio] : []} title={title} description={Top.desc} schemaExtra={schemaExtra}>
+  <Crumbs lang={lang} items={crumbs} />
+  <section class="section section--tight">
+    <div class="container">
+      <div class="section-head">
+        <h1>{h1}</h1>
+      </div>
+
+      {/* Filtro por zona: enlaces reales, funcionan sin JavaScript */}
+      <nav class="filter-chips" aria-label={nav.zonas}>
+        {municipio
+          ? <a href={path(lang, section)}>{T.todas}</a>
+          : <span aria-current="true">{T.todas}</span>}
+        {zonasData.zonas.map((z) =>
+          z.slug === municipio
+            ? <span aria-current="true">{nz(z)}</span>
+            : <a href={path(lang, section, z.slug)}>{nz(z)}</a>
+        )}
+      </nav>
+
+      {/* Filtros instantáneos: solo mejora con JavaScript */}
+      <form class="filters-js" data-filtros aria-label="Filtros">
+        <label>{T.filtroPrecio}
+          <select data-f-precio>
+            <option value="">{T.filtroCualquiera}</option>
+            {(op === 'alquiler' ? [800, 1000, 1200, 1500, 2000] : [200000, 300000, 450000, 600000, 900000]).map((p) => (
+              <option value={p}>{new Intl.NumberFormat(lang === 'en' ? 'en-GB' : 'es-ES').format(p)} €</option>
+            ))}
+          </select>
+        </label>
+        {op !== 'traspaso' && (
+          <label>{T.filtroHab}
+            <select data-f-hab>
+              <option value="">{T.filtroCualquiera}</option>
+              <option value="2">2+</option>
+              <option value="3">3+</option>
+              <option value="4">4+</option>
+            </select>
+          </label>
+        )}
+      </form>
+
+      <p class="lst-count" data-count aria-live="polite">
+        {inmuebles.length === 1 ? T.resultado1 : fmt(T.resultados, { n: inmuebles.length })}
+      </p>
+
+      <h2 class="visually-hidden">{lang === 'en' ? 'Results' : lang === 'ca' ? 'Resultats' : 'Resultados'}</h2>
+      {inmuebles.length > 0 ? (
+        <div class="grid-cards" data-lista>
+          {inmuebles.map((i, idx) => <PropCard lang={lang} inmueble={i} prioridad={idx < 3} />)}
+        </div>
+      ) : (
+        <div class="notice">
+          <p>{T.vacio}</p>
+          <p style="margin-top:10px"><a class="btn btn--primary btn--sm" href={path(lang, 'alerta')}>{T.alertaCta}</a></p>
+        </div>
+      )}
+
+      <noscript>
+        <p class="lst-count">{fmt(ui.comunes.noJsListado, { tel })}</p>
+      </noscript>
+    </div>
+  </section>
+  <CtaBand lang={lang} titulo={T.ctaTitulo} texto={T.ctaTexto} />
+</Base>
+<script>
+  // Filtrado instantáneo del listado (mejora progresiva).
+  const form = document.querySelector<HTMLFormElement>('[data-filtros]');
+  const lista = document.querySelector<HTMLElement>('[data-lista]');
+  if (form && lista) {
+    form.classList.add('is-on');
+    const precio = form.querySelector<HTMLSelectElement>('[data-f-precio]');
+    const hab = form.querySelector<HTMLSelectElement>('[data-f-hab]');
+    const count = document.querySelector<HTMLElement>('[data-count]');
+    const base = count?.textContent ?? '';
+    const aplicar = () => {
+      const maxP = precio?.value ? Number(precio.value) : Infinity;
+      const minH = hab?.value ? Number(hab.value) : 0;
+      let visibles = 0;
+      lista.querySelectorAll<HTMLElement>('[data-prop]').forEach((el) => {
+        const ok = Number(el.dataset.precio) <= maxP && Number(el.dataset.hab) >= minH;
+        el.style.display = ok ? '' : 'none';
+        if (ok) visibles++;
+      });
+      if (count) count.textContent = maxP === Infinity && minH === 0 ? base : base.replace(/^\d+/, String(visibles));
+    };
+    precio?.addEventListener('change', aplicar);
+    hab?.addEventListener('change', aplicar);
+  }
+</script>

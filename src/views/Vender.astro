@@ -1,0 +1,185 @@
+---
+import Base from '../layouts/Base.astro';
+import Crumbs from '../components/Crumbs.astro';
+import Reviews from '../components/Reviews.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { path, t, type Lang } from '../lib/i18n';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const ui = t(lang);
+
+const T = {
+  es: {
+    title: 'Vender su vivienda en Gavà y Baix Llobregat · Finques Mil·lenium',
+    desc: 'Venda su vivienda al precio real de mercado, con una sola persona de referencia, en exclusiva y con acompañamiento hasta la firma ante notario.',
+    h1: 'Venda su vivienda al precio real de mercado.',
+    lead: 'Sin inflar expectativas para captar el encargo: le decimos lo que hoy se paga en su barrio y cómo lo venderíamos. Usted decide.',
+    pasosEyebrow: '01 · El proceso',
+    pasosTitulo: 'Vender su vivienda, paso a paso.',
+    pasosLead: 'Un proceso claro, con una sola persona de referencia de principio a fin.',
+    pasos: [
+      { t: 'Valoración gratuita', d: 'Estudiamos su vivienda y le damos su precio real de mercado, con las ventas comparables encima de la mesa.' },
+      { t: 'Preparación', d: 'Le aconsejamos cómo presentarla y preparamos un anuncio cuidado, con fotografía profesional.' },
+      { t: 'Visitas', d: 'Organizamos las visitas y filtramos a los interesados: a su casa solo entra quien puede comprarla.' },
+      { t: 'Firma', d: 'Le acompañamos en la negociación, las arras y la firma ante notario.' },
+    ],
+    exclusivaEyebrow: '02 · En exclusiva',
+    exclusivaTitulo: 'Una sola agencia, trabajando de verdad.',
+    exclusivaTexto: 'Vender en exclusiva con nosotros no es atarse: es tener a una agencia volcada en su vivienda, con un plan de venta por escrito, informes periódicos de visitas y una sola interlocución. Si no cumplimos lo pactado, lo hablamos cara a cara.',
+    exclusivaPuntos: ['Plan de venta por escrito y fecha de revisión', 'Informe de cada visita: quién vino y qué dijo', 'Difusión en portales y en nuestra cartera de compradores', 'Sin letra pequeña: condiciones pactadas antes de firmar'],
+    docsEyebrow: '03 · Documentación',
+    docsTitulo: 'Qué necesita para vender.',
+    docsLead: 'No se preocupe si le falta algo: le ayudamos a reunirlo.',
+    docs: ['Escritura de la vivienda', 'Nota simple del Registro de la Propiedad', 'Certificado de eficiencia energética', 'Cédula de habitabilidad', 'Último recibo del IBI', 'Certificado de la comunidad de estar al corriente de pago', 'DNI o NIE de los propietarios'],
+    faqEyebrow: '04 · Preguntas frecuentes',
+    faqTitulo: 'Preguntas sobre la venta.',
+    faqs: [
+      { q: '¿Cuánto se tarda en vender una vivienda?', a: 'Depende sobre todo del precio y de la zona. Con un precio real de mercado desde el principio, la venta suele ser más ágil. En la valoración le damos una previsión para su caso.' },
+      { q: '¿Qué impuestos paga el vendedor?', a: 'Normalmente la plusvalía municipal y, si hay ganancia, el IRPF. Le orientamos en la valoración y le recomendamos confirmarlo con su asesor fiscal.' },
+      { q: '¿Puedo vender si aún tengo hipoteca?', a: 'Sí. La hipoteca se cancela en la misma firma con parte del precio de venta. Nos coordinamos con su banco para que no tenga que ocuparse de nada.' },
+      { q: '¿Qué pasa si la vivienda es heredada?', a: 'Hay que aceptar la herencia e inscribirla antes de vender. Le explicamos los pasos y los plazos, y trabajamos con profesionales de confianza si necesita ayuda.' },
+    ],
+    ctaTitulo: 'Empecemos por el precio.',
+    ctaTexto: 'La valoración es gratuita y no le compromete a nada.',
+  },
+  ca: {
+    title: 'Vendre el seu habitatge a Gavà i el Baix Llobregat · Finques Mil·lenium',
+    desc: 'Vengui el seu habitatge al preu real de mercat, amb una sola persona de referència, en exclusiva i amb acompanyament fins a la signatura davant de notari.',
+    h1: 'Vengui el seu habitatge al preu real de mercat.',
+    lead: 'Sense inflar expectatives per captar l’encàrrec: li diem el que avui es paga al seu barri i com el vendríem. Vostè decideix.',
+    pasosEyebrow: '01 · El procés',
+    pasosTitulo: 'Vendre el seu habitatge, pas a pas.',
+    pasosLead: 'Un procés clar, amb una sola persona de referència de principi a fi.',
+    pasos: [
+      { t: 'Valoració gratuïta', d: 'Estudiem el seu habitatge i li donem el seu preu real de mercat, amb les vendes comparables sobre la taula.' },
+      { t: 'Preparació', d: 'L’aconsellem com presentar-lo i preparem un anunci acurat, amb fotografia professional.' },
+      { t: 'Visites', d: 'Organitzem les visites i filtrem els interessats: a casa seva només hi entra qui la pot comprar.' },
+      { t: 'Signatura', d: 'L’acompanyem en la negociació, les arres i la signatura davant de notari.' },
+    ],
+    exclusivaEyebrow: '02 · En exclusiva',
+    exclusivaTitulo: 'Una sola agència, treballant de debò.',
+    exclusivaTexto: 'Vendre en exclusiva amb nosaltres no és lligar-se: és tenir una agència bolcada en el seu habitatge, amb un pla de venda per escrit, informes periòdics de visites i una sola interlocució. Si no complim el que hem pactat, en parlem cara a cara.',
+    exclusivaPuntos: ['Pla de venda per escrit i data de revisió', 'Informe de cada visita: qui va venir i què va dir', 'Difusió als portals i a la nostra cartera de compradors', 'Sense lletra petita: condicions pactades abans de signar'],
+    docsEyebrow: '03 · Documentació',
+    docsTitulo: 'Què necessita per vendre.',
+    docsLead: 'No es preocupi si li falta res: l’ajudem a reunir-ho.',
+    docs: ['Escriptura de l’habitatge', 'Nota simple del Registre de la Propietat', 'Certificat d’eficiència energètica', 'Cèdula d’habitabilitat', 'Darrer rebut de l’IBI', 'Certificat de la comunitat d’estar al corrent de pagament', 'DNI o NIE dels propietaris'],
+    faqEyebrow: '04 · Preguntes freqüents',
+    faqTitulo: 'Preguntes sobre la venda.',
+    faqs: [
+      { q: 'Quant es triga a vendre un habitatge?', a: 'Depèn sobretot del preu i de la zona. Amb un preu real de mercat des del principi, la venda sol ser més àgil. A la valoració li donem una previsió per al seu cas.' },
+      { q: 'Quins impostos paga el venedor?', a: 'Normalment la plusvàlua municipal i, si hi ha guany, l’IRPF. L’orientem a la valoració i li recomanem confirmar-ho amb el seu assessor fiscal.' },
+      { q: 'Puc vendre si encara tinc hipoteca?', a: 'Sí. La hipoteca es cancel·la a la mateixa signatura amb part del preu de venda. Ens coordinem amb el seu banc perquè no s’hagi d’ocupar de res.' },
+      { q: 'Què passa si l’habitatge és heretat?', a: 'Cal acceptar l’herència i inscriure-la abans de vendre. Li expliquem els passos i els terminis, i treballem amb professionals de confiança si necessita ajuda.' },
+    ],
+    ctaTitulo: 'Comencem pel preu.',
+    ctaTexto: 'La valoració és gratuïta i no el compromet a res.',
+  },
+  en: {
+    title: 'Selling your home in Gavà and Baix Llobregat · Finques Mil·lenium',
+    desc: 'Sell your home at its real market price, with a single point of contact, under an exclusive mandate and with support all the way to the notary.',
+    h1: 'Sell your home at its real market price.',
+    lead: 'We don’t inflate expectations to win your listing: we tell you what buyers are paying in your neighbourhood today and how we would sell it. You decide.',
+    pasosEyebrow: '01 · The process',
+    pasosTitulo: 'Selling your home, step by step.',
+    pasosLead: 'A clear process, with one person looking after you from start to finish.',
+    pasos: [
+      { t: 'Free valuation', d: 'We study your home and give you its real market price, with comparable sales on the table.' },
+      { t: 'Preparation', d: 'We advise you on presentation and prepare a polished listing with professional photography.' },
+      { t: 'Visits', d: 'We organise viewings and screen prospective buyers: only people who can actually buy enter your home.' },
+      { t: 'Completion', d: 'We stand by you through negotiation, the deposit contract and signing before the notary.' },
+    ],
+    exclusivaEyebrow: '02 · Exclusive mandate',
+    exclusivaTitulo: 'One agency, genuinely working.',
+    exclusivaTexto: 'Selling exclusively with us is not being tied down: it means an agency fully committed to your home, with a written sales plan, regular visit reports and a single point of contact. If we fall short of what we agreed, we discuss it face to face.',
+    exclusivaPuntos: ['Written sales plan with a review date', 'A report after every visit: who came and what they said', 'Promotion on the portals and to our own buyer list', 'No small print: terms agreed before you sign'],
+    docsEyebrow: '03 · Paperwork',
+    docsTitulo: 'What you need to sell.',
+    docsLead: 'Don’t worry if something is missing: we will help you gather it.',
+    docs: ['Title deed', 'Land Registry extract (nota simple)', 'Energy performance certificate', 'Occupancy certificate (cédula de habitabilidad)', 'Latest IBI (property tax) receipt', 'Certificate from the owners’ association confirming payments are up to date', 'Owners’ ID (DNI or NIE)'],
+    faqEyebrow: '04 · Frequently asked questions',
+    faqTitulo: 'Questions about selling.',
+    faqs: [
+      { q: 'How long does it take to sell a home?', a: 'It depends mostly on price and location. With a real market price from day one, sales tend to move faster. Your valuation includes a forecast for your case.' },
+      { q: 'Which taxes does the seller pay?', a: 'Usually the municipal capital gains tax (plusvalía) and, if there is a profit, income tax. We will point you in the right direction and recommend confirming with your tax advisor.' },
+      { q: 'Can I sell if I still have a mortgage?', a: 'Yes. The mortgage is cancelled at completion out of the sale price. We coordinate with your bank so you don’t have to deal with it.' },
+      { q: 'What if the home is inherited?', a: 'The inheritance must be accepted and registered before selling. We explain the steps and timescales, and work with trusted professionals if you need help.' },
+    ],
+    ctaTitulo: 'Let’s start with the price.',
+    ctaTexto: 'The valuation is free and commits you to nothing.',
+  },
+}[lang]!;
+---
+<Base lang={lang} section="vender" title={T.title} description={T.desc}>
+  <Crumbs lang={lang} items={[{ nombre: ui.nav.vender }]} />
+  <section class="section section--tight">
+    <div class="container">
+      <div class="section-head">
+        <h1>{T.h1}</h1>
+        <p class="lead">{T.lead}</p>
+        <p style="margin-top:18px"><a class="btn btn--primary" href={path(lang, 'valorar')}>{ui.comunes.valorarGratis}</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--deep" aria-labelledby="pasos-t">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">{T.pasosEyebrow}</span>
+        <h2 id="pasos-t">{T.pasosTitulo}</h2>
+        <p class="lead">{T.pasosLead}</p>
+      </div>
+      <ol class="steps steps--row">
+        {T.pasos.map((p) => <li><h3>{p.t}</h3><p>{p.d}</p></li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="excl-t">
+    <div class="container split">
+      <div>
+        <span class="eyebrow">{T.exclusivaEyebrow}</span>
+        <h2 id="excl-t">{T.exclusivaTitulo}</h2>
+        <p style="margin-top:14px">{T.exclusivaTexto}</p>
+      </div>
+      <ul class="icon-list">
+        {T.exclusivaPuntos.map((p) => <li>{p}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--navy" aria-labelledby="docs-t">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">{T.docsEyebrow}</span>
+        <h2 id="docs-t">{T.docsTitulo}</h2>
+        <p class="lead">{T.docsLead}</p>
+      </div>
+      <ul class="icon-list">
+        {T.docs.map((d) => <li>{d}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <Reviews lang={lang} />
+
+  <section class="section section--deep" aria-labelledby="faq-t">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">{T.faqEyebrow}</span>
+        <h2 id="faq-t">{T.faqTitulo}</h2>
+      </div>
+      <div class="faq">
+        {T.faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <div class="faq__body"><p>{f.a}</p></div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand lang={lang} titulo={T.ctaTitulo} texto={T.ctaTexto} />
+</Base>

@@ -1,0 +1,186 @@
+---
+import Base from '../layouts/Base.astro';
+import Crumbs from '../components/Crumbs.astro';
+import FormShell from '../components/FormShell.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { path, t, type Lang } from '../lib/i18n';
+import { EMPRESA, dato, telHref, waHref } from '../config/empresa';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const ui = t(lang);
+const tel = dato(EMPRESA.telefono)!;
+const wa = dato(EMPRESA.whatsapp)!;
+
+const T = {
+  es: {
+    title: 'Valorar mi vivienda gratis en el Baix Llobregat · Finques Mil·lenium',
+    desc: 'Valoración gratuita y sin compromiso de su vivienda en Gavà, Castelldefels o Viladecans, basada en las ventas reales de su barrio.',
+    h1: '¿Cuánto vale hoy su vivienda?',
+    lead: 'Se lo decimos con las ventas reales de su barrio encima de la mesa. Gratis, sin compromiso y sin inflar el precio para quedarnos el encargo.',
+    formTitulo: 'Pida su valoración',
+    campos: { direccion: 'Dirección de la vivienda', municipio: 'Municipio', superficie: 'Superficie aproximada (m²)', nombre: 'Nombre', telefono: 'Teléfono', email: 'Correo electrónico' },
+    enviar: 'Pedir valoración gratuita',
+    pasosEyebrow: '02 · Cómo lo hacemos',
+    pasosTitulo: 'Así preparamos su valoración.',
+    pasos: [
+      { t: 'Nos cuenta su vivienda', d: 'Con los datos de este formulario o en una llamada breve.' },
+      { t: 'La conocemos de cerca', d: 'Si lo desea, la visitamos para ver lo que no se aprecia en un plano.' },
+      { t: 'Le damos un precio real', d: 'Basado en lo que hoy se vende en su barrio, no en promesas.' },
+      { t: 'Le acompañamos', d: 'Si decide vender, estamos a su lado hasta la firma ante notario.' },
+    ],
+    hablemosEyebrow: '03 · Hablemos',
+    hablemosTitulo: 'Hablemos sin compromiso.',
+    hablemosTexto: 'Atendemos personalmente a cada propietario. Llámenos o escríbanos cuando le vaya bien.',
+    waMsg: 'Hola, me gustaría valorar mi vivienda.',
+    faqEyebrow: '04 · Preguntas frecuentes',
+    faqTitulo: 'Lo que suelen preguntarnos.',
+    faqs: [
+      { q: '¿La valoración tiene algún coste?', a: 'No. Es gratuita y no le obliga a nada.' },
+      { q: '¿Me compromete a vender con ustedes?', a: 'No. Usted decide si quiere vender, cuándo y con quién.' },
+      { q: '¿Necesitan visitar la vivienda?', a: 'Para darle un precio ajustado, lo ideal es verla. Si lo prefiere, le damos primero una horquilla orientativa por teléfono.' },
+      { q: '¿Qué diferencia hay con una tasación oficial?', a: 'Nuestra valoración es un estudio de mercado para orientar la venta. La tasación oficial la emite una sociedad homologada y suele pedirse para la hipoteca del comprador.' },
+    ],
+    ctaTitulo: '¿Prefiere que le llamemos?',
+    ctaTexto: 'Déjenos sus datos en el formulario y le llamamos nosotros.',
+  },
+  ca: {
+    title: 'Valorar el meu habitatge gratis al Baix Llobregat · Finques Mil·lenium',
+    desc: 'Valoració gratuïta i sense compromís del seu habitatge a Gavà, Castelldefels o Viladecans, basada en les vendes reals del seu barri.',
+    h1: 'Quant val avui el seu habitatge?',
+    lead: 'L’hi diem amb les vendes reals del seu barri sobre la taula. Gratis, sense compromís i sense inflar el preu per quedar-nos l’encàrrec.',
+    formTitulo: 'Demani la seva valoració',
+    campos: { direccion: 'Adreça de l’habitatge', municipio: 'Municipi', superficie: 'Superfície aproximada (m²)', nombre: 'Nom', telefono: 'Telèfon', email: 'Correu electrònic' },
+    enviar: 'Demanar valoració gratuïta',
+    pasosEyebrow: '02 · Com ho fem',
+    pasosTitulo: 'Així preparem la seva valoració.',
+    pasos: [
+      { t: 'Ens explica el seu habitatge', d: 'Amb les dades d’aquest formulari o en una trucada breu.' },
+      { t: 'El coneixem de prop', d: 'Si ho desitja, el visitem per veure el que no s’aprecia en un plànol.' },
+      { t: 'Li donem un preu real', d: 'Basat en el que avui es ven al seu barri, no en promeses.' },
+      { t: 'L’acompanyem', d: 'Si decideix vendre, som al seu costat fins a la signatura davant de notari.' },
+    ],
+    hablemosEyebrow: '03 · Parlem-ne',
+    hablemosTitulo: 'Parlem-ne sense compromís.',
+    hablemosTexto: 'Atenem personalment cada propietari. Truqui’ns o escrigui’ns quan li vagi bé.',
+    waMsg: 'Hola, m’agradaria valorar el meu habitatge.',
+    faqEyebrow: '04 · Preguntes freqüents',
+    faqTitulo: 'El que ens solen preguntar.',
+    faqs: [
+      { q: 'La valoració té cap cost?', a: 'No. És gratuïta i no l’obliga a res.' },
+      { q: 'Em compromet a vendre amb vostès?', a: 'No. Vostè decideix si vol vendre, quan i amb qui.' },
+      { q: 'Necessiten visitar l’habitatge?', a: 'Per donar-li un preu ajustat, l’ideal és veure’l. Si ho prefereix, primer li donem una forquilla orientativa per telèfon.' },
+      { q: 'Quina diferència hi ha amb una taxació oficial?', a: 'La nostra valoració és un estudi de mercat per orientar la venda. La taxació oficial l’emet una societat homologada i se sol demanar per a la hipoteca del comprador.' },
+    ],
+    ctaTitulo: 'Prefereix que el truquem?',
+    ctaTexto: 'Deixi’ns les seves dades al formulari i el truquem nosaltres.',
+  },
+  en: {
+    title: 'Free home valuation in Baix Llobregat · Finques Mil·lenium',
+    desc: 'Free, no-obligation valuation of your home in Gavà, Castelldefels or Viladecans, based on real sales in your neighbourhood.',
+    h1: 'What is your home worth today?',
+    lead: 'We tell you with real sales from your neighbourhood on the table. Free, no obligation, and no inflated price just to win your listing.',
+    formTitulo: 'Request your valuation',
+    campos: { direccion: 'Property address', municipio: 'Town', superficie: 'Approximate floor area (m²)', nombre: 'Name', telefono: 'Phone', email: 'Email' },
+    enviar: 'Request a free valuation',
+    pasosEyebrow: '02 · How we do it',
+    pasosTitulo: 'How we prepare your valuation.',
+    pasos: [
+      { t: 'Tell us about your home', d: 'Using this form or in a short phone call.' },
+      { t: 'We see it up close', d: 'If you wish, we visit to see what a floor plan cannot show.' },
+      { t: 'We give you a real price', d: 'Based on what is actually selling in your neighbourhood, not on promises.' },
+      { t: 'We stay by your side', d: 'If you decide to sell, we are with you until signing before the notary.' },
+    ],
+    hablemosEyebrow: '03 · Let’s talk',
+    hablemosTitulo: 'Let’s talk, no strings attached.',
+    hablemosTexto: 'We look after every owner personally. Call or message us whenever suits you.',
+    waMsg: 'Hello, I would like a valuation of my home.',
+    faqEyebrow: '04 · Frequently asked questions',
+    faqTitulo: 'What people usually ask us.',
+    faqs: [
+      { q: 'Does the valuation cost anything?', a: 'No. It is free and commits you to nothing.' },
+      { q: 'Does it oblige me to sell with you?', a: 'No. You decide whether to sell, when and with whom.' },
+      { q: 'Do you need to visit the property?', a: 'For an accurate price, seeing it is best. If you prefer, we first give you an indicative range over the phone.' },
+      { q: 'How is this different from an official appraisal?', a: 'Our valuation is a market study to guide your sale. An official appraisal is issued by a certified valuation company and is usually required for the buyer’s mortgage.' },
+    ],
+    ctaTitulo: 'Would you rather we called you?',
+    ctaTexto: 'Leave your details in the form and we will call you.',
+  },
+}[lang]!;
+
+const municipios = [
+  { valor: 'gava', label: 'Gavà' },
+  { valor: 'castelldefels', label: 'Castelldefels' },
+  { valor: 'viladecans', label: 'Viladecans' },
+  { valor: 'otro', label: lang === 'en' ? 'Other' : lang === 'ca' ? 'Altres' : 'Otro' },
+];
+---
+<Base lang={lang} section="valorar" title={T.title} description={T.desc}>
+  <Crumbs lang={lang} items={[{ nombre: ui.nav.valorador }]} />
+  <section class="section section--tight" id="valorador">
+    <div class="container split split--13">
+      <div>
+        <h1>{T.h1}</h1>
+        <p class="lead" style="margin-top:14px">{T.lead}</p>
+      </div>
+      <div class="hero__card" style="max-width:none">
+        <h2 style="margin-bottom:10px">{T.formTitulo}</h2>
+        <FormShell
+          lang={lang}
+          id="form-valorar"
+          origen="valoracion"
+          submitLabel={T.enviar}
+          campos={[
+            { clave: 'direccion', label: T.campos.direccion, requerido: true, autocomplete: 'street-address' },
+            { clave: 'municipio', label: T.campos.municipio, tipo: 'select', requerido: true, opciones: municipios },
+            { clave: 'superficie', label: T.campos.superficie, tipo: 'number' },
+            { clave: 'nombre', label: T.campos.nombre, requerido: true, autocomplete: 'name' },
+            { clave: 'telefono', label: T.campos.telefono, tipo: 'tel', requerido: true, autocomplete: 'tel' },
+            { clave: 'email', label: T.campos.email, tipo: 'email', autocomplete: 'email' },
+          ]}
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--deep" aria-labelledby="val-pasos">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">{T.pasosEyebrow}</span>
+        <h2 id="val-pasos">{T.pasosTitulo}</h2>
+      </div>
+      <ol class="steps steps--row">
+        {T.pasos.map((p) => <li><h3>{p.t}</h3><p>{p.d}</p></li>)}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--navy" aria-labelledby="val-hablemos">
+    <div class="container cta-band">
+      <span class="eyebrow">{T.hablemosEyebrow}</span>
+      <h2 id="val-hablemos">{T.hablemosTitulo}</h2>
+      <p class="lead">{T.hablemosTexto}</p>
+      <p class="hero__actions" style="justify-content:center">
+        <a class="btn btn--brass" href={telHref(tel)}>{ui.comunes.llamenos}: {tel}</a>
+        <a class="btn btn--ghost" href={waHref(wa, T.waMsg)} rel="noopener" target="_blank">{ui.comunes.escribanosWhatsapp} <span class="visually-hidden">{ui.comunes.abreNueva}</span></a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="val-faq">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">{T.faqEyebrow}</span>
+        <h2 id="val-faq">{T.faqTitulo}</h2>
+      </div>
+      <div class="faq">
+        {T.faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <div class="faq__body"><p>{f.a}</p></div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>

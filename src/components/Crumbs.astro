@@ -1,0 +1,16 @@
+---
+import { path, t } from '../lib/i18n';
+import type { Lang } from '../config/site';
+
+interface Props { lang: Lang; items: { nombre: string; href?: string }[]; }
+const { lang, items } = Astro.props;
+const ui = t(lang);
+---
+<nav class="crumbs container" aria-label="Breadcrumb">
+  <ol>
+    <li><a href={path(lang, 'home')}>{ui.migas.inicio}</a></li>
+    {items.map((it) => (
+      <li>{it.href ? <a href={it.href}>{it.nombre}</a> : <span aria-current="page">{it.nombre}</span>}</li>
+    ))}
+  </ol>
+</nav>

@@ -1,0 +1,92 @@
+---
+import { EMPRESA, dato, telHref, waHref } from '../config/empresa';
+import { path, t, fmt } from '../lib/i18n';
+import { DEMO, type Lang } from '../config/site';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const ui = t(lang);
+
+const tel = dato(EMPRESA.telefono)!;
+const wa = dato(EMPRESA.whatsapp)!;
+const email = dato(EMPRESA.email)!;
+const direccion = dato(EMPRESA.direccion)!;
+const cp = dato(EMPRESA.codigoPostal)!;
+const muni = dato(EMPRESA.municipio)!;
+const insta = dato(EMPRESA.instagram)!;
+const aicat = dato(EMPRESA.aicat);
+const fundacion = dato(EMPRESA.fundacion);
+const horario = dato(EMPRESA.horario);
+const razonSocial = dato(EMPRESA.razonSocial);
+const cif = dato(EMPRESA.cif);
+const peritoJudicial = dato(EMPRESA.peritoJudicial);
+const agente = dato(EMPRESA.agenteNombre);
+const ano = new Date().getFullYear();
+const waMsg = {
+  es: 'Hola, vengo de la web de Finques Mil·lenium',
+  ca: 'Hola, vinc del web de Finques Mil·lenium',
+  en: 'Hello, I found you on the Finques Mil·lenium website',
+  fr: 'Bonjour, je viens du site de Finques Mil·lenium',
+}[lang];
+const horarioLabel = { es: 'Horario', ca: 'Horari', en: 'Opening hours', fr: 'Horaires' }[lang];
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__grid">
+      <div>
+        <a class="brand" href={path(lang, 'home')} style="margin-bottom:14px">
+          <span class="brand__mark" aria-hidden="true">M</span>
+          <span class="brand__name">Finques Mil·lenium</span>
+        </a>
+        <p>{fundacion ? fmt(ui.footer.lemaFundacion, { ano: fundacion }) : ui.footer.lema}</p>
+        <ul style="margin-top:16px">
+          <li>{direccion} · {cp} {muni} (Barcelona)</li>
+          <li><a href={telHref(tel)}>{tel}</a></li>
+          <li><a href={waHref(wa, waMsg)} rel="noopener" target="_blank">{ui.footer.whatsappLabel}</a></li>
+          <li><a href={`mailto:${email}`}>{email}</a></li>
+          {horario && (
+            <li>{horarioLabel}: {horario.dias}, {horario.manana.abre}–{horario.manana.cierra} · {horario.tarde.abre}–{horario.tarde.cierra}</li>
+          )}
+          <li><a href={`https://www.instagram.com/${insta}/`} rel="noopener" target="_blank">{ui.footer.instagramLabel}</a></li>
+        </ul>
+      </div>
+      <nav aria-labelledby="f-inmuebles">
+        <h2 id="f-inmuebles">{ui.nav.inmuebles}</h2>
+        <ul>
+          <li><a href={path(lang, 'comprar')}>{ui.nav.comprar}</a></li>
+          <li><a href={path(lang, 'alquilar')}>{ui.nav.alquilar}</a></li>
+          <li><a href={path(lang, 'obra-nueva')}>{ui.nav.obraNueva}</a></li>
+          <li><a href={path(lang, 'traspasos')}>{ui.nav.traspasos}</a></li>
+          <li><a href={path(lang, 'alerta')}>{ui.nav.alerta}</a></li>
+        </ul>
+      </nav>
+      <nav aria-labelledby="f-servicios">
+        <h2 id="f-servicios">{ui.nav.herramientas}</h2>
+        <ul>
+          <li><a href={path(lang, 'vender')}>{ui.nav.vender}</a></li>
+          <li><a href={path(lang, 'valorar')}>{ui.nav.valorador}</a></li>
+          <li><a href={path(lang, 'hipoteca')}>{ui.nav.hipoteca}</a></li>
+          <li><a href={path(lang, 'inversion')}>{ui.nav.inversion}</a></li>
+        </ul>
+      </nav>
+      <nav aria-labelledby="f-agencia">
+        <h2 id="f-agencia">{ui.nav.nosotros}</h2>
+        <ul>
+          <li><a href={path(lang, 'nosotros')}>{ui.nav.nosotros}</a></li>
+          <li><a href={path(lang, 'zonas')}>{ui.nav.zonas}</a></li>
+          <li><a href={path(lang, 'contacto')}>{ui.nav.contacto}</a></li>
+        </ul>
+        {aicat && <p style="margin-top:14px;font-size:.8rem">{fmt(ui.footer.aicat, { num: aicat })}</p>}
+        {agente && peritoJudicial && <p style="font-size:.8rem">{agente} · {ui.footer.peritoJudicial}</p>}
+      </nav>
+    </div>
+    <div class="site-footer__legal">
+      <span>© {ano} {razonSocial ?? dato(EMPRESA.nombreComercial)}{cif ? ` · CIF ${cif}` : ''}</span>
+      <a href={path(lang, 'aviso-legal')}>{ui.footer.avisoLegal}</a>
+      <a href={path(lang, 'privacidad')}>{ui.footer.privacidad}</a>
+      <a href={path(lang, 'cookies')}>{ui.footer.cookies}</a>
+      <button type="button" class="btn btn--ghost btn--sm" data-consent-open style="font-size:.78rem;padding:6px 12px">{ui.footer.configurarCookies}</button>
+      {DEMO && <span>{ui.footer.demoNota}</span>}
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,205 @@
+---
+import Base from '../layouts/Base.astro';
+import Crumbs from '../components/Crumbs.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { path, t, type Lang } from '../lib/i18n';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const ui = t(lang);
+
+const T = {
+  es: {
+    title: 'Calculadora hipotecaria: cuota y gastos · Finques Mil·lenium',
+    desc: 'Calcule la cuota mensual de su hipoteca y los gastos de compra de una vivienda de segunda mano en Cataluña, en un minuto y sin registrarse.',
+    h1: '¿Cuánto pagaría al mes por su vivienda?',
+    lead: 'Mueva los datos y vea la cuota al momento. Orientativo y sin registrarse.',
+    datos: 'Sus datos',
+    precio: 'Precio de la vivienda (€)',
+    entrada: 'Entrada / ahorro aportado (€)',
+    plazo: 'Plazo (años)',
+    interes: 'Interés anual (%)',
+    resultado: 'Su cuota estimada',
+    alMes: 'al mes',
+    prestamo: 'Importe del préstamo',
+    gastos: 'Gastos de compra estimados (ITP 10% + notaría y registro aprox.)',
+    totalNecesario: 'Ahorro total necesario (entrada + gastos)',
+    nota: 'Cálculo orientativo con sistema francés. El ITP del 10% corresponde a vivienda de segunda mano en Cataluña (tipo general); la obra nueva tributa IVA del 10% más AJD. No es una oferta de financiación: su banco fijará las condiciones finales.',
+    noJs: 'La calculadora necesita JavaScript. Si lo prefiere, llámenos y hacemos los números con usted.',
+    queEyebrow: '02 · Qué incluye',
+    queTitulo: 'Qué incluye el cálculo.',
+    que: [
+      { t: 'Cuota mensual', d: 'Con el sistema francés, el habitual en España: la misma cuota cada mes.' },
+      { t: 'Gastos de compra', d: 'ITP al 10% en segunda mano en Cataluña, más una estimación de notaría, registro y gestoría.' },
+      { t: 'Ahorro necesario', d: 'La suma de entrada y gastos: lo que conviene tener ahorrado antes de comprar.' },
+    ],
+    faqEyebrow: '03 · Preguntas frecuentes',
+    faqTitulo: 'Lo que suelen preguntarnos.',
+    faqs: [
+      { q: '¿Cuánta entrada necesito?', a: 'Los bancos suelen financiar hasta el 80% del menor valor entre compra y tasación. A eso hay que sumar los gastos e impuestos, alrededor de un 11–13% adicional en segunda mano.' },
+      { q: '¿Fijo o variable?', a: 'Depende de su situación y de su tolerancia al riesgo. Le ayudamos a comparar ofertas reales de varios bancos antes de decidir.' },
+      { q: '¿Me pueden ayudar a conseguir la hipoteca?', a: 'Sí. Trabajamos a diario con las oficinas bancarias de la zona y le acompañamos en la negociación, sin coste por nuestra parte.' },
+    ],
+    ctaTitulo: '¿Hacemos números con su caso?',
+    ctaTexto: 'Cuéntenos qué vivienda tiene en mente y le orientamos sin compromiso.',
+  },
+  ca: {
+    title: 'Calculadora hipotecària: quota i despeses · Finques Mil·lenium',
+    desc: 'Calculi la quota mensual de la seva hipoteca i les despeses de compra d’un habitatge de segona mà a Catalunya, en un minut i sense registrar-se.',
+    h1: 'Quant pagaria al mes pel seu habitatge?',
+    lead: 'Mogui les dades i vegi la quota al moment. Orientatiu i sense registrar-se.',
+    datos: 'Les seves dades',
+    precio: 'Preu de l’habitatge (€)',
+    entrada: 'Entrada / estalvi aportat (€)',
+    plazo: 'Termini (anys)',
+    interes: 'Interès anual (%)',
+    resultado: 'La seva quota estimada',
+    alMes: 'al mes',
+    prestamo: 'Import del préstec',
+    gastos: 'Despeses de compra estimades (ITP 10% + notaria i registre aprox.)',
+    totalNecesario: 'Estalvi total necessari (entrada + despeses)',
+    nota: 'Càlcul orientatiu amb sistema francès. L’ITP del 10% correspon a habitatge de segona mà a Catalunya (tipus general); l’obra nova tributa IVA del 10% més AJD. No és una oferta de finançament: el seu banc fixarà les condicions finals.',
+    noJs: 'La calculadora necessita JavaScript. Si ho prefereix, truqui’ns i fem els números amb vostè.',
+    queEyebrow: '02 · Què inclou',
+    queTitulo: 'Què inclou el càlcul.',
+    que: [
+      { t: 'Quota mensual', d: 'Amb el sistema francès, l’habitual a Espanya: la mateixa quota cada mes.' },
+      { t: 'Despeses de compra', d: 'ITP al 10% en segona mà a Catalunya, més una estimació de notaria, registre i gestoria.' },
+      { t: 'Estalvi necessari', d: 'La suma d’entrada i despeses: el que convé tenir estalviat abans de comprar.' },
+    ],
+    faqEyebrow: '03 · Preguntes freqüents',
+    faqTitulo: 'El que ens solen preguntar.',
+    faqs: [
+      { q: 'Quanta entrada necessito?', a: 'Els bancs solen finançar fins al 80% del menor valor entre compra i taxació. A això cal sumar-hi les despeses i els impostos, al voltant d’un 11–13% addicional en segona mà.' },
+      { q: 'Fix o variable?', a: 'Depèn de la seva situació i de la seva tolerància al risc. L’ajudem a comparar ofertes reals de diversos bancs abans de decidir.' },
+      { q: 'Em poden ajudar a aconseguir la hipoteca?', a: 'Sí. Treballem cada dia amb les oficines bancàries de la zona i l’acompanyem en la negociació, sense cost per la nostra banda.' },
+    ],
+    ctaTitulo: 'Fem números amb el seu cas?',
+    ctaTexto: 'Expliqui’ns quin habitatge té al cap i l’orientem sense compromís.',
+  },
+  en: {
+    title: 'Mortgage calculator: payment and costs · Finques Mil·lenium',
+    desc: 'Work out your monthly mortgage payment and the purchase costs of a resale home in Catalonia, in a minute and with no sign-up.',
+    h1: 'What would your home cost per month?',
+    lead: 'Adjust the figures and see your payment instantly. Indicative, no sign-up.',
+    datos: 'Your figures',
+    precio: 'Property price (€)',
+    entrada: 'Deposit / savings (€)',
+    plazo: 'Term (years)',
+    interes: 'Annual interest rate (%)',
+    resultado: 'Your estimated payment',
+    alMes: 'per month',
+    prestamo: 'Loan amount',
+    gastos: 'Estimated purchase costs (10% transfer tax + approx. notary and registry)',
+    totalNecesario: 'Total savings needed (deposit + costs)',
+    nota: 'Indicative calculation using the French amortisation system. The 10% transfer tax (ITP) applies to resale homes in Catalonia (general rate); new builds pay 10% VAT plus stamp duty. This is not a financing offer: your bank will set the final terms.',
+    noJs: 'The calculator needs JavaScript. If you prefer, call us and we will run the numbers with you.',
+    queEyebrow: '02 · What’s included',
+    queTitulo: 'What the calculation includes.',
+    que: [
+      { t: 'Monthly payment', d: 'Using the French system, the standard in Spain: the same payment every month.' },
+      { t: 'Purchase costs', d: '10% transfer tax on resale homes in Catalonia, plus an estimate for notary, registry and processing.' },
+      { t: 'Savings needed', d: 'Deposit plus costs: what you should have saved before buying.' },
+    ],
+    faqEyebrow: '03 · Frequently asked questions',
+    faqTitulo: 'What people usually ask us.',
+    faqs: [
+      { q: 'How big a deposit do I need?', a: 'Banks usually lend up to 80% of the lower of the purchase price and the appraisal value. Add taxes and costs on top, roughly another 11–13% on a resale home.' },
+      { q: 'Fixed or variable?', a: 'It depends on your situation and your appetite for risk. We help you compare real offers from several banks before deciding.' },
+      { q: 'Can you help me get the mortgage?', a: 'Yes. We deal with the local bank branches every day and support you through the negotiation, at no cost from our side.' },
+    ],
+    ctaTitulo: 'Shall we run your numbers?',
+    ctaTexto: 'Tell us which home you have in mind and we will guide you, no strings attached.',
+  },
+}[lang]!;
+---
+<Base lang={lang} section="hipoteca" title={T.title} description={T.desc}>
+  <Crumbs lang={lang} items={[{ nombre: ui.nav.hipoteca }]} />
+  <section class="section section--tight">
+    <div class="container">
+      <div class="section-head">
+        <h1>{T.h1}</h1>
+        <p class="lead">{T.lead}</p>
+      </div>
+      <div class="calc" data-hipoteca>
+        <form class="form" aria-label={T.datos} onsubmit="return false">
+          <p class="field"><label for="mc-precio">{T.precio}</label><input id="mc-precio" type="number" inputmode="numeric" min="10000" step="1000" value="300000" data-mc="precio" /></p>
+          <p class="field"><label for="mc-entrada">{T.entrada}</label><input id="mc-entrada" type="number" inputmode="numeric" min="0" step="1000" value="60000" data-mc="entrada" /></p>
+          <p class="field"><label for="mc-plazo">{T.plazo}</label><input id="mc-plazo" type="number" inputmode="numeric" min="5" max="40" value="30" data-mc="plazo" /></p>
+          <p class="field"><label for="mc-interes">{T.interes}</label><input id="mc-interes" type="number" inputmode="decimal" min="0.1" max="12" step="0.05" value="2.9" data-mc="interes" /></p>
+          <noscript><p class="notice">{T.noJs}</p></noscript>
+        </form>
+        <div class="calc__out" aria-live="polite">
+          <h3>{T.resultado}</h3>
+          <p class="calc__big"><span data-mc-out="cuota">—</span> <small style="font-size:1rem;color:var(--cream-on-navy)">{T.alMes}</small></p>
+          <p class="calc__row"><span>{T.prestamo}</span> <strong data-mc-out="prestamo">—</strong></p>
+          <p class="calc__row"><span>{T.gastos}</span> <strong data-mc-out="gastos">—</strong></p>
+          <p class="calc__row"><span>{T.totalNecesario}</span> <strong data-mc-out="total">—</strong></p>
+          <p class="calc__note">{T.nota}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--deep">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">{T.queEyebrow}</span>
+        <h2>{T.queTitulo}</h2>
+      </div>
+      <div class="num-cols">
+        {T.que.map((q, idx) => (
+          <div>
+            <h3><span class="n" aria-hidden="true">{String(idx + 1).padStart(2, '0')}</span> {q.t}</h3>
+            <p>{q.d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">{T.faqEyebrow}</span>
+        <h2>{T.faqTitulo}</h2>
+      </div>
+      <div class="faq">
+        {T.faqs.map((f) => (
+          <details>
+            <summary>{f.q}</summary>
+            <div class="faq__body"><p>{f.a}</p></div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <CtaBand lang={lang} titulo={T.ctaTitulo} texto={T.ctaTexto} />
+</Base>
+<script>
+  const raiz = document.querySelector('[data-hipoteca]');
+  if (raiz) {
+    const lang = document.documentElement.lang;
+    const eur = (n: number) =>
+      new Intl.NumberFormat(lang === 'en' ? 'en-GB' : 'es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n);
+    const inp = (k: string) => raiz.querySelector<HTMLInputElement>(`[data-mc="${k}"]`)!;
+    const out = (k: string) => raiz.querySelector<HTMLElement>(`[data-mc-out="${k}"]`)!;
+    const calcular = () => {
+      const precio = Number(inp('precio').value) || 0;
+      const entrada = Number(inp('entrada').value) || 0;
+      const anos = Number(inp('plazo').value) || 30;
+      const interes = (Number(inp('interes').value) || 0) / 100 / 12;
+      const prestamo = Math.max(precio - entrada, 0);
+      const n = anos * 12;
+      const cuota = interes > 0 ? (prestamo * interes) / (1 - Math.pow(1 + interes, -n)) : prestamo / n;
+      const gastos = precio * 0.10 + Math.min(3000 + precio * 0.004, 6000);
+      out('cuota').textContent = eur(cuota || 0);
+      out('prestamo').textContent = eur(prestamo);
+      out('gastos').textContent = eur(gastos);
+      out('total').textContent = eur(entrada + gastos);
+    };
+    raiz.querySelectorAll('input').forEach((i) => i.addEventListener('input', calcular));
+    calcular();
+  }
+</script>

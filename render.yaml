@@ -1,0 +1,30 @@
+# Generado por scripts/gen-redirects.mjs — NO editar a mano (fuente: redirects.config.mjs)
+services:
+  - type: web
+    name: finques-millenium-demo
+    runtime: static
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: redirect
+        source: "/"
+        destination: "/es/"
+      - type: redirect
+        source: "/conocenos"
+        destination: "/es/nosotros/"
+      - type: redirect
+        source: "/si-vendes-nosotros-compramos"
+        destination: "/es/vender/"
+      - type: redirect
+        source: "/contactar"
+        destination: "/es/contacto/"
+      - type: redirect
+        source: "/es/contacto"
+        destination: "/es/contacto/"
+    headers:
+      - path: /_astro/*
+        name: Cache-Control
+        value: public, max-age=31536000, immutable
+      - path: /*
+        name: X-Robots-Tag
+        value: noindex, nofollow

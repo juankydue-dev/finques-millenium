@@ -1,0 +1,122 @@
+---
+import Base from '../layouts/Base.astro';
+import Crumbs from '../components/Crumbs.astro';
+import { path, t, type Lang } from '../lib/i18n';
+import { EMPRESA, dato } from '../config/empresa';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const ui = t(lang);
+const nombre = dato(EMPRESA.nombreComercial)!;
+const razonSocial = dato(EMPRESA.razonSocial);
+const cif = dato(EMPRESA.cif);
+const direccion = dato(EMPRESA.direccion)!;
+const cp = dato(EMPRESA.codigoPostal)!;
+const muni = dato(EMPRESA.municipio)!;
+const email = dato(EMPRESA.email)!;
+const retencion = dato(EMPRESA.retencionMeses);
+const titular = razonSocial ?? nombre;
+
+const T = {
+  es: {
+    title: 'Política de privacidad · Finques Mil·lenium',
+    desc: 'Cómo trata Finques Mil·lenium sus datos personales: responsable, finalidades, base legal, plazos de conservación y derechos.',
+    h1: 'Política de privacidad',
+    s1: '1. Responsable del tratamiento',
+    dResp: 'Responsable', dNif: 'NIF', dDom: 'Domicilio', dCon: 'Contacto para privacidad',
+    s2: '2. Qué datos tratamos y para qué',
+    s2Items: [
+      'Formularios de contacto, valoración, alerta e inversión: los datos que usted nos facilita (nombre, teléfono, correo y la información de su consulta) para responderle y prestarle el servicio solicitado.',
+      'WhatsApp: si nos escribe por WhatsApp, trataremos su número y sus mensajes para atenderle. El servicio lo presta Meta y se rige también por sus condiciones.',
+      'Alerta Mil·lenium: sus criterios de búsqueda, para avisarle de inmuebles que encajen.',
+      'Analítica y publicidad: solo si usted las activa en el banner de cookies (vea la política de cookies).',
+    ],
+    s3: '3. Base legal',
+    s3Texto: 'Tratamos sus datos para atender su solicitud (medidas precontractuales y ejecución del servicio) y, en el caso de la analítica, la publicidad y los avisos de la alerta, sobre la base de su consentimiento, que puede retirar en cualquier momento.',
+    s4: '4. Cuánto tiempo conservamos sus datos',
+    s4ConPlazo: (m: number) => `Los datos de contacto y consultas se conservan mientras atendemos su solicitud y, después, hasta ${m} meses antes de suprimirse. Las alertas se mantienen hasta que usted se da de baja.`,
+    s4SinPlazo: 'Los datos de contacto y consultas se conservan el tiempo imprescindible para atender su solicitud y cumplir con las obligaciones legales. Las alertas se mantienen hasta que usted se da de baja.',
+    s5: '5. Destinatarios',
+    s5Texto: 'No cedemos sus datos a terceros salvo obligación legal. Los proveedores que nos prestan servicios (alojamiento web, correo) actúan como encargados del tratamiento dentro del Espacio Económico Europeo o con garantías equivalentes.',
+    s6: '6. Sus derechos',
+    s6Texto: `Puede ejercer sus derechos de acceso, rectificación, supresión, oposición, limitación y portabilidad escribiendo a ${email}. Si considera que no le hemos atendido bien, puede reclamar ante la Agencia Española de Protección de Datos (aepd.es).`,
+    s7: '7. Seguridad y menores',
+    s7Texto: 'Aplicamos medidas técnicas y organizativas razonables para proteger sus datos. Este sitio no se dirige a menores de 14 años.',
+  },
+  ca: {
+    title: 'Política de privacitat · Finques Mil·lenium',
+    desc: 'Com tracta Finques Mil·lenium les seves dades personals: responsable, finalitats, base legal, terminis de conservació i drets.',
+    h1: 'Política de privacitat',
+    s1: '1. Responsable del tractament',
+    dResp: 'Responsable', dNif: 'NIF', dDom: 'Domicili', dCon: 'Contacte per a privacitat',
+    s2: '2. Quines dades tractem i per a què',
+    s2Items: [
+      'Formularis de contacte, valoració, alerta i inversió: les dades que vostè ens facilita (nom, telèfon, correu i la informació de la seva consulta) per respondre-li i prestar-li el servei sol·licitat.',
+      'WhatsApp: si ens escriu per WhatsApp, tractarem el seu número i els seus missatges per atendre’l. El servei el presta Meta i es regeix també per les seves condicions.',
+      'Alerta Mil·lenium: els seus criteris de cerca, per avisar-lo d’immobles que encaixin.',
+      'Analítica i publicitat: només si vostè les activa al bàner de galetes (vegi la política de galetes).',
+    ],
+    s3: '3. Base legal',
+    s3Texto: 'Tractem les seves dades per atendre la seva sol·licitud (mesures precontractuals i execució del servei) i, en el cas de l’analítica, la publicitat i els avisos de l’alerta, sobre la base del seu consentiment, que pot retirar en qualsevol moment.',
+    s4: '4. Quant de temps conservem les seves dades',
+    s4ConPlazo: (m: number) => `Les dades de contacte i consultes es conserven mentre atenem la seva sol·licitud i, després, fins a ${m} mesos abans de suprimir-se. Les alertes es mantenen fins que vostè es dona de baixa.`,
+    s4SinPlazo: 'Les dades de contacte i consultes es conserven el temps imprescindible per atendre la seva sol·licitud i complir les obligacions legals. Les alertes es mantenen fins que vostè es dona de baixa.',
+    s5: '5. Destinataris',
+    s5Texto: 'No cedim les seves dades a tercers llevat d’obligació legal. Els proveïdors que ens presten serveis (allotjament web, correu) actuen com a encarregats del tractament dins de l’Espai Econòmic Europeu o amb garanties equivalents.',
+    s6: '6. Els seus drets',
+    s6Texto: `Pot exercir els seus drets d’accés, rectificació, supressió, oposició, limitació i portabilitat escrivint a ${email}. Si considera que no l’hem atès bé, pot reclamar davant l’Agència Espanyola de Protecció de Dades (aepd.es).`,
+    s7: '7. Seguretat i menors',
+    s7Texto: 'Apliquem mesures tècniques i organitzatives raonables per protegir les seves dades. Aquest lloc no s’adreça a menors de 14 anys.',
+  },
+  en: {
+    title: 'Privacy policy · Finques Mil·lenium',
+    desc: 'How Finques Mil·lenium handles your personal data: controller, purposes, legal basis, retention periods and your rights.',
+    h1: 'Privacy policy',
+    s1: '1. Data controller',
+    dResp: 'Controller', dNif: 'Tax ID', dDom: 'Address', dCon: 'Privacy contact',
+    s2: '2. What data we process and why',
+    s2Items: [
+      'Contact, valuation, alert and investment forms: the details you give us (name, phone, email and the content of your enquiry) so we can reply and provide the requested service.',
+      'WhatsApp: if you message us on WhatsApp, we process your number and messages in order to assist you. The service is provided by Meta and is also governed by its terms.',
+      'Mil·lenium Alert: your search criteria, so we can notify you about matching properties.',
+      'Analytics and advertising: only if you enable them in the cookie banner (see the cookie policy).',
+    ],
+    s3: '3. Legal basis',
+    s3Texto: 'We process your data to handle your request (pre-contractual steps and performance of the service) and, for analytics, advertising and alert notifications, on the basis of your consent, which you can withdraw at any time.',
+    s4: '4. How long we keep your data',
+    s4ConPlazo: (m: number) => `Contact details and enquiries are kept while we handle your request and then for up to ${m} months before deletion. Alerts are kept until you unsubscribe.`,
+    s4SinPlazo: 'Contact details and enquiries are kept for as long as strictly needed to handle your request and meet legal obligations. Alerts are kept until you unsubscribe.',
+    s5: '5. Recipients',
+    s5Texto: 'We do not share your data with third parties unless legally required. Service providers (web hosting, email) act as data processors within the European Economic Area or under equivalent safeguards.',
+    s6: '6. Your rights',
+    s6Texto: `You can exercise your rights of access, rectification, erasure, objection, restriction and portability by writing to ${email}. If you feel we have not dealt with you properly, you can complain to the Spanish Data Protection Agency (aepd.es).`,
+    s7: '7. Security and minors',
+    s7Texto: 'We apply reasonable technical and organisational measures to protect your data. This site is not aimed at children under 14.',
+  },
+}[lang]!;
+---
+<Base lang={lang} section="privacidad" title={T.title} description={T.desc}>
+  <Crumbs lang={lang} items={[{ nombre: ui.footer.privacidad }]} />
+  <section class="section section--tight">
+    <div class="container legal-body">
+      <h1>{T.h1}</h1>
+      <h2>{T.s1}</h2>
+      <dl class="deflist">
+        <div><dt>{T.dResp}</dt><dd>{titular}</dd></div>
+        {cif && <div><dt>{T.dNif}</dt><dd>{cif}</dd></div>}
+        <div><dt>{T.dDom}</dt><dd>{direccion}, {cp} {muni} (Barcelona)</dd></div>
+        <div><dt>{T.dCon}</dt><dd>{email}</dd></div>
+      </dl>
+      <h2>{T.s2}</h2>
+      <ul>
+        {T.s2Items.map((i) => <li>{i}</li>)}
+      </ul>
+      <h2>{T.s3}</h2><p>{T.s3Texto}</p>
+      <h2>{T.s4}</h2>
+      <p>{retencion ? T.s4ConPlazo(retencion) : T.s4SinPlazo}</p>
+      <h2>{T.s5}</h2><p>{T.s5Texto}</p>
+      <h2>{T.s6}</h2><p>{T.s6Texto}</p>
+      <h2>{T.s7}</h2><p>{T.s7Texto}</p>
+    </div>
+  </section>
+</Base>

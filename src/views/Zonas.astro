@@ -1,0 +1,71 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Crumbs from '../components/Crumbs.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { img } from '../lib/img';
+import { path, t, type Lang } from '../lib/i18n';
+import zonasData from '../data/zonas.json';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const nz = (z: { nombre: Record<string, string> }) => z.nombre[lang] ?? z.nombre.es;
+const ui = t(lang);
+
+const T = {
+  es: {
+    title: 'Zonas: Gavà, Castelldefels y Viladecans · Finques Mil·lenium',
+    desc: 'Trabajamos donde vivimos: Gavà, Castelldefels y Viladecans, barrio a barrio. Conozca cada zona y lo que tenemos en ella.',
+    h1: 'Conocemos cada calle.',
+    lead: 'Trabajamos donde vivimos, barrio a barrio. Elija una zona para ver cómo es vivir en ella y qué tenemos ahora mismo.',
+    barrios: 'barrios',
+    nota: 'El ámbito definitivo de trabajo está pendiente de cerrar con la agencia; aquí mostramos las zonas confirmadas.',
+    ctaTitulo: '¿Vende en alguna de estas zonas?',
+    ctaTexto: 'Le decimos lo que hoy se paga en su barrio, con las ventas reales encima de la mesa.',
+  },
+  ca: {
+    title: 'Zones: Gavà, Castelldefels i Viladecans · Finques Mil·lenium',
+    desc: 'Treballem on vivim: Gavà, Castelldefels i Viladecans, barri a barri. Conegui cada zona i el que hi tenim.',
+    h1: 'Coneixem cada carrer.',
+    lead: 'Treballem on vivim, barri a barri. Triï una zona per veure com és viure-hi i què hi tenim ara mateix.',
+    barrios: 'barris',
+    nota: 'L’àmbit definitiu de treball està pendent de tancar amb l’agència; aquí mostrem les zones confirmades.',
+    ctaTitulo: 'Ven en alguna d’aquestes zones?',
+    ctaTexto: 'Li diem el que avui es paga al seu barri, amb les vendes reals sobre la taula.',
+  },
+  en: {
+    title: 'Areas: Gavà, Castelldefels and Viladecans · Finques Mil·lenium',
+    desc: 'We work where we live: Gavà, Castelldefels and Viladecans, neighbourhood by neighbourhood. Get to know each area and what we have there.',
+    h1: 'We know every street.',
+    lead: 'We work where we live, neighbourhood by neighbourhood. Pick an area to see what living there is like and what we have right now.',
+    barrios: 'neighbourhoods',
+    nota: 'The agency’s final working area is still being confirmed; the areas shown here are the confirmed ones.',
+    ctaTitulo: 'Selling in one of these areas?',
+    ctaTexto: 'We will tell you what buyers pay in your neighbourhood today, with real sales on the table.',
+  },
+}[lang]!;
+---
+<Base lang={lang} section="zonas" title={T.title} description={T.desc}>
+  <Crumbs lang={lang} items={[{ nombre: ui.nav.zonas }]} />
+  <section class="section section--tight">
+    <div class="container">
+      <div class="section-head">
+        <h1>{T.h1}</h1>
+        <p class="lead">{T.lead}</p>
+      </div>
+      <div class="zone-grid">
+        {zonasData.zonas.map((z) => (
+          <article class="zone-card" style="min-height:260px">
+            <Image src={img(`zona-${z.slug}`)} alt="" widths={[480, 760]} sizes="(min-width: 700px) 360px, 92vw" quality={65} />
+            <div class="zone-card__body">
+              <h3><a href={path(lang, 'zonas', z.slug)}>{nz(z)}</a></h3>
+              <p class="zone-card__meta">{z.barrios.length} {T.barrios}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+      <p class="hint" style="margin-top:20px">{T.nota}</p>
+    </div>
+  </section>
+  <CtaBand lang={lang} titulo={T.ctaTitulo} texto={T.ctaTexto} />
+</Base>

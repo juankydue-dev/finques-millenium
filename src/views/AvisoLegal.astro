@@ -1,0 +1,127 @@
+---
+import Base from '../layouts/Base.astro';
+import Crumbs from '../components/Crumbs.astro';
+import { path, t, type Lang } from '../lib/i18n';
+import { EMPRESA, dato } from '../config/empresa';
+
+interface Props { lang: Lang; }
+const { lang } = Astro.props;
+const ui = t(lang);
+const nombre = dato(EMPRESA.nombreComercial)!;
+const razonSocial = dato(EMPRESA.razonSocial);
+const cif = dato(EMPRESA.cif);
+const rm = dato(EMPRESA.registroMercantil);
+const aicat = dato(EMPRESA.aicat);
+const numeroApi = dato(EMPRESA.numeroApi);
+const colegio = dato(EMPRESA.colegioApi);
+const rc = dato(EMPRESA.aseguradoraRC);
+const caucion = dato(EMPRESA.garantiaCaucion);
+const direccion = dato(EMPRESA.direccion)!;
+const cp = dato(EMPRESA.codigoPostal)!;
+const muni = dato(EMPRESA.municipio)!;
+const email = dato(EMPRESA.email)!;
+const tel = dato(EMPRESA.telefono)!;
+const titular = razonSocial ?? nombre;
+
+const T = {
+  es: {
+    title: 'Aviso legal · Finques Mil·lenium',
+    desc: 'Aviso legal de la web de Finques Mil·lenium: datos del titular, registro de agentes inmobiliarios y condiciones de uso del sitio.',
+    h1: 'Aviso legal',
+    s1: '1. Datos del titular',
+    s1Texto: 'En cumplimiento de la Ley 34/2002, de Servicios de la Sociedad de la Información y de Comercio Electrónico (LSSI-CE), le informamos de los datos del titular de este sitio web:',
+    dTitular: 'Titular', dNif: 'NIF', dDomicilio: 'Domicilio', dEmail: 'Correo electrónico', dTel: 'Teléfono', dRM: 'Registro Mercantil',
+    dAicat: 'Registro de Agentes Inmobiliarios de Cataluña (AICAT)', dApi: 'Agente de la Propiedad Inmobiliaria (API)', dRC: 'Seguro de responsabilidad civil', dCaucion: 'Garantía de cantidades entregadas',
+    s2: '2. Objeto y condiciones de uso',
+    s2Texto: 'Este sitio web informa de los servicios de intermediación inmobiliaria de la agencia y de los inmuebles que gestiona. El acceso es gratuito y supone aceptar estas condiciones. El usuario se compromete a hacer un uso lícito del sitio y de sus contenidos.',
+    s3: '3. Información de los inmuebles y herramientas',
+    s3Texto: 'Las superficies, precios y demás características de los inmuebles son orientativos, pueden variar y no constituyen oferta contractual. Las calculadoras y el valorador ofrecen estimaciones orientativas que no sustituyen ni una tasación oficial ni el asesoramiento profesional.',
+    s4: '4. Propiedad intelectual e industrial',
+    s4Texto: `Los contenidos, textos, imágenes, diseño y código de este sitio pertenecen a ${titular} o a terceros que han autorizado su uso. No se permite su reproducción, distribución o transformación sin autorización expresa.`,
+    s5: '5. Responsabilidad',
+    s5Texto: 'El titular no responde del mal uso que se haga de los contenidos ni de los daños derivados de circunstancias ajenas a su control, y trabaja por mantener la información actualizada y el sitio disponible.',
+    s6: '6. Enlaces',
+    s6Texto: 'Este sitio puede enlazar a webs de terceros (mapas, redes sociales, perfil de Google). El titular no se hace responsable de sus contenidos ni de sus políticas.',
+    s7: '7. Protección de datos y cookies',
+    s7Texto: 'El tratamiento de datos personales se describe en la política de privacidad, y el uso de cookies y almacenamiento local, en la política de cookies.',
+    s8: '8. Legislación y jurisdicción',
+    s8Texto: 'Estas condiciones se rigen por la legislación española. Para cualquier controversia, las partes se someten a los juzgados y tribunales que correspondan conforme a la normativa de consumidores.',
+  },
+  ca: {
+    title: 'Avís legal · Finques Mil·lenium',
+    desc: 'Avís legal del web de Finques Mil·lenium: dades del titular, registre d’agents immobiliaris i condicions d’ús del lloc.',
+    h1: 'Avís legal',
+    s1: '1. Dades del titular',
+    s1Texto: 'En compliment de la Llei 34/2002, de Serveis de la Societat de la Informació i de Comerç Electrònic (LSSI-CE), l’informem de les dades del titular d’aquest lloc web:',
+    dTitular: 'Titular', dNif: 'NIF', dDomicilio: 'Domicili', dEmail: 'Correu electrònic', dTel: 'Telèfon', dRM: 'Registre Mercantil',
+    dAicat: 'Registre d’Agents Immobiliaris de Catalunya (AICAT)', dApi: 'Agent de la Propietat Immobiliària (API)', dRC: 'Assegurança de responsabilitat civil', dCaucion: 'Garantia de quantitats lliurades',
+    s2: '2. Objecte i condicions d’ús',
+    s2Texto: 'Aquest lloc web informa dels serveis d’intermediació immobiliària de l’agència i dels immobles que gestiona. L’accés és gratuït i suposa acceptar aquestes condicions. L’usuari es compromet a fer un ús lícit del lloc i dels seus continguts.',
+    s3: '3. Informació dels immobles i eines',
+    s3Texto: 'Les superfícies, preus i altres característiques dels immobles són orientatius, poden variar i no constitueixen oferta contractual. Les calculadores i el valorador ofereixen estimacions orientatives que no substitueixen ni una taxació oficial ni l’assessorament professional.',
+    s4: '4. Propietat intel·lectual i industrial',
+    s4Texto: `Els continguts, textos, imatges, disseny i codi d’aquest lloc pertanyen a ${titular} o a tercers que n’han autoritzat l’ús. No se’n permet la reproducció, distribució o transformació sense autorització expressa.`,
+    s5: '5. Responsabilitat',
+    s5Texto: 'El titular no respon del mal ús que es faci dels continguts ni dels danys derivats de circumstàncies alienes al seu control, i treballa per mantenir la informació actualitzada i el lloc disponible.',
+    s6: '6. Enllaços',
+    s6Texto: 'Aquest lloc pot enllaçar a webs de tercers (mapes, xarxes socials, perfil de Google). El titular no es fa responsable dels seus continguts ni de les seves polítiques.',
+    s7: '7. Protecció de dades i galetes',
+    s7Texto: 'El tractament de dades personals es descriu a la política de privacitat, i l’ús de galetes i emmagatzematge local, a la política de galetes.',
+    s8: '8. Legislació i jurisdicció',
+    s8Texto: 'Aquestes condicions es regeixen per la legislació espanyola. Per a qualsevol controvèrsia, les parts se sotmeten als jutjats i tribunals que corresponguin d’acord amb la normativa de consumidors.',
+  },
+  en: {
+    title: 'Legal notice · Finques Mil·lenium',
+    desc: 'Legal notice for the Finques Mil·lenium website: site owner details, estate agents register and terms of use.',
+    h1: 'Legal notice',
+    s1: '1. Site owner',
+    s1Texto: 'In compliance with Spanish Law 34/2002 on Information Society Services and Electronic Commerce (LSSI-CE), the details of the owner of this website are:',
+    dTitular: 'Owner', dNif: 'Tax ID', dDomicilio: 'Address', dEmail: 'Email', dTel: 'Phone', dRM: 'Companies Registry',
+    dAicat: 'Catalan Register of Real Estate Agents (AICAT)', dApi: 'Licensed Estate Agent (API)', dRC: 'Professional liability insurance', dCaucion: 'Client funds guarantee',
+    s2: '2. Purpose and terms of use',
+    s2Texto: 'This website presents the agency’s estate agency services and the properties it manages. Access is free and implies acceptance of these terms. Users undertake to make lawful use of the site and its contents.',
+    s3: '3. Property information and tools',
+    s3Texto: 'Floor areas, prices and other property details are indicative, may change and do not constitute a contractual offer. The calculators and the valuation tool provide indicative estimates that replace neither an official appraisal nor professional advice.',
+    s4: '4. Intellectual and industrial property',
+    s4Texto: `The contents, texts, images, design and code of this site belong to ${titular} or to third parties who have authorised their use. Reproduction, distribution or transformation without express authorisation is not permitted.`,
+    s5: '5. Liability',
+    s5Texto: 'The owner is not liable for misuse of the contents or for damage arising from circumstances beyond its control, and works to keep the information up to date and the site available.',
+    s6: '6. Links',
+    s6Texto: 'This site may link to third-party websites (maps, social networks, our Google profile). The owner is not responsible for their content or policies.',
+    s7: '7. Data protection and cookies',
+    s7Texto: 'The processing of personal data is described in the privacy policy, and the use of cookies and local storage in the cookie policy.',
+    s8: '8. Governing law and jurisdiction',
+    s8Texto: 'These terms are governed by Spanish law. Any dispute will be submitted to the courts determined by consumer protection rules.',
+  },
+}[lang]!;
+---
+<Base lang={lang} section="aviso-legal" title={T.title} description={T.desc}>
+  <Crumbs lang={lang} items={[{ nombre: ui.footer.avisoLegal }]} />
+  <section class="section section--tight">
+    <div class="container legal-body">
+      <h1>{T.h1}</h1>
+      <h2>{T.s1}</h2>
+      <p>{T.s1Texto}</p>
+      <dl class="deflist">
+        <div><dt>{T.dTitular}</dt><dd>{titular}</dd></div>
+        {cif && <div><dt>{T.dNif}</dt><dd>{cif}</dd></div>}
+        <div><dt>{T.dDomicilio}</dt><dd>{direccion}, {cp} {muni} (Barcelona)</dd></div>
+        <div><dt>{T.dEmail}</dt><dd>{email}</dd></div>
+        <div><dt>{T.dTel}</dt><dd>{tel}</dd></div>
+        {rm && <div><dt>{T.dRM}</dt><dd>{rm}</dd></div>}
+        {aicat && <div><dt>{T.dAicat}</dt><dd>nº {aicat}</dd></div>}
+        {numeroApi && <div><dt>{T.dApi}</dt><dd>nº {numeroApi}{colegio ? ` · ${colegio}` : ''}</dd></div>}
+        {rc && <div><dt>{T.dRC}</dt><dd>{rc}</dd></div>}
+        {caucion && <div><dt>{T.dCaucion}</dt><dd>{caucion}</dd></div>}
+      </dl>
+      <h2>{T.s2}</h2><p>{T.s2Texto}</p>
+      <h2>{T.s3}</h2><p>{T.s3Texto}</p>
+      <h2>{T.s4}</h2><p>{T.s4Texto}</p>
+      <h2>{T.s5}</h2><p>{T.s5Texto}</p>
+      <h2>{T.s6}</h2><p>{T.s6Texto}</p>
+      <h2>{T.s7}</h2>
+      <p>{T.s7Texto} <a href={path(lang, 'privacidad')}>{ui.footer.privacidad}</a> · <a href={path(lang, 'cookies')}>{ui.footer.cookies}</a></p>
+      <h2>{T.s8}</h2><p>{T.s8Texto}</p>
+    </div>
+  </section>
+</Base>
