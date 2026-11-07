@@ -50,6 +50,7 @@ const demoLabel = { es: 'Versión de demostración', ca: 'Versió de demostraci�
   <meta property="og:locale" content={OG_LOCALE[lang]} />
   {LANGS.filter((l) => l !== lang).map((l) => <meta property="og:locale:alternate" content={OG_LOCALE[l]} />)}
   <script type="application/ld+json" set:html={ld} />
+  <script is:inline>document.documentElement.classList.add('js');</script>
 </head>
 <body>
   <a class="skip-link" href="#contenido">{ui.saltar}</a>

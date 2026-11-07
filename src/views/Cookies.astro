@@ -22,6 +22,8 @@ const T = {
     thNombre: 'Nombre', thTitular: 'Titular', thPara: 'Para qué sirve', thDuracion: 'Duración',
     nFmConsent: 'Guardar su elección sobre las cookies (almacenamiento local).',
     nFmConsentDur: 'Hasta que la cambie o borre',
+    nFmFav: 'Recordar los inmuebles que marca como favoritos (almacenamiento local, solo en su navegador).',
+    nFmFavDur: 'Hasta que los borre',
     analitica: 'Analítica (solo con su consentimiento)',
     nGa: 'Contar visitas y saber qué páginas se usan más, de forma agregada.',
     nGaDur: '2 años',
@@ -47,6 +49,8 @@ const T = {
     thNombre: 'Nom', thTitular: 'Titular', thPara: 'Per a què serveix', thDuracion: 'Durada',
     nFmConsent: 'Desar la seva elecció sobre les galetes (emmagatzematge local).',
     nFmConsentDur: 'Fins que la canviï o esborri',
+    nFmFav: 'Recordar els immobles que marca com a favorits (emmagatzematge local, només al seu navegador).',
+    nFmFavDur: 'Fins que els esborri',
     analitica: 'Analítica (només amb el seu consentiment)',
     nGa: 'Comptar visites i saber quines pàgines es fan servir més, de manera agregada.',
     nGaDur: '2 anys',
@@ -72,6 +76,8 @@ const T = {
     thNombre: 'Name', thTitular: 'Provider', thPara: 'Purpose', thDuracion: 'Duration',
     nFmConsent: 'Store your cookie choice (local storage).',
     nFmConsentDur: 'Until you change or delete it',
+    nFmFav: 'Remember the properties you mark as favourites (local storage, only in your browser).',
+    nFmFavDur: 'Until you delete them',
     analitica: 'Analytics (only with your consent)',
     nGa: 'Count visits and see which pages are most used, in aggregate.',
     nGaDur: '2 years',
@@ -101,6 +107,7 @@ const T = {
           <thead><tr><th scope="col">{T.thNombre}</th><th scope="col">{T.thTitular}</th><th scope="col">{T.thPara}</th><th scope="col">{T.thDuracion}</th></tr></thead>
           <tbody>
             <tr><td>fm_consent_v1</td><td>Finques Mil·lenium</td><td>{T.nFmConsent}</td><td>{T.nFmConsentDur}</td></tr>
+            <tr><td>fm_favorites</td><td>Finques Mil·lenium</td><td>{T.nFmFav}</td><td>{T.nFmFavDur}</td></tr>
           </tbody>
         </table>
       </div>

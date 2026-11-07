@@ -32,7 +32,12 @@ const T = {
     alertaCta: 'Crear una Alerta Mil·lenium',
     filtroPrecio: 'Precio máximo',
     filtroHab: 'Habitaciones mínimas',
+    filtroTipo: 'Tipo',
     filtroCualquiera: 'Cualquiera',
+    tipoOpts: [['piso', 'Piso'], ['atico', 'Ático'], ['casa', 'Casa o chalet']],
+    soloFav: 'Solo favoritos ♥',
+    orden: 'Ordenar',
+    ordenOpts: [['', 'Relevancia'], ['precio-asc', 'Precio: de menor a mayor'], ['precio-desc', 'Precio: de mayor a menor'], ['sup-desc', 'Superficie: mayor primero']],
     ctaTitulo: '¿No encuentra lo que busca?',
     ctaTexto: 'Cuéntenos qué necesita y le avisaremos en cuanto entre. También puede llamarnos: le escuchamos.',
   },
@@ -48,7 +53,12 @@ const T = {
     alertaCta: 'Crear una Alerta Mil·lenium',
     filtroPrecio: 'Preu màxim',
     filtroHab: 'Habitacions mínimes',
+    filtroTipo: 'Tipus',
     filtroCualquiera: 'Qualsevol',
+    tipoOpts: [['piso', 'Pis'], ['atico', 'Àtic'], ['casa', 'Casa o xalet']],
+    soloFav: 'Només favorits ♥',
+    orden: 'Ordenar',
+    ordenOpts: [['', 'Rellevància'], ['precio-asc', 'Preu: de menor a major'], ['precio-desc', 'Preu: de major a menor'], ['sup-desc', 'Superfície: major primer']],
     ctaTitulo: 'No troba el que busca?',
     ctaTexto: 'Expliqui’ns què necessita i l’avisarem quan entri. També pot trucar-nos: l’escoltem.',
   },
@@ -64,7 +74,12 @@ const T = {
     alertaCta: 'Create a Mil·lenium Alert',
     filtroPrecio: 'Maximum price',
     filtroHab: 'Minimum bedrooms',
+    filtroTipo: 'Type',
     filtroCualquiera: 'Any',
+    tipoOpts: [['piso', 'Flat'], ['atico', 'Penthouse'], ['casa', 'House']],
+    soloFav: 'Favourites only ♥',
+    orden: 'Sort',
+    ordenOpts: [['', 'Relevance'], ['precio-asc', 'Price: low to high'], ['precio-desc', 'Price: high to low'], ['sup-desc', 'Largest first']],
     ctaTitulo: 'Can’t find what you’re after?',
     ctaTexto: 'Tell us what you need and we will let you know as soon as it comes in. Or just call us: we listen.',
   },
@@ -124,11 +139,29 @@ const schemaExtra = [breadcrumbSchema([{ nombre: ui.migas.inicio, href: path(lan
             </select>
           </label>
         )}
+        {op !== 'traspaso' && (
+          <label>{T.filtroTipo}
+            <select data-f-tipo>
+              <option value="">{T.filtroCualquiera}</option>
+              {T.tipoOpts.map(([v, l]) => <option value={v}>{l}</option>)}
+            </select>
+          </label>
+        )}
+        <label class="chip-fav" style="align-self:center">
+          <input type="checkbox" data-f-fav /> {T.soloFav}
+        </label>
       </form>
 
-      <p class="lst-count" data-count aria-live="polite">
-        {inmuebles.length === 1 ? T.resultado1 : fmt(T.resultados, { n: inmuebles.length })}
-      </p>
+      <div class="lst-toolbar">
+        <p class="lst-count" data-count aria-live="polite">
+          {inmuebles.length === 1 ? T.resultado1 : fmt(T.resultados, { n: inmuebles.length })}
+        </p>
+        <label class="lst-sort">{T.orden}
+          <select data-sort>
+            {T.ordenOpts.map(([v, l]) => <option value={v}>{l}</option>)}
+          </select>
+        </label>
+      </div>
 
       <h2 class="visually-hidden">{lang === 'en' ? 'Results' : lang === 'ca' ? 'Resultats' : 'Resultados'}</h2>
       {inmuebles.length > 0 ? (
@@ -150,27 +183,64 @@ const schemaExtra = [breadcrumbSchema([{ nombre: ui.migas.inicio, href: path(lan
   <CtaBand lang={lang} titulo={T.ctaTitulo} texto={T.ctaTexto} />
 </Base>
 <script>
-  // Filtrado instantáneo del listado (mejora progresiva).
+  // Mejora progresiva del listado: filtros instantáneos (con lectura de la URL
+  // que envía el buscador de la portada), ordenación y filtro de favoritos.
   const form = document.querySelector<HTMLFormElement>('[data-filtros]');
   const lista = document.querySelector<HTMLElement>('[data-lista]');
   if (form && lista) {
     form.classList.add('is-on');
     const precio = form.querySelector<HTMLSelectElement>('[data-f-precio]');
     const hab = form.querySelector<HTMLSelectElement>('[data-f-hab]');
+    const tipo = form.querySelector<HTMLSelectElement>('[data-f-tipo]');
+    const fav = form.querySelector<HTMLInputElement>('[data-f-fav]');
+    const sort = document.querySelector<HTMLSelectElement>('[data-sort]');
     const count = document.querySelector<HTMLElement>('[data-count]');
     const base = count?.textContent ?? '';
+
+    const leerFavoritos = (): Set<string> => {
+      try { return new Set(JSON.parse(localStorage.getItem('fm_favorites') || '[]')); } catch { return new Set(); }
+    };
+
+    // Preseleccionar lo que venga del buscador de la portada (?precio=&tipo=)
+    const q = new URLSearchParams(location.search);
+    if (precio && q.get('precio') && [...precio.options].some((o) => o.value === q.get('precio'))) precio.value = q.get('precio')!;
+    if (tipo && q.get('tipo') && [...tipo.options].some((o) => o.value === q.get('tipo'))) tipo.value = q.get('tipo')!;
+
     const aplicar = () => {
       const maxP = precio?.value ? Number(precio.value) : Infinity;
       const minH = hab?.value ? Number(hab.value) : 0;
+      const t = tipo?.value ?? '';
+      const soloFav = fav?.checked ?? false;
+      const favoritos = soloFav ? leerFavoritos() : null;
       let visibles = 0;
       lista.querySelectorAll<HTMLElement>('[data-prop]').forEach((el) => {
-        const ok = Number(el.dataset.precio) <= maxP && Number(el.dataset.hab) >= minH;
+        const ok =
+          Number(el.dataset.precio) <= maxP &&
+          Number(el.dataset.hab) >= minH &&
+          (!t || el.dataset.tipo === t) &&
+          (!favoritos || favoritos.has(el.dataset.id ?? ''));
         el.style.display = ok ? '' : 'none';
         if (ok) visibles++;
       });
-      if (count) count.textContent = maxP === Infinity && minH === 0 ? base : base.replace(/^\d+/, String(visibles));
+      const sinFiltros = maxP === Infinity && minH === 0 && !t && !soloFav;
+      if (count) count.textContent = sinFiltros ? base : base.replace(/^\d+/, String(visibles));
     };
+
+    const ordenar = () => {
+      const modo = sort?.value ?? '';
+      if (!modo) return;
+      const [clave, dir] = modo === 'sup-desc' ? ['sup', -1] : ['precio', modo.endsWith('asc') ? 1 : -1];
+      [...lista.querySelectorAll<HTMLElement>('[data-prop]')]
+        .sort((a, b) => (Number(a.dataset[clave]) - Number(b.dataset[clave])) * (dir as number))
+        .forEach((el) => lista.appendChild(el));
+    };
+
     precio?.addEventListener('change', aplicar);
     hab?.addEventListener('change', aplicar);
+    tipo?.addEventListener('change', aplicar);
+    fav?.addEventListener('change', aplicar);
+    sort?.addEventListener('change', ordenar);
+    document.addEventListener('fm:favoritos', () => { if (fav?.checked) aplicar(); });
+    aplicar();
   }
 </script>

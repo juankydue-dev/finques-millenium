@@ -20,10 +20,21 @@ const zonaNombre: Record<string, string> = { gava: 'Gavà', castelldefels: 'Cast
   data-tipo={i.tipo}
   data-precio={i.precio}
   data-hab={i.habitaciones ?? 0}
+  data-sup={i.superficie}
+  data-id={i.id}
 >
   <div class="prop-card__media">
     {i.ejemplo && <span class="badge">{ui.card.ejemplo}</span>}
     <span class="badge badge--op">{opLabel}</span>
+    <button
+      type="button"
+      class="fav-btn"
+      data-fav={i.id}
+      aria-pressed="false"
+      aria-label={ui.card.favAdd}
+      data-label-add={ui.card.favAdd}
+      data-label-quit={ui.card.favQuit}
+    >♥</button>
     <Image
       src={img(foto.src)}
       alt={foto.alt[lang] ?? foto.alt.es}
@@ -49,3 +60,29 @@ const zonaNombre: Record<string, string> = { gava: 'Gavà', castelldefels: 'Cast
     </p>
   </div>
 </article>
+<script>
+  // Favoritos: se guardan solo en este navegador (localStorage fm_favorites).
+  const KEY = 'fm_favorites';
+  const leer = (): string[] => {
+    try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch { return []; }
+  };
+  const guardar = (v: string[]) => {
+    try { localStorage.setItem(KEY, JSON.stringify(v)); } catch { /* almacenamiento bloqueado */ }
+  };
+  const favoritos = new Set(leer());
+  for (const btn of document.querySelectorAll<HTMLButtonElement>('[data-fav]')) {
+    const id = btn.dataset.fav!;
+    const pintar = () => {
+      const on = favoritos.has(id);
+      btn.setAttribute('aria-pressed', String(on));
+      btn.setAttribute('aria-label', on ? btn.dataset.labelQuit! : btn.dataset.labelAdd!);
+    };
+    pintar();
+    btn.addEventListener('click', () => {
+      favoritos.has(id) ? favoritos.delete(id) : favoritos.add(id);
+      guardar([...favoritos]);
+      pintar();
+      document.dispatchEvent(new CustomEvent('fm:favoritos'));
+    });
+  }
+</script>

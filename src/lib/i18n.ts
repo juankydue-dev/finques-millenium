@@ -97,6 +97,8 @@ export const UI = {
       alquiler: 'Alquiler',
       venta: 'Venta',
       cee: 'Certificado energético',
+      favAdd: 'Guardar en favoritos',
+      favQuit: 'Quitar de favoritos',
     },
     form: {
       nombre: 'Nombre',
@@ -182,6 +184,8 @@ export const UI = {
       alquiler: 'Lloguer',
       venta: 'Venda',
       cee: 'Certificat energètic',
+      favAdd: 'Desar a favorits',
+      favQuit: 'Treure de favorits',
     },
     form: {
       nombre: 'Nom',
@@ -267,6 +271,8 @@ export const UI = {
       alquiler: 'To rent',
       venta: 'For sale',
       cee: 'Energy certificate',
+      favAdd: 'Save to favourites',
+      favQuit: 'Remove from favourites',
     },
     form: {
       nombre: 'Name',

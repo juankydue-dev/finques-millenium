@@ -3,11 +3,10 @@ import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import PropCard from '../components/PropCard.astro';
 import Reviews from '../components/Reviews.astro';
-import CtaBand from '../components/CtaBand.astro';
 import { destacados } from '../lib/propiedades';
 import { img } from '../lib/img';
 import { path, t, type Lang } from '../lib/i18n';
-import { EMPRESA, dato, telHref, waHref } from '../config/empresa';
+import { EMPRESA, dato, telHref } from '../config/empresa';
 import zonasData from '../data/zonas.json';
 
 interface Props { lang: Lang; }
@@ -25,30 +24,55 @@ const T = {
     h1ConAno: 'Cuatro décadas abriendo puertas.',
     h1: 'Aquí se abren puertas.',
     lead: 'Díganos qué busca. Del resto nos ocupamos nosotros: precio real de mercado, trato personal y acompañamiento hasta la firma ante notario.',
-    heroImgAlt: 'Vivienda mediterránea con piscina',
-    cardTitulo: '¿Qué le traemos?',
-    cardTexto: 'Elija por dónde quiere empezar y le acompañamos desde la primera visita.',
-    quiero: [
-      { href: 'comprar', label: 'Quiero comprar' },
-      { href: 'alquilar', label: 'Quiero alquilar' },
-      { href: 'vender', label: 'Quiero vender' },
-      { href: 'valorar', label: 'Saber qué vale mi casa' },
-    ],
+    buscar: {
+      titulo: '¿Qué busca?',
+      operacion: 'Operación', tipo: 'Tipo', municipio: 'Municipio', precio: 'Precio máximo',
+      ops: [
+        { v: 'comprar', l: 'Comprar' }, { v: 'alquilar', l: 'Alquilar' },
+        { v: 'obra-nueva', l: 'Obra nueva' }, { v: 'traspasos', l: 'Traspaso' },
+      ],
+      tipos: [
+        { v: '', l: 'Cualquier tipo' }, { v: 'piso', l: 'Piso' }, { v: 'atico', l: 'Ático' },
+        { v: 'casa', l: 'Casa o chalet' }, { v: 'local', l: 'Local' },
+      ],
+      todas: 'Todos',
+      sinLimite: 'Sin límite',
+      btn: 'Buscar inmuebles',
+      quick: 'También puede ir directo:',
+      quickLinks: [
+        { href: 'vender', label: 'Quiero vender' },
+        { href: 'valorar', label: '¿Qué vale mi casa?' },
+        { href: 'alerta', label: 'Crear una alerta' },
+      ],
+    },
+    usp: ['Valoración gratuita y sin compromiso', 'Precio real de mercado, con datos', 'Una sola persona de referencia', 'Hasta la firma ante notario'],
     destacadosEyebrow: '01 · Inmuebles',
     destacadosTitulo: 'Lo que tenemos ahora',
     destacadosLead: 'Una selección de las viviendas y locales que gestionamos en este momento.',
     verComprar: 'Ver todo en venta',
+    verAlquiler: 'Ver alquileres',
     nosotrosEyebrow: '02 · La agencia',
     nosotrosTitulo: 'Una inmobiliaria de aquí.',
     nosotrosParr1: 'Atendemos personalmente a cada propietario y a cada comprador desde nuestra oficina de la calle Sant Pere de Gavà. Sin centralitas ni intermediarios: las personas que le reciben son las que llevan su operación de principio a fin.',
     nosotrosParr2: 'El método no cambia: precio real de mercado, información clara y acompañamiento hasta la firma ante notario.',
     nosotrosCta: 'Conózcanos',
     nosotrosImgAlt: 'Oficina de la agencia',
-    zonasEyebrow: '03 · Zonas',
+    venderEyebrow: '03 · Vender',
+    venderTitulo: 'Vender su vivienda, paso a paso.',
+    venderLead: 'Un proceso claro, con una sola persona de referencia de principio a fin.',
+    venderPasos: [
+      { t: 'Valoración gratuita', d: 'Estudiamos su vivienda y le damos su precio real de mercado.' },
+      { t: 'Preparación', d: 'Le aconsejamos cómo presentarla y preparamos un anuncio cuidado.' },
+      { t: 'Visitas', d: 'Organizamos las visitas y filtramos a los interesados.' },
+      { t: 'Firma', d: 'Le acompañamos en la negociación, las arras y la firma ante notario.' },
+    ],
+    venderCta: 'Cómo vendemos su vivienda',
+    zonasEyebrow: '04 · Zonas',
     zonasTitulo: 'Conocemos cada calle.',
     zonasLead: 'Trabajamos donde vivimos. Estas son nuestras zonas.',
     zonasCta: 'Ver todas las zonas',
-    toolsEyebrow: '04 · Herramientas',
+    barrios: 'barrios',
+    toolsEyebrow: '05 · Herramientas',
     toolsTitulo: 'Lo que usamos para trabajar, ahora a su disposición.',
     tools: [
       { href: 'valorar', titulo: 'Valorador', texto: 'Conozca el precio real de mercado de su vivienda, gratis y sin compromiso.' },
@@ -56,8 +80,19 @@ const T = {
       { href: 'inversion', titulo: 'Calculadora de rentabilidad', texto: 'Números claros antes de invertir: rentabilidad bruta y neta.' },
       { href: 'alerta', titulo: 'Alerta Mil·lenium', texto: 'Le avisamos cuando entre una vivienda como la que busca.' },
     ],
-    ctaTitulo: '¿Cuánto vale hoy su vivienda?',
-    ctaTexto: 'Le decimos el precio real de mercado, gratis y sin compromiso. Hablemos.',
+    invEyebrow: '06 · Inversión',
+    invTitulo: 'Rentabilidad calculada, con números claros.',
+    invTexto: 'Antes de invertir, los números. Sabemos qué se paga y qué se alquila en cada barrio, y cada propuesta llega con su rentabilidad calculada y los gastos detallados. Si quiere, le avisamos cuando detectemos una oportunidad.',
+    invPuntos: ['Conocemos el precio real, portal a portal', 'Números antes que promesas', 'Gestión completa: de la compra al alquiler'],
+    invCta: 'Calcular una rentabilidad',
+    invCta2: 'Recibir oportunidades',
+    opinionesTitulo: 'Lo dicen ellos, no nosotros.',
+    closingEyebrow: '07 · Empiece hoy',
+    closingTitulo: '¿Cuánto vale hoy su vivienda?',
+    closingTexto: 'Escriba la dirección y se lo decimos con las ventas reales de su barrio encima de la mesa. Gratis y sin compromiso.',
+    closingPlaceholder: 'Calle y número, municipio',
+    closingBtn: 'Valorar gratis',
+    closingNota: 'Sin compromiso. También puede llamarnos: le escuchamos.',
   },
   ca: {
     title: 'Immobiliària a Gavà i el Baix Llobregat · Finques Mil·lenium',
@@ -66,30 +101,55 @@ const T = {
     h1ConAno: 'Quatre dècades obrint portes.',
     h1: 'Aquí s’obren portes.',
     lead: 'Digui’ns què busca. De la resta ens n’ocupem nosaltres: preu real de mercat, tracte personal i acompanyament fins a la signatura davant de notari.',
-    heroImgAlt: 'Habitatge mediterrani amb piscina',
-    cardTitulo: 'Què li portem?',
-    cardTexto: 'Triï per on vol començar i l’acompanyem des de la primera visita.',
-    quiero: [
-      { href: 'comprar', label: 'Vull comprar' },
-      { href: 'alquilar', label: 'Vull llogar' },
-      { href: 'vender', label: 'Vull vendre' },
-      { href: 'valorar', label: 'Saber què val casa meva' },
-    ],
+    buscar: {
+      titulo: 'Què busca?',
+      operacion: 'Operació', tipo: 'Tipus', municipio: 'Municipi', precio: 'Preu màxim',
+      ops: [
+        { v: 'comprar', l: 'Comprar' }, { v: 'alquilar', l: 'Llogar' },
+        { v: 'obra-nueva', l: 'Obra nova' }, { v: 'traspasos', l: 'Traspàs' },
+      ],
+      tipos: [
+        { v: '', l: 'Qualsevol tipus' }, { v: 'piso', l: 'Pis' }, { v: 'atico', l: 'Àtic' },
+        { v: 'casa', l: 'Casa o xalet' }, { v: 'local', l: 'Local' },
+      ],
+      todas: 'Tots',
+      sinLimite: 'Sense límit',
+      btn: 'Buscar immobles',
+      quick: 'També pot anar directe:',
+      quickLinks: [
+        { href: 'vender', label: 'Vull vendre' },
+        { href: 'valorar', label: 'Què val casa meva?' },
+        { href: 'alerta', label: 'Crear una alerta' },
+      ],
+    },
+    usp: ['Valoració gratuïta i sense compromís', 'Preu real de mercat, amb dades', 'Una sola persona de referència', 'Fins a la signatura davant de notari'],
     destacadosEyebrow: '01 · Immobles',
     destacadosTitulo: 'El que tenim ara',
     destacadosLead: 'Una selecció dels habitatges i locals que gestionem en aquest moment.',
     verComprar: 'Veure tot en venda',
+    verAlquiler: 'Veure lloguers',
     nosotrosEyebrow: '02 · L’agència',
     nosotrosTitulo: 'Una immobiliària d’aquí.',
     nosotrosParr1: 'Atenem personalment cada propietari i cada comprador des de la nostra oficina del carrer Sant Pere de Gavà. Sense centraletes ni intermediaris: les persones que el reben són les que porten la seva operació de principi a fi.',
     nosotrosParr2: 'El mètode no canvia: preu real de mercat, informació clara i acompanyament fins a la signatura davant de notari.',
     nosotrosCta: 'Conegui’ns',
     nosotrosImgAlt: 'Oficina de l’agència',
-    zonasEyebrow: '03 · Zones',
+    venderEyebrow: '03 · Vendre',
+    venderTitulo: 'Vendre el seu habitatge, pas a pas.',
+    venderLead: 'Un procés clar, amb una sola persona de referència de principi a fi.',
+    venderPasos: [
+      { t: 'Valoració gratuïta', d: 'Estudiem el seu habitatge i li donem el seu preu real de mercat.' },
+      { t: 'Preparació', d: 'L’aconsellem com presentar-lo i preparem un anunci acurat.' },
+      { t: 'Visites', d: 'Organitzem les visites i filtrem els interessats.' },
+      { t: 'Signatura', d: 'L’acompanyem en la negociació, les arres i la signatura davant de notari.' },
+    ],
+    venderCta: 'Com venem el seu habitatge',
+    zonasEyebrow: '04 · Zones',
     zonasTitulo: 'Coneixem cada carrer.',
     zonasLead: 'Treballem on vivim. Aquestes són les nostres zones.',
     zonasCta: 'Veure totes les zones',
-    toolsEyebrow: '04 · Eines',
+    barrios: 'barris',
+    toolsEyebrow: '05 · Eines',
     toolsTitulo: 'El que fem servir per treballar, ara a la seva disposició.',
     tools: [
       { href: 'valorar', titulo: 'Valorador', texto: 'Conegui el preu real de mercat del seu habitatge, gratis i sense compromís.' },
@@ -97,8 +157,19 @@ const T = {
       { href: 'inversion', titulo: 'Calculadora de rendibilitat', texto: 'Números clars abans d’invertir: rendibilitat bruta i neta.' },
       { href: 'alerta', titulo: 'Alerta Mil·lenium', texto: 'L’avisem quan entri un habitatge com el que busca.' },
     ],
-    ctaTitulo: 'Quant val avui el seu habitatge?',
-    ctaTexto: 'Li diem el preu real de mercat, gratis i sense compromís. Parlem-ne.',
+    invEyebrow: '06 · Inversió',
+    invTitulo: 'Rendibilitat calculada, amb números clars.',
+    invTexto: 'Abans d’invertir, els números. Sabem què es paga i què es lloga a cada barri, i cada proposta arriba amb la rendibilitat calculada i les despeses detallades. Si vol, l’avisem quan detectem una oportunitat.',
+    invPuntos: ['Coneixem el preu real, portal a portal', 'Números abans que promeses', 'Gestió completa: de la compra al lloguer'],
+    invCta: 'Calcular una rendibilitat',
+    invCta2: 'Rebre oportunitats',
+    opinionesTitulo: 'Ho diuen ells, no nosaltres.',
+    closingEyebrow: '07 · Comenci avui',
+    closingTitulo: 'Quant val avui el seu habitatge?',
+    closingTexto: 'Escrigui l’adreça i l’hi diem amb les vendes reals del seu barri sobre la taula. Gratis i sense compromís.',
+    closingPlaceholder: 'Carrer i número, municipi',
+    closingBtn: 'Valorar gratis',
+    closingNota: 'Sense compromís. També pot trucar-nos: l’escoltem.',
   },
   en: {
     title: 'Estate agents in Gavà and Baix Llobregat · Finques Mil·lenium',
@@ -107,30 +178,55 @@ const T = {
     h1ConAno: 'Four decades opening doors.',
     h1: 'Doors open here.',
     lead: 'Tell us what you are looking for and we will take care of the rest: a real market price, personal service and support all the way to signing before the notary.',
-    heroImgAlt: 'Mediterranean home with a pool',
-    cardTitulo: 'Where shall we start?',
-    cardTexto: 'Choose a starting point and we will be with you from the first visit.',
-    quiero: [
-      { href: 'comprar', label: 'I want to buy' },
-      { href: 'alquilar', label: 'I want to rent' },
-      { href: 'vender', label: 'I want to sell' },
-      { href: 'valorar', label: 'What is my home worth?' },
-    ],
+    buscar: {
+      titulo: 'What are you looking for?',
+      operacion: 'Operation', tipo: 'Type', municipio: 'Town', precio: 'Maximum price',
+      ops: [
+        { v: 'comprar', l: 'Buy' }, { v: 'alquilar', l: 'Rent' },
+        { v: 'obra-nueva', l: 'New build' }, { v: 'traspasos', l: 'Business transfer' },
+      ],
+      tipos: [
+        { v: '', l: 'Any type' }, { v: 'piso', l: 'Flat' }, { v: 'atico', l: 'Penthouse' },
+        { v: 'casa', l: 'House' }, { v: 'local', l: 'Premises' },
+      ],
+      todas: 'All',
+      sinLimite: 'No limit',
+      btn: 'Search properties',
+      quick: 'Or go straight to:',
+      quickLinks: [
+        { href: 'vender', label: 'I want to sell' },
+        { href: 'valorar', label: 'What is my home worth?' },
+        { href: 'alerta', label: 'Create an alert' },
+      ],
+    },
+    usp: ['Free, no-obligation valuation', 'Real market prices, backed by data', 'One person looking after you', 'With you until the notary'],
     destacadosEyebrow: '01 · Properties',
     destacadosTitulo: 'What we have right now',
     destacadosLead: 'A selection of the homes and premises we are currently handling.',
     verComprar: 'See everything for sale',
+    verAlquiler: 'See rentals',
     nosotrosEyebrow: '02 · The agency',
     nosotrosTitulo: 'An agency from here.',
     nosotrosParr1: 'We look after every owner and every buyer personally from our office on Carrer de Sant Pere in Gavà. No call centres and no middlemen: the people who welcome you are the ones who handle your sale or purchase from start to finish.',
     nosotrosParr2: 'The method never changes: a real market price, clear information and support all the way to the notary.',
     nosotrosCta: 'Get to know us',
     nosotrosImgAlt: 'The agency’s office',
-    zonasEyebrow: '03 · Areas',
+    venderEyebrow: '03 · Selling',
+    venderTitulo: 'Selling your home, step by step.',
+    venderLead: 'A clear process, with one person looking after you from start to finish.',
+    venderPasos: [
+      { t: 'Free valuation', d: 'We study your home and give you its real market price.' },
+      { t: 'Preparation', d: 'We advise on presentation and prepare a polished listing.' },
+      { t: 'Visits', d: 'We organise viewings and screen prospective buyers.' },
+      { t: 'Completion', d: 'We stand by you through negotiation, deposit and signing.' },
+    ],
+    venderCta: 'How we sell your home',
+    zonasEyebrow: '04 · Areas',
     zonasTitulo: 'We know every street.',
     zonasLead: 'We work where we live. These are our areas.',
     zonasCta: 'See all areas',
-    toolsEyebrow: '04 · Tools',
+    barrios: 'neighbourhoods',
+    toolsEyebrow: '05 · Tools',
     toolsTitulo: 'The tools we work with, now at your service.',
     tools: [
       { href: 'valorar', titulo: 'Valuation tool', texto: 'Find out your home’s real market price, free and with no obligation.' },
@@ -138,13 +234,30 @@ const T = {
       { href: 'inversion', titulo: 'Yield calculator', texto: 'Clear numbers before you invest: gross and net returns.' },
       { href: 'alerta', titulo: 'Mil·lenium Alert', texto: 'We let you know when a home like the one you want comes in.' },
     ],
-    ctaTitulo: 'What is your home worth today?',
-    ctaTexto: 'We will tell you its real market price, free and with no obligation. Let’s talk.',
+    invEyebrow: '06 · Investment',
+    invTitulo: 'Returns you can actually calculate.',
+    invTexto: 'Numbers first, then the investment. We know what sells and what rents in every neighbourhood, and every proposal comes with its yield calculated and costs itemised. If you wish, we will tell you when we spot an opportunity.',
+    invPuntos: ['We know the real price, doorway by doorway', 'Numbers before promises', 'End-to-end management, purchase to rental'],
+    invCta: 'Calculate a yield',
+    invCta2: 'Receive opportunities',
+    opinionesTitulo: 'Their words, not ours.',
+    closingEyebrow: '07 · Start today',
+    closingTitulo: 'What is your home worth today?',
+    closingTexto: 'Type in the address and we will tell you, with real sales from your neighbourhood on the table. Free and with no obligation.',
+    closingPlaceholder: 'Street and number, town',
+    closingBtn: 'Free valuation',
+    closingNota: 'No obligation. You can also just call us: we listen.',
   },
 }[lang]!;
 
 const props = destacados().slice(0, 4);
-const secciones = { comprar: 'comprar', alquilar: 'alquilar', vender: 'vender', valorar: 'valorar', hipoteca: 'hipoteca', inversion: 'inversion', alerta: 'alerta' } as const;
+const secciones = { comprar: 'comprar', alquilar: 'alquilar', 'obra-nueva': 'obra-nueva', traspasos: 'traspasos', vender: 'vender', valorar: 'valorar', hipoteca: 'hipoteca', inversion: 'inversion', alerta: 'alerta' } as const;
+const precios = [150000, 200000, 250000, 300000, 400000, 500000, 750000, 1000000];
+const fmt = new Intl.NumberFormat(lang === 'en' ? 'en-GB' : 'es-ES');
+/* Rutas de cada operación en este idioma, para que el buscador navegue sin tabla extra en JS */
+const rutasOp = Object.fromEntries(
+  (['comprar', 'alquilar', 'obra-nueva', 'traspasos'] as const).map((s) => [s, path(lang, s)])
+);
 ---
 <Base lang={lang} section="home" title={T.title} description={T.desc}>
   <section class="hero">
@@ -159,16 +272,49 @@ const secciones = { comprar: 'comprar', alquilar: 'alquilar', vender: 'vender', 
         <p class="lead">{T.lead}</p>
       </div>
       <div class="hero__card">
-        <h2>{T.cardTitulo}</h2>
-        <p class="hint" style="margin-bottom:14px">{T.cardTexto}</p>
-        <ul class="filter-chips">
-          {T.quiero.map((q) => (
-            <li><a href={path(lang, secciones[q.href as keyof typeof secciones])}>{q.label}</a></li>
-          ))}
-        </ul>
+        <h2 style="margin-bottom:10px">{T.buscar.titulo}</h2>
+        <form class="hero-search" action={rutasOp['comprar']} method="get" data-hero-search data-rutas={JSON.stringify(rutasOp)}>
+          <div class="hs-grid">
+            <label>{T.buscar.operacion}
+              <select name="operacion" data-hs-op>
+                {T.buscar.ops.map((o) => <option value={o.v}>{o.l}</option>)}
+              </select>
+            </label>
+            <label>{T.buscar.tipo}
+              <select name="tipo">
+                {T.buscar.tipos.map((o) => <option value={o.v}>{o.l}</option>)}
+              </select>
+            </label>
+            <label>{T.buscar.municipio}
+              <select name="zona">
+                <option value="">{T.buscar.todas}</option>
+                {zonasData.zonas.map((z) => <option value={z.slug}>{nz(z)}</option>)}
+              </select>
+            </label>
+            <label>{T.buscar.precio}
+              <select name="precio">
+                <option value="">{T.buscar.sinLimite}</option>
+                {precios.map((p) => <option value={p}>{fmt.format(p)} €</option>)}
+              </select>
+            </label>
+          </div>
+          <button class="btn btn--primary" type="submit">{T.buscar.btn}</button>
+          <p class="hero-quick">
+            <span style="color:var(--ink-soft)">{T.buscar.quick}</span>
+            {T.buscar.quickLinks.map((q) => <a href={path(lang, secciones[q.href as keyof typeof secciones])}>{q.label}</a>)}
+          </p>
+        </form>
       </div>
     </div>
   </section>
+
+  <div class="usp-strip">
+    <div class="container">
+      <ul>
+        {T.usp.map((u) => <li>{u}</li>)}
+      </ul>
+    </div>
+  </div>
 
   <section class="section" aria-labelledby="destacados-t">
     <div class="container">
@@ -180,7 +326,10 @@ const secciones = { comprar: 'comprar', alquilar: 'alquilar', vender: 'vender', 
       <div class="grid-cards">
         {props.map((i) => <PropCard lang={lang} inmueble={i} />)}
       </div>
-      <p style="margin-top:26px"><a class="btn btn--ghost" href={path(lang, 'comprar')}>{T.verComprar}</a></p>
+      <p style="margin-top:26px;display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn btn--ghost" href={path(lang, 'comprar')}>{T.verComprar}</a>
+        <a class="btn btn--ghost" href={path(lang, 'alquilar')}>{T.verAlquiler}</a>
+      </p>
     </div>
   </section>
 
@@ -199,7 +348,24 @@ const secciones = { comprar: 'comprar', alquilar: 'alquilar', vender: 'vender', 
     </div>
   </section>
 
-  <section class="section" aria-labelledby="zonas-t">
+  <section class="section" aria-labelledby="vender-t">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">{T.venderEyebrow}</span>
+        <h2 id="vender-t">{T.venderTitulo}</h2>
+        <p class="lead">{T.venderLead}</p>
+      </div>
+      <ol class="steps steps--row">
+        {T.venderPasos.map((p) => <li><h3>{p.t}</h3><p>{p.d}</p></li>)}
+      </ol>
+      <p style="margin-top:24px;display:flex;gap:12px;flex-wrap:wrap">
+        <a class="btn btn--primary" href={path(lang, 'vender')}>{T.venderCta}</a>
+        <a class="btn btn--ghost" href={path(lang, 'valorar')}>{ui.comunes.valorarGratis}</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--deep" aria-labelledby="zonas-t">
     <div class="container">
       <div class="section-head">
         <span class="eyebrow">{T.zonasEyebrow}</span>
@@ -212,7 +378,7 @@ const secciones = { comprar: 'comprar', alquilar: 'alquilar', vender: 'vender', 
             <Image src={img(`zona-${z.slug}`)} alt="" widths={[480, 760]} sizes="(min-width: 700px) 340px, 92vw" quality={65} />
             <div class="zone-card__body">
               <h3><a href={path(lang, 'zonas', z.slug)}>{nz(z)}</a></h3>
-              <p class="zone-card__meta">{z.barrios.length} {lang === 'en' ? 'neighbourhoods' : lang === 'ca' ? 'barris' : 'barrios'}</p>
+              <p class="zone-card__meta">{z.barrios.length} {T.barrios}</p>
             </div>
           </article>
         ))}
@@ -238,7 +404,56 @@ const secciones = { comprar: 'comprar', alquilar: 'alquilar', vender: 'vender', 
     </div>
   </section>
 
-  <Reviews lang={lang} />
+  <section class="section" aria-labelledby="inv-t">
+    <div class="container split">
+      <div>
+        <span class="eyebrow">{T.invEyebrow}</span>
+        <h2 id="inv-t">{T.invTitulo}</h2>
+        <p style="margin-top:14px">{T.invTexto}</p>
+        <p style="margin-top:22px;display:flex;gap:12px;flex-wrap:wrap">
+          <a class="btn btn--primary" href={path(lang, 'inversion') + '#calculadora'}>{T.invCta}</a>
+          <a class="btn btn--ghost" href={path(lang, 'inversion')}>{T.invCta2}</a>
+        </p>
+      </div>
+      <ul class="icon-list">
+        {T.invPuntos.map((p) => <li>{p}</li>)}
+      </ul>
+    </div>
+  </section>
 
-  <CtaBand lang={lang} titulo={T.ctaTitulo} texto={T.ctaTexto} />
+  <Reviews lang={lang} titulo={T.opinionesTitulo} />
+
+  <section class="section section--navy" aria-labelledby="closing-t">
+    <div class="container cta-band">
+      <span class="eyebrow">{T.closingEyebrow}</span>
+      <h2 id="closing-t">{T.closingTitulo}</h2>
+      <p class="lead">{T.closingTexto}</p>
+      <form class="closing-form" action={path(lang, 'valorar')} method="get">
+        <div class="row">
+          <label class="visually-hidden" for="closing-dir">{T.closingPlaceholder}</label>
+          <input id="closing-dir" type="text" name="direccion" placeholder={T.closingPlaceholder} autocomplete="street-address" />
+          <button class="btn btn--brass" type="submit">{T.closingBtn}</button>
+        </div>
+        <p class="hint">{T.closingNota} <a href={telHref(tel)} style="color:var(--brass-bright)">{tel}</a></p>
+      </form>
+    </div>
+  </section>
 </Base>
+<script>
+  // Buscador del hero: con JavaScript navega a la URL limpia de la sección y zona
+  // (p. ej. /es/comprar/gava/?precio=300000&tipo=piso). Sin JavaScript, el GET
+  // aterriza en el listado general, que sigue siendo funcional.
+  const form = document.querySelector<HTMLFormElement>('[data-hero-search]');
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const rutas = JSON.parse(form.dataset.rutas!) as Record<string, string>;
+    const d = new FormData(form);
+    const op = String(d.get('operacion') || 'comprar');
+    const zona = String(d.get('zona') || '');
+    const q = new URLSearchParams();
+    if (d.get('precio')) q.set('precio', String(d.get('precio')));
+    if (d.get('tipo')) q.set('tipo', String(d.get('tipo')));
+    const base = rutas[op] ?? rutas['comprar'];
+    location.href = base + (zona ? zona + '/' : '') + (q.toString() ? '?' + q.toString() : '');
+  });
+</script>

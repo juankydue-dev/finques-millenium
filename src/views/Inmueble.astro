@@ -3,7 +3,8 @@ import { Image, getImage } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Crumbs from '../components/Crumbs.astro';
 import CtaBand from '../components/CtaBand.astro';
-import { porSlug, OPERACION_SECCION, tituloDe, descripcionDe, extrasDe } from '../lib/propiedades';
+import { porSlug, getInmuebles, OPERACION_SECCION, tituloDe, descripcionDe, extrasDe } from '../lib/propiedades';
+import PropCard from '../components/PropCard.astro';
 import { inmuebleSchema, breadcrumbSchema } from '../lib/schema';
 import { img } from '../lib/img';
 import { path, t, precio, type Lang } from '../lib/i18n';
@@ -35,6 +36,7 @@ const T = {
     interesaTexto: 'Llámenos o escríbanos y organizamos una visita sin compromiso.',
     waMsg: 'Hola, me interesa el inmueble "{t}" que he visto en su web.',
     verMas: 'Ver más inmuebles',
+    relacionados: 'También le puede interesar',
   },
   ca: {
     ejemploAviso: 'Immoble d’exemple: aquesta fitxa forma part de la demo i no correspon a cap habitatge real en cartera.',
@@ -53,6 +55,7 @@ const T = {
     interesaTexto: 'Truqui’ns o escrigui’ns i organitzem una visita sense compromís.',
     waMsg: 'Hola, m’interessa l’immoble "{t}" que he vist al seu web.',
     verMas: 'Veure més immobles',
+    relacionados: 'També li pot interessar',
   },
   en: {
     ejemploAviso: 'Example property: this listing is part of the demo and does not correspond to any real property on our books.',
@@ -71,6 +74,7 @@ const T = {
     interesaTexto: 'Call or message us and we will arrange a no-obligation visit.',
     waMsg: 'Hello, I am interested in the property "{t}" I saw on your website.',
     verMas: 'See more properties',
+    relacionados: 'You may also like',
   },
 }[lang]!;
 
@@ -94,6 +98,10 @@ const schemaExtra = [
 ];
 const metaDesc = (desc.length > 155 ? desc.slice(0, 152).trimEnd() + '…' : desc);
 const waLink = waHref(wa, T.waMsg.replace('{t}', titulo));
+const relacionados = getInmuebles()
+  .filter((x) => x.slug !== i.slug)
+  .sort((a, b) => Number(b.municipio === i.municipio) - Number(a.municipio === i.municipio))
+  .slice(0, 3);
 ---
 <Base lang={lang} section="inmuebles" rest={[i.slug]} title={`${titulo} · Finques Mil·lenium`} description={metaDesc} schemaExtra={schemaExtra}>
   <Crumbs lang={lang} items={[{ nombre: navLabel, href: path(lang, section) }, { nombre: titulo }]} />
@@ -151,4 +159,14 @@ const waLink = waHref(wa, T.waMsg.replace('{t}', titulo));
       <p style="margin-top:34px"><a class="btn btn--ghost btn--sm" href={path(lang, section)}>← {T.verMas}</a></p>
     </div>
   </article>
+  {relacionados.length > 0 && (
+    <section class="section section--deep" aria-labelledby="rel-t">
+      <div class="container">
+        <h2 id="rel-t" style="margin-bottom:22px">{T.relacionados}</h2>
+        <div class="grid-cards">
+          {relacionados.map((r) => <PropCard lang={lang} inmueble={r} />)}
+        </div>
+      </div>
+    </section>
+  )}
 </Base>

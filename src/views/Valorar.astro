@@ -184,3 +184,9 @@ const municipios = [
     </div>
   </section>
 </Base>
+<script>
+  // Si se llega desde el mini-valorador de la portada, precargar la dirección.
+  const dir = new URLSearchParams(location.search).get('direccion');
+  const campo = document.querySelector<HTMLInputElement>('#form-valorar-direccion');
+  if (dir && campo && !campo.value) campo.value = dir;
+</script>
